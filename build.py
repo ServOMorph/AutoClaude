@@ -18,7 +18,7 @@ def main():
 
     print("[BUILD] Construction de l'exe AutoClaude...")
     result = subprocess.run(
-        [sys.executable, "-m", "PyInstaller", str(spec_file)],
+        [sys.executable, "-m", "PyInstaller", "-y", str(spec_file)],
         cwd=script_dir
     )
 

@@ -8,6 +8,7 @@ ROOT_DIR = Path(__file__).parent.parent.parent
 ASSETS_DIR = ROOT_DIR / "assets"
 ASSET_YES_PNG = ASSETS_DIR / "yes.png"
 ASSET_LOGO_PNG = ASSETS_DIR / "logo.png"
+ASSET_LOGO_ICO = ASSETS_DIR / "logo.ico"
 
 # URLs
 URL_WEBSITE = "https://serenia-tech.fr"

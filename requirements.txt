@@ -1,16 +1,8 @@
-# Dépendances principales
+# Runtime
 pyautogui>=0.9.53
 pynput>=1.7.6
-
-# UI
 customtkinter>=5.2.2
 Pillow>=10.0.0
 
-# Optionnel : pour meilleure détection multi-écran et performance
-mss>=9.0.1
-opencv-python>=4.8.0
-numpy>=1.24.0
-screeninfo>=0.8.1
-
-# Build
+# Build (facultatif)
 pyinstaller>=6.0.0

@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_PNG, ASSET_YES_PNG
+from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
 from src.ui import theme
@@ -22,7 +22,7 @@ class AutoClaudeApp(ctk.CTk):
         self.configure(fg_color=theme.PALETTE["bg"])
 
         try:
-            self.iconbitmap(str(ASSET_LOGO_PNG))
+            self.iconbitmap(str(ASSET_LOGO_ICO))
         except Exception:
             pass
 
@@ -45,7 +45,7 @@ class AutoClaudeApp(ctk.CTk):
                 "• AutoClaude clique automatiquement sur les YES de ClaudeCode (VSCode)\n\n"
                 "• ⚠️ À utiliser avec beaucoup de prudence — augmente l'autonomie de ClaudeCode\n\n"
                 "• 🔒 Sécurité : protégez votre projet en le sélectionnant et en cliquant "
-                "\"Protéger\" — restrictions périmètre injectées automatiquement dans CLAUDE.md"
+                "\"Protéger\" — restrictions périmètre injectées automatiquement dans .claude/CLAUDE.md du projet"
             ),
         ).pack(fill="x", padx=20, pady=(0, 16))
 
