@@ -18,7 +18,7 @@ class WarningBanner(ctk.CTkFrame):
 
         ctk.CTkLabel(
             self, text=text,
-            font=ctk.CTkFont(family=theme._font(), size=10),
+            font=ctk.CTkFont(family=theme._font(), size=14),
             text_color=theme.PALETTE["warning"],
             wraplength=440,
             justify="left",
