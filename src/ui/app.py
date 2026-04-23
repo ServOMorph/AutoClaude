@@ -42,8 +42,10 @@ class AutoClaudeApp(ctk.CTk):
         WarningBanner(
             self,
             text=(
-                "AutoClaude clique automatiquement sur les boutons détectés. "
-                "Désactivez avant toute manipulation manuelle."
+                "• AutoClaude clique automatiquement sur les YES de ClaudeCode (VSCode)\n\n"
+                "• ⚠️ À utiliser avec beaucoup de prudence — augmente l'autonomie de ClaudeCode\n\n"
+                "• 🔒 Sécurité : protégez votre projet en le sélectionnant et en cliquant "
+                "\"Protéger\" — restrictions périmètre injectées automatiquement dans CLAUDE.md"
             ),
         ).pack(fill="x", padx=20, pady=(0, 16))
 
