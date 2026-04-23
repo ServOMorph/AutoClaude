@@ -1,106 +1,116 @@
-# AutoClaude — Automatiseur de clics GUI
+# AutoClaude
 
-Script Python qui détecte et clique automatiquement sur un bouton spécifique apparaissant à l'écran.
+Outil Python qui détecte et clique automatiquement sur un bouton récurrent à l'écran — avec une interface graphique CustomTkinter en mode sombre.
 
-## Utilisation
+> Développé par [SéréniaTech](https://serenia-tech.fr) · [GitHub](https://github.com/ServOMorph)
 
-### Installation
-
-```bash
-# Installation minimale (pyautogui seul)
-pip install pyautogui pynput
-
-# Installation complète (meilleure détection multi-écran)
-pip install -r requirements.txt
-```
-
-### Exécution basique
-
-```bash
-# Utilise yes.png dans le répertoire courant par défaut
-python run.py
-```
-
-### Options CLI
-
-```bash
-# Spécifier un autre chemin d'image
-python run.py --image /chemin/vers/image.png
-
-# Configurer l'intervalle de polling (en secondes)
-python run.py --interval 1.0
-
-# Arrêt au premier mouvement souris/clavier (sauf Esc)
-python run.py --auto-stop
-```
-
-### Variables d'environnement
-
-```bash
-# Configurer le chemin par défaut
-export AUTOCLAUDE_IMAGE_PATH=/chemin/vers/yes.png
-python run.py
-```
+---
 
 ## Fonctionnalités
 
-- ✅ Détection d'image par template matching
-- ✅ Gestion multi-écran
-- ✅ Fallbacks automatiques (pyautogui, opencv, mss)
-- ✅ Arrêt sécurisé (Esc, Ctrl+C, mouvement souris)
-- ✅ Logs clairs et informatifs
+- Détection d'image par template matching (OpenCV + mss)
+- Support multi-moniteur
+- Dégradation progressive : si une dépendance optionnelle manque, l'outil continue de fonctionner
+- Arrêt via Esc, fermeture fenêtre ou mouvement souris (mode auto-stop)
+- Protection de projet Claude Code via injection dans `.claude/CLAUDE.md`
+- Interface sombre SéréniaTech (CustomTkinter)
+- Paramètres persistés localement (`~/.autoclaude/settings.json`)
 
-## Arrêt
+---
 
-- **Esc** : Arrête le script
-- **Ctrl+C** : Arrête le script
-- **Mouvement souris** (si `--auto-stop`) : Arrête le script
+## Installation
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/ServOMorph/AutoClaude.git
+cd AutoClaude
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+### Dépendances obligatoires
+
+| Package | Rôle |
+|---------|------|
+| `pyautogui` | Détection et clic d'image (fallback) |
+| `pynput` | Écoute clavier/souris |
+| `customtkinter` | Interface graphique |
+| `Pillow` | Affichage du logo |
+
+### Dépendances optionnelles (meilleures performances)
+
+| Package | Rôle |
+|---------|------|
+| `opencv-python` | Template matching haute précision |
+| `mss` | Capture multi-moniteur rapide |
+| `numpy` | Traitement d'image (requis par OpenCV) |
+| `screeninfo` | Énumération des moniteurs |
+
+---
+
+## Interface
+
+![AutoClaude UI](assets/ui-screenshot.png)
+
+---
+
+## Utilisation
+
+```bash
+# Lancer l'interface graphique
+python run.py
+```
+
+L'interface permet de :
+1. **Activer / désactiver** l'autoclick via le bouton central
+2. **Sélectionner un dossier de projet** à protéger
+3. **Appliquer ou retirer** la protection Claude Code sur ce dossier
+
+### Arrêt
+
+- Touche **Esc** — arrête l'autoclick
+- **Fermeture de la fenêtre** — arrête proprement le thread
+- **Mouvement souris** — si le mode auto-stop est actif
+
+---
+
+## Image cible
+
+Par défaut, AutoClaude cherche `assets/yes.png`. Remplace ce fichier par un screenshot du bouton que tu veux automatiser (PNG, JPG ou BMP recommandé).
+
+---
+
+## Protection Claude Code
+
+Le bouton **Protéger** injecte un bloc de restrictions dans `.claude/CLAUDE.md` du projet sélectionné. Ce bloc est lu par Claude Code au démarrage de chaque session et contraint le comportement de l'IA au périmètre du projet.
+
+Voir [DOCS/SECURITY.md](DOCS/SECURITY.md) pour le détail du bloc injecté et de l'API.
+
+---
 
 ## Architecture
 
-Le script utilise un pattern de **dégradation progressive** :
-
-1. **Priorité 1** : Module custom `outils/image_finder` (si disponible)
-2. **Priorité 2** : OpenCV + mss (haute précision, multi-écran)
-3. **Priorité 3** : screeninfo + pyautogui
-4. **Priorité 4** : pyautogui seul (fallback minimal)
-
-Chaque méthode est testée indépendamment. L'absence d'une dépendance optionnelle ne bloque jamais l'exécution.
-
-## Dépendances
-
-### Obligatoires
-- `pyautogui` : Détection et clic d'image
-- `pynput` : Écoute clavier/souris
-
-### Optionnelles
-- `opencv-python` : Meilleure détection par template matching
-- `mss` : Capture d'écran multi-moniteur
-- `numpy` : Traitement d'images (dépendance d'OpenCV)
-- `screeninfo` : Énumération des moniteurs
-
-## Exemples
-
-```bash
-# Détecter et cliquer sur yes.png toutes les 0.5s
-python run.py
-
-# Utiliser une image personnalisée, arrêter au premier mouvement
-python run.py --image button.png --auto-stop
-
-# Intervalle plus court (100ms)
-python run.py --interval 0.1
+```
+src/core/       détection, clic, listener, service autoclick
+src/ui/         interface CustomTkinter + composants + dialogs
+src/security/   ClaudeMdProtector
+src/config/     constantes et persistance JSON
+assets/         yes.png, logo.png
 ```
 
-## Cas d'usage
+Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions techniques.
 
-- Automatisation de validations répétitives
-- Tests UI automatisés
-- Workflows d'acceptation de popups
-- Tâches d'interaction GUI sans API
+---
 
-## Notes
+## Licence
 
-- L'image `yes.png` doit être en format PNG/JPG/BMP
-- Les coordonnées détectées sont le centre de l'image
-- Tous les fallbacks sont testés silencieusement (logs seulement au démarrage)
+MIT — voir [LICENSE](LICENSE)
+
+
+---
+
+Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech : 
+https://serenia-tech.fr/
+
+Date : 23 avril 2026

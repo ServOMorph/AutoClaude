@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
 > Dernière mise à jour : 2026-04-23
-> Statut global : **Phase 7 terminée** — UI fonctionnelle, Phase 8 (doc) à faire
+> Statut global : **Phase 8 terminée** — Projet prêt pour publication publique
 
 ---
 
@@ -144,13 +144,13 @@ is_running() → bool
 
 | Tâche | Fichier cible | Statut | Notes |
 |-------|--------------|--------|-------|
-| 8.1 `DOCS/ARCHITECTURE.md` | `DOCS/ARCHITECTURE.md` | ⏳ | Décisions techniques, patterns, dépendances |
-| 8.2 `DOCS/SECURITY.md` | `DOCS/SECURITY.md` | ⏳ | Détails `ClaudeMdProtector`, bloc injecté, cas limites |
-| 8.3 `DOCS/CHARTE_GRAPHIQUE.md` | `DOCS/CHARTE_GRAPHIQUE.md` | ⏳ | Extraits pertinents palette + typographie |
-| 8.4 Réécrire `README.md` | `README.md` | ⏳ | Installation, usage, captures d'écran |
-| 8.5 Créer `LICENSE` (MIT) | `LICENSE` | ⏳ | |
-| 8.6 Audit secrets / chemins absolus | — | ⏳ | Aucun chemin utilisateur, aucune clé |
-| 8.7 `.gitignore` final | `.gitignore` | ⏳ | Vérification avant push public |
+| 8.1 `DOCS/ARCHITECTURE.md` | `DOCS/ARCHITECTURE.md` | ✅ | Décisions techniques, patterns, dépendances |
+| 8.2 `DOCS/SECURITY.md` | `DOCS/SECURITY.md` | ✅ | Détails `ClaudeMdProtector`, bloc injecté, cas limites |
+| 8.3 `DOCS/CHARTE_GRAPHIQUE.md` | `DOCS/CHARTE_GRAPHIQUE.md` | ✅ | Extraits pertinents palette + typographie |
+| 8.4 Réécrire `README.md` | `README.md` | ✅ | Installation, usage, architecture |
+| 8.5 Créer `LICENSE` (MIT) | `LICENSE` | ✅ | |
+| 8.6 Audit secrets / chemins absolus | — | ✅ | Aucun chemin utilisateur, aucune clé |
+| 8.7 `.gitignore` final | `.gitignore` | ✅ | Vérifié — complet |
 
 ---
 
@@ -168,7 +168,7 @@ is_running() → bool
 | Fermeture fenêtre arrête proprement le thread (pas de zombie) | ✅ |
 | Touche Esc arrête l'autoclick | ✅ |
 | Aucun chemin absolu personnel, aucun secret dans le code | ✅ |
-| README à jour avec instructions + captures d'écran | ⏳ |
+| README à jour avec instructions + captures d'écran | ✅ |
 
 ---
 
@@ -194,3 +194,4 @@ is_running() → bool
 |------|-------------|
 | 2026-04-23 | Création de la roadmap — v1 complète, v2.0 planifiée |
 | 2026-04-23 | Phases 1→7 complètes — UI v2.0 fonctionnelle |
+| 2026-04-23 | Phase 8 complète — ARCHITECTURE, SECURITY, CHARTE_GRAPHIQUE, README, LICENSE |
