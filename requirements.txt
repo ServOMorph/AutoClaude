@@ -2,6 +2,10 @@
 pyautogui>=0.9.53
 pynput>=1.7.6
 
+# UI
+customtkinter>=5.2.2
+Pillow>=10.0.0
+
 # Optionnel : pour meilleure détection multi-écran et performance
 mss>=9.0.1
 opencv-python>=4.8.0

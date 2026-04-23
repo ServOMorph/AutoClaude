@@ -1,3 +1,6 @@
+# Paramètres utilisateur persistés
+.autoclaude/
+
 # Python
 __pycache__/
 *.py[cod]
