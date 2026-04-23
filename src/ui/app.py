@@ -21,6 +21,11 @@ class AutoClaudeApp(ctk.CTk):
         self.resizable(False, False)
         self.configure(fg_color=theme.PALETTE["bg"])
 
+        self.update_idletasks()
+        x = (self.winfo_screenwidth() - WINDOW_WIDTH) // 2
+        y = (self.winfo_screenheight() - WINDOW_HEIGHT) // 2
+        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
+
         try:
             self.iconbitmap(str(ASSET_LOGO_ICO))
         except Exception:
