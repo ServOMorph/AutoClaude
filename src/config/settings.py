@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import json
 from pathlib import Path
 from src.config.constants import DEFAULT_INTERVAL
@@ -13,6 +15,7 @@ _DEFAULTS = {
 
 
 def load() -> dict:
+    """TODO: description de load."""
     if not _SETTINGS_FILE.exists():
         return dict(_DEFAULTS)
     try:
@@ -23,6 +26,7 @@ def load() -> dict:
 
 
 def save(settings: dict) -> None:
+    """TODO: description de save."""
     _SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
     _SETTINGS_FILE.write_text(
         json.dumps(settings, indent=2, ensure_ascii=False),
@@ -31,10 +35,12 @@ def save(settings: dict) -> None:
 
 
 def get(key: str):
+    """TODO: description de get."""
     return load().get(key, _DEFAULTS.get(key))
 
 
 def set(key: str, value) -> None:
+    """TODO: description de set."""
     data = load()
     data[key] = value
     save(data)

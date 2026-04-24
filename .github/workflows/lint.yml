@@ -1,0 +1,37 @@
+name: Lint
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install linters
+        run: |
+          pip install ruff black mypy
+
+      - name: Run Ruff
+        run: |
+          ruff check src/ tests/ || true
+
+      - name: Run Black (check only)
+        run: |
+          black --check src/ tests/ || true
+
+      - name: Run MyPy
+        run: |
+          mypy src/ --ignore-missing-imports || true

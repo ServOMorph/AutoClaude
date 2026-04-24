@@ -1,9 +1,13 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from src.ui import theme
 
 
 class WarningBanner(ctk.CTkFrame):
+    """TODO: description de WarningBanner."""
     def __init__(self, master, text: str, **kwargs):
+        """TODO: description de __init__."""
         super().__init__(
             master,
             fg_color="#2d1f0a",

@@ -1,0 +1,93 @@
+{
+  "path": "D:\\ServOMorph\\AutoClaude",
+  "timestamp": "2026-04-24T11:19:38",
+  "score_total": 30,
+  "score_max": 100,
+  "categories": {
+    "packaging": {
+      "score": 7,
+      "max": 20,
+      "failed": [
+        "pyproject.toml",
+        "requirements-dev.txt",
+        ".gitignore adéquat",
+        "version semantic"
+      ],
+      "passed": [
+        "requirements.txt",
+        "pas de dist/build trackés",
+        "LICENSE"
+      ]
+    },
+    "tests": {
+      "score": 0,
+      "max": 15,
+      "failed": [
+        "dossier tests/",
+        "tests couvrant modules src/ (0/19)",
+        "conftest.py",
+        "pytest configuré",
+        "coverage (non mesuré)"
+      ],
+      "passed": []
+    },
+    "ci": {
+      "score": 0,
+      "max": 15,
+      "failed": [
+        ".github/workflows/",
+        "workflow tests",
+        "workflow lint",
+        ".github/ISSUE_TEMPLATE/",
+        "PULL_REQUEST_TEMPLATE.md"
+      ],
+      "passed": []
+    },
+    "docs": {
+      "score": 8,
+      "max": 20,
+      "failed": [
+        "badges shields.io (0)",
+        "docstrings ≥ 70% (0%)",
+        "type hints ≥ 70% (40%)"
+      ],
+      "passed": [
+        "README ≥ 80 lignes (132)",
+        "sections Install + Usage",
+        "capture/screenshot"
+      ]
+    },
+    "governance": {
+      "score": 0,
+      "max": 15,
+      "failed": [
+        "CONTRIBUTING.md",
+        "CODE_OF_CONDUCT.md",
+        "CHANGELOG.md (format Keep a Changelog)"
+      ],
+      "passed": []
+    },
+    "security": {
+      "score": 15,
+      "max": 15,
+      "failed": [],
+      "passed": [
+        "pas de secrets hardcodés",
+        "pas de .env commité",
+        ".env.example (si .env utilisé)"
+      ]
+    }
+  },
+  "actions_prioritaires": [
+    "[packaging] pyproject.toml",
+    "[packaging] requirements-dev.txt",
+    "[packaging] .gitignore adéquat",
+    "[tests] dossier tests/",
+    "[tests] tests couvrant modules src/ (0/19)",
+    "[tests] conftest.py",
+    "[ci] .github/workflows/",
+    "[ci] workflow tests",
+    "[ci] workflow lint",
+    "[docs] badges shields.io (0)"
+  ]
+}

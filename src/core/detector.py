@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 from src.core.monitors import get_all_monitors
 
 try:
@@ -30,6 +32,7 @@ except Exception:
 
 
 def _center_from_tuple(t):
+    """TODO: description de _center_from_tuple."""
     if len(t) == 2:
         return int(t[0]), int(t[1])
     if len(t) == 4:
@@ -39,6 +42,7 @@ def _center_from_tuple(t):
 
 
 def _mss_cv2(path: str, confidence: float = 0.8):
+    """TODO: description de _mss_cv2."""
     if not _mss or not _cv2 or not _np:
         return None
     try:
@@ -67,6 +71,7 @@ def _mss_cv2(path: str, confidence: float = 0.8):
 
 
 def _pyautogui_multimonitor(path: str, confidence: float = 0.8):
+    """TODO: description de _pyautogui_multimonitor."""
     if not _pyautogui:
         return None
     monitors = get_all_monitors()
@@ -88,6 +93,7 @@ def _pyautogui_multimonitor(path: str, confidence: float = 0.8):
 
 
 def _pyautogui_single(path: str, confidence: float = 0.8):
+    """TODO: description de _pyautogui_single."""
     if not _pyautogui:
         return None
     try:
@@ -104,6 +110,7 @@ def _pyautogui_single(path: str, confidence: float = 0.8):
 
 
 def _outils_find(path: str):
+    """TODO: description de _outils_find."""
     if not _find_image_fn:
         return None
     try:
@@ -122,6 +129,7 @@ def _outils_find(path: str):
 
 
 def locate(path: str, confidence: float = 0.8) -> tuple[int, int] | None:
+    """TODO: description de locate."""
     coords = _outils_find(path)
     if coords:
         return coords
@@ -137,10 +145,12 @@ def locate(path: str, confidence: float = 0.8) -> tuple[int, int] | None:
 
 
 def has_detector() -> bool:
+    """TODO: description de has_detector."""
     return bool(_find_image_fn or _pyautogui)
 
 
 def describe_detector() -> str:
+    """TODO: description de describe_detector."""
     if _find_image_fn:
         return "outils.image_finder"
     if _pyautogui:

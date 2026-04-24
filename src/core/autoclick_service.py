@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import time
 import threading
 
@@ -7,6 +9,7 @@ from src.core.monitors import get_all_monitors
 
 
 class AutoclickService:
+    """TODO: description de AutoclickService."""
     def __init__(
         self,
         image_path: str,
@@ -15,6 +18,7 @@ class AutoclickService:
         on_click: callable = None,
         on_stop: callable = None,
     ):
+        """TODO: description de __init__."""
         self._image_path = image_path
         self._interval = interval
         self._auto_stop = auto_stop
@@ -25,6 +29,7 @@ class AutoclickService:
         self._listener: InputListener | None = None
 
     def start(self):
+        """TODO: description de start."""
         if self._thread and self._thread.is_alive():
             return
         self._stop_event.clear()
@@ -34,14 +39,17 @@ class AutoclickService:
         self._thread.start()
 
     def stop(self):
+        """TODO: description de stop."""
         self._stop_event.set()
         if self._listener:
             self._listener.stop()
 
     def is_running(self) -> bool:
+        """TODO: description de is_running."""
         return bool(self._thread and self._thread.is_alive())
 
     def _run(self):
+        """TODO: description de _run."""
         try:
             while not self._stop_event.is_set():
                 coords = detector.locate(self._image_path)

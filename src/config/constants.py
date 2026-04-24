@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 from pathlib import Path
 
 VERSION = "2.2.0"

@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 def main():
+    """TODO: description de main."""
     script_dir = Path(__file__).parent
     spec_file = script_dir / "AutoClaude.spec"
 

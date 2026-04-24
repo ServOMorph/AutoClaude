@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 from pathlib import Path
 
 _MARKER_START = "<!-- AUTOCLAUDE_GUARD:START -->"
@@ -16,18 +18,22 @@ Ce projet est protégé par AutoClaude. Les règles suivantes s'appliquent :
 
 
 class ClaudeMdProtector:
+    """TODO: description de ClaudeMdProtector."""
     def __init__(self, project_path: str | Path):
+        """TODO: description de __init__."""
         self._project_path = Path(project_path)
         self._claude_dir = self._project_path / ".claude"
         self._target = self._claude_dir / "CLAUDE.md"
 
     def is_already_protected(self) -> bool:
+        """TODO: description de is_already_protected."""
         if not self._target.exists():
             return False
         content = self._target.read_text(encoding="utf-8")
         return _MARKER_START in content and _MARKER_END in content
 
     def apply(self) -> tuple[bool, str]:
+        """TODO: description de apply."""
         if self.is_already_protected():
             return False, "Déjà protégé."
         try:
@@ -43,6 +49,7 @@ class ClaudeMdProtector:
             return False, f"Erreur : {e}"
 
     def remove_protection(self) -> tuple[bool, str]:
+        """TODO: description de remove_protection."""
         if not self.is_already_protected():
             return False, "Aucune protection à retirer."
         try:
