@@ -1,6 +1,6 @@
 from pathlib import Path
 
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 APP_NAME = "AutoClaude"
 
 # Paths
@@ -26,7 +26,7 @@ COLOR_BORDER = "#4A5568"
 
 # Window
 WINDOW_WIDTH = 520
-WINDOW_HEIGHT = 860
+WINDOW_HEIGHT = 940
 
 # Defaults
 DEFAULT_INTERVAL = 0.5

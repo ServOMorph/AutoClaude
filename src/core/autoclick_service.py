@@ -1,7 +1,7 @@
 import time
 import threading
 
-from src.core import detector, clicker
+from src.core import detector, clicker, click_stats
 from src.core.listener import InputListener
 from src.core.monitors import get_all_monitors
 
@@ -48,6 +48,7 @@ class AutoclickService:
                 if coords:
                     x, y = coords
                     if clicker.click(x, y):
+                        click_stats.increment()
                         if self._on_click:
                             self._on_click(x, y)
                         time.sleep(0.4)
@@ -56,6 +57,7 @@ class AutoclickService:
                 else:
                     time.sleep(self._interval)
         finally:
+            click_stats.flush_buffer()
             if self._listener:
                 self._listener.stop()
             if self._on_stop:

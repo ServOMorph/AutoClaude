@@ -8,7 +8,9 @@ from src.ui.components.warning_banner import WarningBanner
 from src.ui.components.activate_button import ActivateButton
 from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
+from src.ui.components.click_counter import ClickCounter
 from src.ui.dialogs.folder_picker import pick_folder
+from src.ui.dialogs.analytics_window import AnalyticsWindow
 
 
 class AutoClaudeApp(ctk.CTk):
@@ -83,6 +85,24 @@ class AutoClaudeApp(ctk.CTk):
         self._protection_btn = ProtectionButton(self, button_width=360)
         self._protection_btn.pack(pady=(0, 16))
 
+        self._click_counter = ClickCounter(self, width=360)
+        self._click_counter.pack(pady=(0, 8))
+
+        ctk.CTkButton(
+            self,
+            text="📊  Analyses",
+            font=theme.font_body(),
+            fg_color=theme.PALETTE["bg_secondary"],
+            hover_color=theme.PALETTE["border"],
+            text_color=theme.PALETTE["text"],
+            border_color=theme.PALETTE["border"],
+            border_width=1,
+            corner_radius=8,
+            width=360,
+            height=38,
+            command=self._open_analytics,
+        ).pack(pady=(0, 16))
+
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
 
     def _on_toggle(self, active: bool):
@@ -118,6 +138,9 @@ class AutoClaudeApp(ctk.CTk):
             self._project_path = path
             self._folder_label.configure(text=path)
             self._protection_btn.set_project_path(path)
+
+    def _open_analytics(self):
+        AnalyticsWindow(self)
 
     def _on_close(self):
         self._stop_service()
