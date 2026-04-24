@@ -13,12 +13,20 @@ Outil Python qui détecte et clique automatiquement sur un bouton récurrent à 
 - Dégradation progressive : si une dépendance optionnelle manque, l'outil continue de fonctionner
 - Arrêt via Esc, fermeture fenêtre ou mouvement souris (mode auto-stop)
 - Protection de projet Claude Code via injection dans `.claude/CLAUDE.md`
+- **Compteur de clics** avec historique persisté
+- **Analyses graphiques** : visualiser les clics par heure/jour/semaine/mois/année
 - Interface sombre SéréniaTech (CustomTkinter)
 - Paramètres persistés localement (`~/.autoclaude/settings.json`)
 
 ---
 
 ## Installation
+
+### Option 1 : Télécharger l'exécutable (Windows)
+
+Télécharge `AutoClaude.exe` depuis les [releases](https://github.com/ServOMorph/AutoClaude/releases) et double-clique pour lancer. Aucune dépendance Python requise.
+
+### Option 2 : Installation depuis le code source
 
 ```bash
 # Cloner le dépôt
@@ -27,18 +35,24 @@ cd AutoClaude
 
 # Installer les dépendances
 pip install -r requirements.txt
+
+# Lancer l'application
+python run.py
 ```
 
-### Dépendances obligatoires
+### Dépendances (installation depuis source)
+
+**Obligatoires**
 
 | Package | Rôle |
 |---------|------|
 | `pyautogui` | Détection et clic d'image (fallback) |
 | `pynput` | Écoute clavier/souris |
 | `customtkinter` | Interface graphique |
-| `Pillow` | Affichage du logo |
+| `Pillow` | Affichage des images |
+| `matplotlib` | Graphes d'analyse |
 
-### Dépendances optionnelles (meilleures performances)
+**Optionnelles** (meilleures performances)
 
 | Package | Rôle |
 |---------|------|
@@ -63,9 +77,11 @@ python run.py
 ```
 
 L'interface permet de :
-1. **Activer / désactiver** l'autoclick via le bouton central
+1. **Activer / désactiver** l'autoclick via le bouton bleu/rouge
 2. **Sélectionner un dossier de projet** à protéger
 3. **Appliquer ou retirer** la protection Claude Code sur ce dossier
+4. **Compter les clics** — affichage en temps réel du nombre total, avec reset possible
+5. **Visualiser les analyses** — graphes interactifs par période (heure/jour/semaine/mois/année)
 
 ### Arrêt
 
@@ -113,4 +129,4 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech : 
 https://serenia-tech.fr/
 
-Date : 23 avril 2026
+Date : 24 avril 2026 (v2.2.0)
