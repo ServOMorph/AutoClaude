@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG
 from src.config import settings
@@ -14,7 +16,9 @@ from src.ui.dialogs.analytics_window import AnalyticsWindow
 
 
 class AutoClaudeApp(ctk.CTk):
+    """TODO: description de AutoClaudeApp."""
     def __init__(self):
+        """TODO: description de __init__."""
         theme.apply()
         super().__init__()
 
@@ -41,6 +45,7 @@ class AutoClaudeApp(ctk.CTk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
     def _build_ui(self):
+        """TODO: description de _build_ui."""
         self.grid_rowconfigure(0, weight=0)
         self.grid_columnconfigure(0, weight=1)
 
@@ -126,12 +131,14 @@ class AutoClaudeApp(ctk.CTk):
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
 
     def _on_toggle(self, active: bool):
+        """TODO: description de _on_toggle."""
         if active:
             self._start_service()
         else:
             self._stop_service()
 
     def _start_service(self):
+        """TODO: description de _start_service."""
         image_path = str(ASSET_YES_PNG)
         interval = settings.get("interval")
         auto_stop = settings.get("auto_stop")
@@ -144,15 +151,18 @@ class AutoClaudeApp(ctk.CTk):
         self._service.start()
 
     def _stop_service(self):
+        """TODO: description de _stop_service."""
         if self._service:
             self._service.stop()
             self._service = None
         self._activate_btn.set_active(False)
 
     def _on_service_stopped(self):
+        """TODO: description de _on_service_stopped."""
         self.after(0, lambda: self._activate_btn.set_active(False))
 
     def _pick_folder(self):
+        """TODO: description de _pick_folder."""
         path = pick_folder()
         if path:
             self._project_path = path
@@ -160,8 +170,10 @@ class AutoClaudeApp(ctk.CTk):
             self._protection_btn.set_project_path(path)
 
     def _open_analytics(self):
+        """TODO: description de _open_analytics."""
         AnalyticsWindow(self)
 
     def _on_close(self):
+        """TODO: description de _on_close."""
         self._stop_service()
         self.destroy()

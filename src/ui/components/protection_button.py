@@ -1,10 +1,14 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from src.security.claude_md_protector import ClaudeMdProtector
 from src.ui import theme
 
 
 class ProtectionButton(ctk.CTkFrame):
+    """TODO: description de ProtectionButton."""
     def __init__(self, master, project_path: str = "", button_width: int = 200, **kwargs):
+        """TODO: description de __init__."""
         super().__init__(master, fg_color="transparent", **kwargs)
         self._project_path = project_path
 
@@ -50,10 +54,12 @@ class ProtectionButton(ctk.CTkFrame):
         self._status.pack(pady=(4, 0))
 
     def set_project_path(self, path: str):
+        """TODO: description de set_project_path."""
         self._project_path = path
         self._status.configure(text="")
 
     def _apply(self):
+        """TODO: description de _apply."""
         if not self._project_path:
             self._status.configure(text="⚠ Aucun dossier sélectionné.", text_color=theme.PALETTE["warning"])
             return
@@ -63,6 +69,7 @@ class ProtectionButton(ctk.CTkFrame):
         self._status.configure(text=msg, text_color=color)
 
     def _remove(self):
+        """TODO: description de _remove."""
         if not self._project_path:
             self._status.configure(text="⚠ Aucun dossier sélectionné.", text_color=theme.PALETTE["warning"])
             return

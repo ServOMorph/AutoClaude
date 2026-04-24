@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 try:
     from screeninfo import get_monitors as _get_monitors
 except Exception:
@@ -10,6 +12,7 @@ except Exception:
 
 
 def get_all_monitors() -> list[dict]:
+    """TODO: description de get_all_monitors."""
     monitors = []
     if _get_monitors:
         try:

@@ -1,0 +1,533 @@
+{
+  "path": "D:\\ServOMorph\\AutoClaude",
+  "total": 63,
+  "fonctions": [
+    {
+      "fichier": "build.py",
+      "ligne": 11,
+      "nom": "main",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def main()"
+    },
+    {
+      "fichier": "src/config/settings.py",
+      "ligne": 33,
+      "nom": "get",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def get(key: str)"
+    },
+    {
+      "fichier": "src/config/settings.py",
+      "ligne": 37,
+      "nom": "set",
+      "args_manquants": [
+        "value"
+      ],
+      "return_manquant": false,
+      "signature": "def set(key: str, value) -> None"
+    },
+    {
+      "fichier": "src/core/autoclick_service.py",
+      "ligne": 27,
+      "nom": "start",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def start(self)"
+    },
+    {
+      "fichier": "src/core/autoclick_service.py",
+      "ligne": 36,
+      "nom": "stop",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def stop(self)"
+    },
+    {
+      "fichier": "src/core/autoclick_service.py",
+      "ligne": 44,
+      "nom": "_run",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _run(self)"
+    },
+    {
+      "fichier": "src/core/detector.py",
+      "ligne": 32,
+      "nom": "_center_from_tuple",
+      "args_manquants": [
+        "t"
+      ],
+      "return_manquant": true,
+      "signature": "def _center_from_tuple(t)"
+    },
+    {
+      "fichier": "src/core/detector.py",
+      "ligne": 41,
+      "nom": "_mss_cv2",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _mss_cv2(path: str, confidence: float)"
+    },
+    {
+      "fichier": "src/core/detector.py",
+      "ligne": 69,
+      "nom": "_pyautogui_multimonitor",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _pyautogui_multimonitor(path: str, confidence: float)"
+    },
+    {
+      "fichier": "src/core/detector.py",
+      "ligne": 90,
+      "nom": "_pyautogui_single",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _pyautogui_single(path: str, confidence: float)"
+    },
+    {
+      "fichier": "src/core/detector.py",
+      "ligne": 106,
+      "nom": "_outils_find",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _outils_find(path: str)"
+    },
+    {
+      "fichier": "src/core/listener.py",
+      "ligne": 20,
+      "nom": "start",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def start(self)"
+    },
+    {
+      "fichier": "src/core/listener.py",
+      "ligne": 28,
+      "nom": "stop",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def stop(self)"
+    },
+    {
+      "fichier": "src/core/listener.py",
+      "ligne": 37,
+      "nom": "_on_press",
+      "args_manquants": [
+        "key"
+      ],
+      "return_manquant": true,
+      "signature": "def _on_press(self, key)"
+    },
+    {
+      "fichier": "src/core/listener.py",
+      "ligne": 48,
+      "nom": "_on_mouse_move",
+      "args_manquants": [
+        "x",
+        "y"
+      ],
+      "return_manquant": true,
+      "signature": "def _on_mouse_move(self, x, y)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 43,
+      "nom": "_build_ui",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _build_ui(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 128,
+      "nom": "_on_toggle",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _on_toggle(self, active: bool)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 134,
+      "nom": "_start_service",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _start_service(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 146,
+      "nom": "_stop_service",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _stop_service(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 152,
+      "nom": "_on_service_stopped",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _on_service_stopped(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 155,
+      "nom": "_pick_folder",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _pick_folder(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 162,
+      "nom": "_open_analytics",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _open_analytics(self)"
+    },
+    {
+      "fichier": "src/ui/app.py",
+      "ligne": 165,
+      "nom": "_on_close",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _on_close(self)"
+    },
+    {
+      "fichier": "src/ui/theme.py",
+      "ligne": 34,
+      "nom": "apply",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def apply()"
+    },
+    {
+      "fichier": "src/ui/components/activate_button.py",
+      "ligne": 9,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master, on_toggle: callable)"
+    },
+    {
+      "fichier": "src/ui/components/activate_button.py",
+      "ligne": 31,
+      "nom": "_toggle",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _toggle(self)"
+    },
+    {
+      "fichier": "src/ui/components/activate_button.py",
+      "ligne": 43,
+      "nom": "set_active",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def set_active(self, state: bool)"
+    },
+    {
+      "fichier": "src/ui/components/click_counter.py",
+      "ligne": 7,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master)"
+    },
+    {
+      "fichier": "src/ui/components/click_counter.py",
+      "ligne": 38,
+      "nom": "_on_reset",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _on_reset(self)"
+    },
+    {
+      "fichier": "src/ui/components/click_counter.py",
+      "ligne": 87,
+      "nom": "refresh",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def refresh(self)"
+    },
+    {
+      "fichier": "src/ui/components/click_counter.py",
+      "ligne": 91,
+      "nom": "_schedule_refresh",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _schedule_refresh(self)"
+    },
+    {
+      "fichier": "src/ui/components/click_counter.py",
+      "ligne": 58,
+      "nom": "on_yes",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def on_yes()"
+    },
+    {
+      "fichier": "src/ui/components/footer.py",
+      "ligne": 8,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master)"
+    },
+    {
+      "fichier": "src/ui/components/header.py",
+      "ligne": 8,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master)"
+    },
+    {
+      "fichier": "src/ui/components/protection_button.py",
+      "ligne": 7,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master, project_path: str, button_width: int)"
+    },
+    {
+      "fichier": "src/ui/components/protection_button.py",
+      "ligne": 52,
+      "nom": "set_project_path",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def set_project_path(self, path: str)"
+    },
+    {
+      "fichier": "src/ui/components/protection_button.py",
+      "ligne": 56,
+      "nom": "_apply",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _apply(self)"
+    },
+    {
+      "fichier": "src/ui/components/protection_button.py",
+      "ligne": 65,
+      "nom": "_remove",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _remove(self)"
+    },
+    {
+      "fichier": "src/ui/components/warning_banner.py",
+      "ligne": 6,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master, text: str)"
+    },
+    {
+      "fichier": "src/ui/dialogs/analytics_window.py",
+      "ligne": 22,
+      "nom": "__init__",
+      "args_manquants": [
+        "master"
+      ],
+      "return_manquant": false,
+      "signature": "def __init__(self, master)"
+    },
+    {
+      "fichier": "src/ui/dialogs/analytics_window.py",
+      "ligne": 35,
+      "nom": "_show",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _show(self)"
+    },
+    {
+      "fichier": "src/ui/dialogs/analytics_window.py",
+      "ligne": 42,
+      "nom": "_build_ui",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _build_ui(self)"
+    },
+    {
+      "fichier": "src/ui/dialogs/analytics_window.py",
+      "ligne": 71,
+      "nom": "_on_period_change",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _on_period_change(self, label: str)"
+    },
+    {
+      "fichier": "src/ui/dialogs/analytics_window.py",
+      "ligne": 75,
+      "nom": "_draw",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def _draw(self, period: str)"
+    },
+    {
+      "fichier": "tests/unit/test_activate_button.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_analytics_window.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_app.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_autoclick_service.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_claude_md_protector.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_clicker.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_click_counter.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_click_stats.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_constants.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_detector.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_folder_picker.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_footer.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_header.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_listener.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_monitors.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_protection_button.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_settings.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_theme.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    },
+    {
+      "fichier": "tests/unit/test_warning_banner.py",
+      "ligne": 6,
+      "nom": "test_import_module",
+      "args_manquants": [],
+      "return_manquant": true,
+      "signature": "def test_import_module()"
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from PIL import Image
 from src.config.constants import ASSET_LOGO_PNG, APP_NAME
@@ -5,7 +7,9 @@ from src.ui import theme
 
 
 class Header(ctk.CTkFrame):
+    """TODO: description de Header."""
     def __init__(self, master, **kwargs):
+        """TODO: description de __init__."""
         super().__init__(master, fg_color=theme.PALETTE["bg_secondary"], corner_radius=12, **kwargs)
 
         try:

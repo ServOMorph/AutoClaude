@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 try:
     import pyautogui as _pyautogui
     _pyautogui.FAILSAFE = False
@@ -16,6 +18,7 @@ except Exception:
 
 
 def click(x: int, y: int) -> bool:
+    """TODO: description de click."""
     if _click_fn:
         try:
             _click_fn(x, y)
@@ -38,10 +41,12 @@ def click(x: int, y: int) -> bool:
 
 
 def has_clicker() -> bool:
+    """TODO: description de has_clicker."""
     return bool(_click_fn or _pyautogui)
 
 
 def describe_clicker() -> str:
+    """TODO: description de describe_clicker."""
     if _click_fn:
         return "outils.mouse_controller"
     if _pyautogui:

@@ -1,0 +1,47 @@
+name: 🐛 Bug Report
+description: Signaler un bug pour aider à améliorer AutoClaude
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de remplir ce rapport de bug !
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Description du bug
+      description: Description claire et concise du bug.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Étapes pour reproduire
+      description: Comment reproduire ce bug ?
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Comportement attendu
+      description: Que devait-il se passer ?
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Comportement observé
+      description: Que s'est-il passé en réalité ?
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Version de AutoClaude utilisée
+  - type: input
+    id: os
+    attributes:
+      label: Système d'exploitation
+      description: Windows / macOS / Linux + version
+  - type: input
+    id: python-version
+    attributes:
+      label: Version Python
+      description: ex. 3.11

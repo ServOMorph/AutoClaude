@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 from src.ui.app import AutoClaudeApp
 
 if __name__ == "__main__":

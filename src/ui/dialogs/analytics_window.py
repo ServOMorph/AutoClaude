@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import io
 import customtkinter as ctk
 import matplotlib
@@ -19,7 +21,9 @@ _W, _H = 640, 340
 
 
 class AnalyticsWindow(ctk.CTkToplevel):
+    """TODO: description de AnalyticsWindow."""
     def __init__(self, master, **kwargs):
+        """TODO: description de __init__."""
         super().__init__(master, **kwargs)
         self.withdraw()
         self.title("Analyses — Clics AutoClaude")
@@ -33,6 +37,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self.after(100, self._show)
 
     def _show(self):
+        """TODO: description de _show."""
         self.deiconify()
         self.lift()
         self.focus_force()
@@ -40,6 +45,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self._draw(self._current_period)
 
     def _build_ui(self):
+        """TODO: description de _build_ui."""
         ctk.CTkLabel(
             self,
             text="Analyse des clics",
@@ -69,10 +75,12 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self._img_label.pack(fill="both", expand=True, padx=8, pady=8)
 
     def _on_period_change(self, label: str):
+        """TODO: description de _on_period_change."""
         self._current_period = _PERIODS[label]
         self._draw(self._current_period)
 
     def _draw(self, period: str):
+        """TODO: description de _draw."""
         if self._img_label is None:
             return
 

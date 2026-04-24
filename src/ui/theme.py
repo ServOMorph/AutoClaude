@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from src.config.constants import (
     COLOR_BG, COLOR_BG_SECONDARY, COLOR_PRIMARY,
@@ -10,6 +12,7 @@ _FONT_FAMILY_FALLBACK = "Segoe UI"
 
 
 def _resolve_font_family() -> str:
+    """TODO: description de _resolve_font_family."""
     import tkinter as tk
     root = tk.Tk()
     root.withdraw()
@@ -22,6 +25,7 @@ _font_family: str | None = None
 
 
 def _font() -> str:
+    """TODO: description de _font."""
     global _font_family
     if _font_family is None:
         try:
@@ -32,23 +36,28 @@ def _font() -> str:
 
 
 def apply():
+    """TODO: description de apply."""
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("dark-blue")
 
 
 def font_title() -> ctk.CTkFont:
+    """TODO: description de font_title."""
     return ctk.CTkFont(family=_font(), size=40, weight="bold")
 
 
 def font_subtitle() -> ctk.CTkFont:
+    """TODO: description de font_subtitle."""
     return ctk.CTkFont(family=_font(), size=13, weight="bold")
 
 
 def font_body() -> ctk.CTkFont:
+    """TODO: description de font_body."""
     return ctk.CTkFont(family=_font(), size=12)
 
 
 def font_small() -> ctk.CTkFont:
+    """TODO: description de font_small."""
     return ctk.CTkFont(family=_font(), size=20)
 
 

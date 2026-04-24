@@ -1,3 +1,5 @@
+"""TODO: description du module."""
+
 import json
 import threading
 from datetime import datetime
@@ -11,6 +13,7 @@ _lock = threading.Lock()
 
 
 def _load_raw() -> dict:
+    """TODO: description de _load_raw."""
     if not _STATS_FILE.exists():
         return {"total": 0, "events": []}
     try:
@@ -20,11 +23,13 @@ def _load_raw() -> dict:
 
 
 def _flush(data: dict) -> None:
+    """TODO: description de _flush."""
     _STATS_DIR.mkdir(parents=True, exist_ok=True)
     _STATS_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def increment() -> None:
+    """TODO: description de increment."""
     with _lock:
         ts = datetime.now().astimezone().isoformat()
         data = _load_raw()
@@ -34,25 +39,30 @@ def increment() -> None:
 
 
 def flush_buffer() -> None:
+    """TODO: description de flush_buffer."""
     pass
 
 
 def get_total() -> int:
+    """TODO: description de get_total."""
     with _lock:
         return _load_raw().get("total", 0)
 
 
 def reset() -> None:
+    """TODO: description de reset."""
     with _lock:
         _flush({"total": 0, "events": []})
 
 
 def get_events() -> list[str]:
+    """TODO: description de get_events."""
     with _lock:
         return _load_raw().get("events", [])
 
 
 def aggregate(period: str) -> list[tuple[str, int]]:
+    """TODO: description de aggregate."""
     events = get_events()
     counts: dict[str, int] = defaultdict(int)
 

@@ -1,5 +1,11 @@
 # AutoClaude
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+
+
 Outil Python qui détecte et clique automatiquement sur un bouton récurrent à l'écran — avec une interface graphique CustomTkinter en mode sombre.
 
 > Développé par [SéréniaTech](https://serenia-tech.fr) · [GitHub](https://github.com/ServOMorph)
@@ -130,3 +136,10 @@ Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
 Date : 24 avril 2026 (v2.2.0)
+
+
+---
+
+## Contribuer
+
+Les contributions sont les bienvenues ! Consulter [CONTRIBUTING.md](CONTRIBUTING.md) pour démarrer.

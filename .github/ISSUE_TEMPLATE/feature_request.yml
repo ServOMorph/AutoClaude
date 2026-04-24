@@ -1,0 +1,32 @@
+name: ✨ Feature Request
+description: Proposer une nouvelle fonctionnalité pour AutoClaude
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de votre proposition !
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème à résoudre
+      description: Quel problème cette fonctionnalité adresse-t-elle ?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: Description claire de la fonctionnalité souhaitée.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives envisagées
+      description: Avez-vous considéré d'autres approches ?
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte additionnel
+      description: Captures, liens, références...

@@ -1,10 +1,14 @@
+"""TODO: description du module."""
+
 import customtkinter as ctk
 from src.core import click_stats
 from src.ui import theme
 
 
 class ClickCounter(ctk.CTkFrame):
+    """TODO: description de ClickCounter."""
     def __init__(self, master, **kwargs):
+        """TODO: description de __init__."""
         super().__init__(master, fg_color=theme.PALETTE["bg_secondary"], corner_radius=10, **kwargs)
 
         self._label = ctk.CTkLabel(
@@ -33,9 +37,11 @@ class ClickCounter(ctk.CTkFrame):
         self._schedule_refresh()
 
     def _format(self, total: int) -> str:
+        """TODO: description de _format."""
         return f"🖱  {total:,} clic{'s' if total > 1 else ''}".replace(",", " ")
 
     def _on_reset(self):
+        """TODO: description de _on_reset."""
         dialog = ctk.CTkToplevel(self)
         dialog.title("Confirmer le reset")
         dialog.geometry("300x130")
@@ -56,6 +62,7 @@ class ClickCounter(ctk.CTkFrame):
         confirmed = [False]
 
         def on_yes():
+            """TODO: description de on_yes."""
             confirmed[0] = True
             dialog.destroy()
 
@@ -85,9 +92,11 @@ class ClickCounter(ctk.CTkFrame):
             self._label.configure(text=self._format(0))
 
     def refresh(self):
+        """TODO: description de refresh."""
         total = click_stats.get_total()
         self._label.configure(text=self._format(total))
 
     def _schedule_refresh(self):
+        """TODO: description de _schedule_refresh."""
         self.refresh()
         self.after(1000, self._schedule_refresh)
