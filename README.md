@@ -3,10 +3,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
+> **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
 Outil Python qui détecte et clique automatiquement sur un bouton récurrent à l'écran — avec une interface graphique CustomTkinter en mode sombre.
+
+Quand Claude Code travaille dans VS Code, il demande régulièrement une confirmation utilisateur (bouton "Continuer", "Approuver", etc.). AutoClaude surveille l'écran en arrière-plan et clique à ta place, permettant à Claude Code de tourner en continu sans surveillance constante.
 
 > Développé par [SéréniaTech](https://serenia-tech.fr) · [GitHub](https://github.com/ServOMorph)
 
