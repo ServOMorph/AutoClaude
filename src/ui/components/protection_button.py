@@ -11,7 +11,7 @@ class ProtectionButton(ctk.CTkFrame):
         self._btn = ctk.CTkButton(
             self,
             text="🛡  Protéger ce projet",
-            font=theme.font_body(),
+            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
             fg_color=theme.PALETTE["bg_secondary"],
             hover_color=theme.PALETTE["border"],
             text_color=theme.PALETTE["text"],
@@ -27,7 +27,7 @@ class ProtectionButton(ctk.CTkFrame):
         self._remove_btn = ctk.CTkButton(
             self,
             text="🗑  Retirer la protection",
-            font=theme.font_body(),
+            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
             fg_color="transparent",
             hover_color=theme.PALETTE["border"],
             text_color=theme.PALETTE["text_muted"],
@@ -38,7 +38,7 @@ class ProtectionButton(ctk.CTkFrame):
             height=38,
             command=self._remove,
         )
-        self._remove_btn.pack(pady=(8, 0))
+        self._remove_btn.pack(pady=(4, 0))
 
         self._status = ctk.CTkLabel(
             self, text="",

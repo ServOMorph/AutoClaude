@@ -8,11 +8,21 @@ class Footer(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
 
+        container = ctk.CTkFrame(self, fg_color="transparent")
+        container.pack(fill="x", pady=(0, 8))
+
         link = ctk.CTkLabel(
-            self, text=URL_GITHUB,
+            container, text=URL_GITHUB,
             font=ctk.CTkFont(size=11),
             text_color=theme.PALETTE["text_muted"],
             cursor="hand2",
         )
-        link.pack(pady=(0, 8))
+        link.pack(side="left")
         link.bind("<Button-1>", lambda _: webbrowser.open(URL_GITHUB))
+
+        version = ctk.CTkLabel(
+            container, text=f"v{VERSION}",
+            font=ctk.CTkFont(size=10),
+            text_color=theme.PALETTE["text_muted"],
+        )
+        version.pack(side="right")

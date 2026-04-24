@@ -43,7 +43,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         ctk.CTkLabel(
             self,
             text="Analyse des clics",
-            font=ctk.CTkFont(family="Segoe UI", size=16, weight="bold"),
+            font=ctk.CTkFont(family="Segoe UI", size=24, weight="bold"),
             text_color=theme.PALETTE["text"],
         ).pack(pady=(16, 8))
 
@@ -51,7 +51,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
             self,
             values=list(_PERIODS.keys()),
             command=self._on_period_change,
-            font=ctk.CTkFont(family="Segoe UI", size=12),
+            font=ctk.CTkFont(family="Segoe UI", size=18),
             fg_color=theme.PALETTE["bg_secondary"],
             selected_color=theme.PALETTE["primary"],
             selected_hover_color=theme.PALETTE["primary"],

@@ -1,7 +1,6 @@
-import webbrowser
 import customtkinter as ctk
 from PIL import Image
-from src.config.constants import ASSET_LOGO_PNG, URL_WEBSITE, APP_NAME
+from src.config.constants import ASSET_LOGO_PNG, APP_NAME
 from src.ui import theme
 
 
@@ -17,23 +16,14 @@ class Header(ctk.CTkFrame):
         except Exception:
             pass
 
-        link = ctk.CTkLabel(
-            self, text=URL_WEBSITE,
-            font=theme.font_small(),
-            text_color=theme.PALETTE["primary"],
-            cursor="hand2",
-        )
-        link.pack(pady=(0, 6))
-        link.bind("<Button-1>", lambda _: webbrowser.open(URL_WEBSITE))
-
         ctk.CTkLabel(
             self, text=APP_NAME,
             font=theme.font_title(),
-            text_color=theme.PALETTE["primary"],
+            text_color="#DB7759",
         ).pack()
 
         ctk.CTkLabel(
             self, text="Automatiseur de clics GUI",
             font=theme.font_small(),
-            text_color=theme.PALETTE["text_muted"],
+            text_color="#0078D4",
         ).pack(pady=(2, 12))

@@ -1,6 +1,9 @@
 import customtkinter as ctk
 from src.ui import theme
 
+_INACTIVE_COLOR = "#3886E5"
+_ACTIVE_COLOR = "#E53838"
+
 
 class ActivateButton(ctk.CTkFrame):
     def __init__(self, master, on_toggle: callable = None, **kwargs):
@@ -11,10 +14,10 @@ class ActivateButton(ctk.CTkFrame):
         self._btn = ctk.CTkButton(
             self,
             text=self._label(),
-            font=theme.font_subtitle(),
-            fg_color=theme.PALETTE["bg_secondary"],
-            hover_color=theme.PALETTE["border"],
-            text_color=theme.PALETTE["text_muted"],
+            font=ctk.CTkFont(family=theme._font(), size=20, weight="bold"),
+            fg_color=_INACTIVE_COLOR,
+            hover_color="#2563d4",
+            text_color="#fff",
             corner_radius=50,
             width=200,
             height=48,
@@ -23,16 +26,16 @@ class ActivateButton(ctk.CTkFrame):
         self._btn.pack()
 
     def _label(self) -> str:
-        dot = "🟢" if self._active else "🔴"
-        state = "ACTIF" if self._active else "INACTIF"
-        return f"{dot}  {state}"
+        return "Désactiver" if self._active else "Activer"
 
     def _toggle(self):
         self._active = not self._active
+        color = _ACTIVE_COLOR if self._active else _INACTIVE_COLOR
+        hover = "#c92c2c" if self._active else "#2563d4"
         self._btn.configure(
             text=self._label(),
-            fg_color=theme.PALETTE["success"] if self._active else theme.PALETTE["bg_secondary"],
-            text_color=theme.PALETTE["bg"] if self._active else theme.PALETTE["text_muted"],
+            fg_color=color,
+            hover_color=hover,
         )
         if self._on_toggle:
             self._on_toggle(self._active)

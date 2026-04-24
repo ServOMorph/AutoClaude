@@ -56,13 +56,10 @@ class AutoClaudeApp(ctk.CTk):
             ),
         ).pack(fill="x", padx=20, pady=(0, 16))
 
-        self._activate_btn = ActivateButton(self, on_toggle=self._on_toggle)
-        self._activate_btn.pack(pady=(0, 12))
-
         ctk.CTkButton(
             self,
             text="📁  Choisir dossier projet",
-            font=theme.font_body(),
+            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
             fg_color=theme.PALETTE["bg_secondary"],
             hover_color=theme.PALETTE["border"],
             text_color=theme.PALETTE["text"],
@@ -76,21 +73,30 @@ class AutoClaudeApp(ctk.CTk):
 
         self._folder_label = ctk.CTkLabel(
             self, text="Aucun dossier sélectionné",
-            font=ctk.CTkFont(size=12),
+            font=ctk.CTkFont(size=18),
             text_color=theme.PALETTE["text_muted"],
             wraplength=360,
         )
         self._folder_label.pack(pady=(0, 12))
 
         self._protection_btn = ProtectionButton(self, button_width=360)
-        self._protection_btn.pack(pady=(0, 16))
+        self._protection_btn.pack(pady=(0, 8))
 
-        self._click_counter = ClickCounter(self, width=360)
-        self._click_counter.pack(pady=(0, 8))
+        center_frame = ctk.CTkFrame(self, fg_color="transparent")
+        center_frame.pack(pady=(0, 12))
+
+        self._activate_btn = ActivateButton(center_frame, on_toggle=self._on_toggle)
+        self._activate_btn.pack()
+
+        row = ctk.CTkFrame(self, fg_color="transparent")
+        row.pack(pady=(0, 16))
+
+        self._click_counter = ClickCounter(row, width=170)
+        self._click_counter.pack(side="left", padx=(0, 4))
 
         ctk.CTkButton(
-            self,
-            text="📊  Analyses",
+            row,
+            text="📊  Graphiques",
             font=theme.font_body(),
             fg_color=theme.PALETTE["bg_secondary"],
             hover_color=theme.PALETTE["border"],
@@ -98,10 +104,24 @@ class AutoClaudeApp(ctk.CTk):
             border_color=theme.PALETTE["border"],
             border_width=1,
             corner_radius=8,
-            width=360,
+            width=170,
             height=38,
             command=self._open_analytics,
-        ).pack(pady=(0, 16))
+        ).pack(side="right", padx=(4, 0))
+
+        quit_btn = ctk.CTkButton(
+            self,
+            text="Quitter",
+            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
+            fg_color="#1A202C",
+            hover_color="#2d3748",
+            text_color="#DB775B",
+            corner_radius=8,
+            width=200,
+            height=38,
+            command=self._on_close,
+        )
+        quit_btn.pack(pady=(0, 12))
 
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
 
