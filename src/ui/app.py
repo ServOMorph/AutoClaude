@@ -88,10 +88,16 @@ class AutoClaudeApp(ctk.CTk):
         self._protection_btn.pack(pady=(0, 8))
 
         center_frame = ctk.CTkFrame(self, fg_color="transparent")
-        center_frame.pack(pady=(0, 12))
+        center_frame.pack(pady=(0, 4))
 
         self._activate_btn = ActivateButton(center_frame, on_toggle=self._on_toggle)
         self._activate_btn.pack()
+
+        ctk.CTkLabel(
+            self, text="Appuyer sur ESC pour désactiver",
+            font=ctk.CTkFont(size=11),
+            text_color=theme.PALETTE["text_muted"],
+        ).pack(pady=(0, 12))
 
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(pady=(0, 16))
