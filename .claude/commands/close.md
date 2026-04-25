@@ -55,3 +55,29 @@ git status
 - [suggestions]
 ```
 
+## 6️⃣ Afficher apprentissages stockés (optionnel)
+
+```bash
+# Lister tous les apprentissages documentés
+python .tooling/archive_search.py --learnings
+
+# Ou via meta.json
+cat APPRENTISSAGES/meta.json | python -m json.tool
+```
+
+**Output attendu** :
+```
+## 📚 Apprentissages stockés
+
+| Domain | Severity | Count | Fichiers |
+|--------|----------|-------|----------|
+| core | HIGH | 2 | logger_patterns.md, detector_robustness.md |
+| ui | MEDIUM | 1 | overlay_threading.md |
+| bugs_resolved | HIGH | 3 | ... |
+| workflows | MEDIUM | 2 | ... |
+
+**Total** : [N] apprentissages | **Dernière MAJ** : 2026-04-25
+```
+
+→ Permet de visualiser le capital connaissance accumulé avant `/start` suivant.
+
