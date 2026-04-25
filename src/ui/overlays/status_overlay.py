@@ -4,6 +4,7 @@ from src.config.constants import (
     OVERLAY_WIDTH, OVERLAY_HEIGHT, OVERLAY_MARGIN,
     OVERLAY_ALPHA, OVERLAY_COLOR_ACTIVE, OVERLAY_COLOR_INACTIVE, OVERLAY_TEXT_COLOR,
 )
+from src.config import settings
 
 class StatusOverlay(ctk.CTkToplevel):
     """Indicateur flottant always-on-top pour l'état de l'autoclick."""
@@ -25,10 +26,17 @@ class StatusOverlay(ctk.CTkToplevel):
             except Exception:
                 pass
 
-        # Positionnement en bas à gauche
-        screen_h = self.winfo_screenheight()
-        x = OVERLAY_MARGIN
-        y = screen_h - OVERLAY_HEIGHT - OVERLAY_MARGIN
+        # Positionnement (chargement ou défaut bas-gauche)
+        saved_x = settings.get("overlay_x")
+        saved_y = settings.get("overlay_y")
+
+        if saved_x is not None and saved_y is not None:
+            x, y = saved_x, saved_y
+        else:
+            screen_h = self.winfo_screenheight()
+            x = OVERLAY_MARGIN
+            y = screen_h - OVERLAY_HEIGHT - OVERLAY_MARGIN
+            
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
         # Frame principale cliquable
@@ -87,6 +95,10 @@ class StatusOverlay(ctk.CTkToplevel):
     def _stop_drag(self, event):
         if not self._is_dragging:
             self._handle_toggle()
+        else:
+            # Sauvegarder la nouvelle position
+            settings.set("overlay_x", self.winfo_x())
+            settings.set("overlay_y", self.winfo_y())
         self._is_dragging = False
 
     def _handle_toggle(self):

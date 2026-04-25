@@ -12,6 +12,8 @@ _DEFAULTS = {
     "auto_stop": False,
     "image_path": "",
     "overlay_enabled": True,
+    "overlay_x": None,
+    "overlay_y": None,
 }
 
 
