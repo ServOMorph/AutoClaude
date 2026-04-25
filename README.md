@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
-[![Version](https://img.shields.io/badge/version-2.2.1-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
 > **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
@@ -23,7 +23,9 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 - Arrêt via Esc, fermeture fenêtre ou mouvement souris (mode auto-stop)
 - Protection de projet Claude Code via injection dans `.claude/CLAUDE.md`
 - **Compteur de clics** avec historique persisté
-- **Analyses graphiques** : visualiser les clics par heure/jour/semaine/mois/année
+- **Analyses graphiques** : navigation temporelle (Récent / Tout), bandeau de statistiques (total, moyenne, record, jours actifs), graphes par heure/jour/semaine/mois/année
+- **Indicateur flottant** : overlay always-on-top en bas à gauche de l'écran, cliquable pour activer/désactiver l'autoclick depuis n'importe quelle application
+- Logs rotatifs (`~/.autoclaude/logs/`) et watchdog de stabilité pour une utilisation longue durée
 - Interface sombre SéréniaTech (CustomTkinter)
 - Paramètres persistés localement (`~/.autoclaude/settings.json`)
 
@@ -33,7 +35,7 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 
 ### Option 1 : Télécharger l'exécutable (Windows)
 
-Télécharge `AutoClaude_v2.2.1.exe` depuis les [releases](https://github.com/ServOMorph/AutoClaude/releases) et double-clique pour lancer. Aucune dépendance Python requise.
+Télécharge `AutoClaude_v2.3.0.exe` depuis les [releases](https://github.com/ServOMorph/AutoClaude/releases) et double-clique pour lancer. Aucune dépendance Python requise.
 
 ### Option 2 : Installation depuis le code source
 
@@ -60,6 +62,7 @@ python run.py
 | `customtkinter` | Interface graphique |
 | `Pillow` | Affichage des images |
 | `matplotlib` | Graphes d'analyse |
+| `psutil` | Monitoring mémoire/stabilité |
 
 **Optionnelles** (meilleures performances)
 
@@ -90,7 +93,25 @@ L'interface permet de :
 2. **Sélectionner un dossier de projet** à protéger
 3. **Appliquer ou retirer** la protection Claude Code sur ce dossier
 4. **Compter les clics** — affichage en temps réel du nombre total, avec reset possible
-5. **Visualiser les analyses** — graphes interactifs par période (heure/jour/semaine/mois/année)
+5. **Visualiser les analyses** — navigation par période, mode Récent/Tout, stats chiffrées
+6. **Afficher/masquer l'indicateur flottant** — overlay visible par-dessus toutes les applications
+
+### Indicateur flottant
+
+Un petit indicateur apparaît en bas à gauche de l'écran, par-dessus toutes les fenêtres :
+
+- 🔵 **Bleu — AutoClaude OFF** : autoclick inactif
+- 🔴 **Rouge — AutoClaude ON** : autoclick actif
+
+Un clic sur l'indicateur active ou désactive l'autoclick directement, sans revenir à la fenêtre principale. L'affichage se contrôle via le switch **"Afficher l'indicateur flottant"** dans l'UI.
+
+### Analyses
+
+La fenêtre d'analyses offre :
+- **5 périodes** : Heure, Jour, Semaine, Mois, Année
+- **Mode Récent** (défaut) : fenêtre glissante — 24h / 30 jours / 12 semaines / 12 mois
+- **Mode Tout** : historique complet avec navigation Précédent / Suivant (paginé par jour, mois ou année)
+- **Bandeau de stats** : total, moyenne par jour actif, record journalier, jours actifs
 
 ### Arrêt
 
@@ -114,11 +135,17 @@ Voir [DOCS/SECURITY.md](DOCS/SECURITY.md) pour le détail du bloc injecté et de
 
 ---
 
+## Logs & stabilité
+
+AutoClaude est conçu pour tourner en continu. Les logs sont disponibles dans `~/.autoclaude/logs/autoclaude.log` (rotation automatique, 5 Mo × 3 fichiers). En cas de crash ou de comportement anormal, ce fichier est le premier endroit à consulter.
+
+---
+
 ## Architecture
 
 ```
-src/core/       détection, clic, listener, service autoclick
-src/ui/         interface CustomTkinter + composants + dialogs
+src/core/       détection, clic, listener, service autoclick, logger, health monitor
+src/ui/         interface CustomTkinter + composants + dialogs + overlays
 src/security/   ClaudeMdProtector
 src/config/     constantes et persistance JSON
 assets/         yes.png, logo.png
@@ -132,14 +159,12 @@ Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions
 
 MIT — voir [LICENSE](LICENSE)
 
-
 ---
 
-Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech : 
+Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 24 avril 2026 (v2.2.1)
-
+Date : 25 avril 2026 (v2.3.0)
 
 ---
 

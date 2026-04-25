@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "autoclaude"
-version = "2.2.0"
+version = "2.3.0"
 description = ""
 readme = "README.md"
 license = {text = "MIT"}
@@ -27,6 +27,7 @@ dependencies = [
     "customtkinter>=5.2.2",
     "Pillow>=10.0.0",
     "matplotlib>=3.8.0",
+    "psutil>=5.9.0",
     "pyinstaller>=6.0.0"
 ]
 

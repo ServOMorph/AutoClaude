@@ -4,6 +4,8 @@ import customtkinter as ctk
 from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
+from src.core import health_monitor
+from src.core.logger import get_logger
 from src.ui import theme
 from src.ui.components.header import Header
 from src.ui.components.warning_banner import WarningBanner
@@ -11,8 +13,10 @@ from src.ui.components.activate_button import ActivateButton
 from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
 from src.ui.components.click_counter import ClickCounter
+from src.ui.components.overlay_toggle import OverlayToggle
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
+from src.ui.overlays.status_overlay import StatusOverlay
 
 
 class AutoClaudeApp(ctk.CTk):
@@ -21,6 +25,9 @@ class AutoClaudeApp(ctk.CTk):
         """TODO: description de __init__."""
         theme.apply()
         super().__init__()
+
+        self._log = get_logger()
+        self.report_callback_exception = self._on_tk_exception
 
         self.title(APP_NAME)
         self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
@@ -43,6 +50,22 @@ class AutoClaudeApp(ctk.CTk):
         self._build_ui()
         self.bind("<Escape>", lambda _: self._stop_service())
         self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+        self._overlay = StatusOverlay(self, on_click=self._activate_btn._toggle)
+        if settings.get("overlay_enabled"):
+            self._overlay.show()
+        else:
+            self._overlay.hide()
+
+        health_monitor.start()
+        self._log.info("AutoClaude démarré (v%s)", APP_NAME)
+
+    def _on_tk_exception(self, exc_type, exc_val, exc_tb):
+        """Hook global Tk — log les exceptions silencieuses au lieu de crasher."""
+        self._log.error(
+            "Exception Tk non gérée : %s: %s",
+            exc_type.__name__, exc_val, exc_info=(exc_type, exc_val, exc_tb),
+        )
 
     def _build_ui(self):
         """TODO: description de _build_ui."""
@@ -120,6 +143,8 @@ class AutoClaudeApp(ctk.CTk):
             command=self._open_analytics,
         ).pack(side="right", padx=(4, 0))
 
+        OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 8))
+
         quit_btn = ctk.CTkButton(
             self,
             text="Quitter",
@@ -142,6 +167,7 @@ class AutoClaudeApp(ctk.CTk):
             self._start_service()
         else:
             self._stop_service()
+        self._overlay.set_active(active)
 
     def _start_service(self):
         """TODO: description de _start_service."""
@@ -162,10 +188,20 @@ class AutoClaudeApp(ctk.CTk):
             self._service.stop()
             self._service = None
         self._activate_btn.set_active(False)
+        self._overlay.set_active(False)
 
     def _on_service_stopped(self):
         """TODO: description de _on_service_stopped."""
-        self.after(0, lambda: self._activate_btn.set_active(False))
+        self.after(0, lambda: (
+            self._activate_btn.set_active(False),
+            self._overlay.set_active(False),
+        ))
+
+    def _on_overlay_toggle(self, enabled: bool):
+        if enabled:
+            self._overlay.show()
+        else:
+            self._overlay.hide()
 
     def _pick_folder(self):
         """TODO: description de _pick_folder."""
@@ -182,4 +218,10 @@ class AutoClaudeApp(ctk.CTk):
     def _on_close(self):
         """TODO: description de _on_close."""
         self._stop_service()
+        health_monitor.stop()
+        try:
+            self._overlay.destroy()
+        except Exception:
+            pass
+        self._log.info("AutoClaude fermé")
         self.destroy()

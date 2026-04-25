@@ -2,18 +2,28 @@
 
 import json
 import threading
+import time
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
+
+from src.core.logger import get_logger
 
 _STATS_DIR = Path.home() / ".autoclaude"
 _STATS_FILE = _STATS_DIR / "click_stats.json"
 
 _lock = threading.Lock()
 
+# Buffer en mémoire pour éviter un write disque à chaque clic
+_buffer_count = 0
+_buffer_events: list[str] = []
+_FLUSH_EVERY = 20       # flush toutes les 20 clics
+_FLUSH_INTERVAL = 60.0  # flush toutes les 60 secondes au plus tard
+
+_last_flush_time = time.monotonic()
+
 
 def _load_raw() -> dict:
-    """TODO: description de _load_raw."""
     if not _STATS_FILE.exists():
         return {"total": 0, "events": []}
     try:
@@ -22,43 +32,73 @@ def _load_raw() -> dict:
         return {"total": 0, "events": []}
 
 
-def _flush(data: dict) -> None:
-    """TODO: description de _flush."""
+def _write_raw(data: dict) -> None:
     _STATS_DIR.mkdir(parents=True, exist_ok=True)
-    _STATS_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp = _STATS_FILE.with_suffix(".tmp")
+    try:
+        tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        tmp.replace(_STATS_FILE)
+    except OSError as exc:
+        get_logger().error("Erreur écriture click_stats : %s", exc)
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
+def _flush_locked(data: dict | None = None) -> None:
+    """Flush le buffer vers le disque. Doit être appelé sous _lock."""
+    global _buffer_count, _buffer_events, _last_flush_time
+    if not _buffer_events and _buffer_count == 0:
+        return
+    if data is None:
+        data = _load_raw()
+    data["total"] = data.get("total", 0) + _buffer_count
+    data["events"] = data.get("events", []) + _buffer_events
+    _write_raw(data)
+    _buffer_count = 0
+    _buffer_events = []
+    _last_flush_time = time.monotonic()
 
 
 def increment() -> None:
     """TODO: description de increment."""
+    global _buffer_count, _buffer_events
     with _lock:
         ts = datetime.now().astimezone().isoformat()
-        data = _load_raw()
-        data["total"] = data.get("total", 0) + 1
-        data["events"] = data.get("events", []) + [ts]
-        _flush(data)
+        _buffer_count += 1
+        _buffer_events.append(ts)
+        if _buffer_count >= _FLUSH_EVERY or (time.monotonic() - _last_flush_time) >= _FLUSH_INTERVAL:
+            _flush_locked()
 
 
 def flush_buffer() -> None:
-    """TODO: description de flush_buffer."""
-    pass
+    """Flush explicite — à appeler à l'arrêt du service."""
+    with _lock:
+        _flush_locked()
 
 
 def get_total() -> int:
     """TODO: description de get_total."""
     with _lock:
-        return _load_raw().get("total", 0)
+        base = _load_raw().get("total", 0)
+        return base + _buffer_count
 
 
 def reset() -> None:
     """TODO: description de reset."""
+    global _buffer_count, _buffer_events
     with _lock:
-        _flush({"total": 0, "events": []})
+        _buffer_count = 0
+        _buffer_events = []
+        _write_raw({"total": 0, "events": []})
 
 
 def get_events() -> list[str]:
     """TODO: description de get_events."""
     with _lock:
-        return _load_raw().get("events", [])
+        data = _load_raw()
+        return data.get("events", []) + list(_buffer_events)
 
 
 def aggregate(period: str) -> list[tuple[str, int]]:
