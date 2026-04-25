@@ -39,7 +39,6 @@ class StatusOverlay(ctk.CTkToplevel):
             border_width=0
         )
         self.main_frame.pack(expand=True, fill="both")
-        self.main_frame.bind("<Button-1>", lambda e: self._handle_toggle())
 
         self.label = ctk.CTkLabel(
             self.main_frame,
@@ -49,7 +48,6 @@ class StatusOverlay(ctk.CTkToplevel):
             fg_color="transparent"
         )
         self.label.pack(side="left", expand=True, padx=(10, 0))
-        self.label.bind("<Button-1>", lambda e: self._handle_toggle())
 
         self.count_label = ctk.CTkLabel(
             self.main_frame,
@@ -59,9 +57,37 @@ class StatusOverlay(ctk.CTkToplevel):
             fg_color="transparent"
         )
         self.count_label.pack(side="right", expand=True, padx=(0, 10))
-        self.count_label.bind("<Button-1>", lambda e: self._handle_toggle())
+        
+        # Drag & Drop et Toggle
+        self._drag_start_x = 0
+        self._drag_start_y = 0
+        self._is_dragging = False
+
+        for widget in [self.main_frame, self.label, self.count_label]:
+            widget.bind("<Button-1>", self._start_drag)
+            widget.bind("<B1-Motion>", self._do_drag)
+            widget.bind("<ButtonRelease-1>", self._stop_drag)
 
         self._keep_on_top()
+
+    def _start_drag(self, event):
+        self._drag_start_x = event.x
+        self._drag_start_y = event.y
+        self._is_dragging = False
+
+    def _do_drag(self, event):
+        # Si on bouge de plus de 2 pixels, on considère que c'est un drag
+        if abs(event.x - self._drag_start_x) > 2 or abs(event.y - self._drag_start_y) > 2:
+            self._is_dragging = True
+            
+        x = self.winfo_x() + (event.x - self._drag_start_x)
+        y = self.winfo_y() + (event.y - self._drag_start_y)
+        self.geometry(f"+{x}+{y}")
+
+    def _stop_drag(self, event):
+        if not self._is_dragging:
+            self._handle_toggle()
+        self._is_dragging = False
 
     def _handle_toggle(self):
         self._active = not self._active
