@@ -2,15 +2,16 @@
 
 ## 🤝 Organes de communication (OBLIGATOIRE)
 
-**3 fichiers racine = source de vérité unique pour toute IA** :
-- **[README.md](../README.md)** : usage + install + features
+**4 fichiers racine = source de vérité unique pour toute IA** :
+- **[README.md](../README.md)** : mission, features, usage
 - **[ROADMAP.md](../ROADMAP.md)** : phases, statuts, priorités
 - **[ARCHITECTURE.md](../ARCHITECTURE.md)** : structure technique, décisions
+- **[WORKFLOW.md](../WORKFLOW.md)** : cycle `/start` `/close` `/doc` IA-agnostique (v2.6.0+)
 
 **Règles** :
-- ✅ Lire ces 3 fichiers au `/start` pour contexte complet
-- ✅ Mettre à jour ces 3 fichiers au `/close` si pertinent
-- ✅ Toute commande IA (`/start`, `/close`, `/bump_version`) y fait référence
+- ✅ Lire ces 4 fichiers au `/start` pour contexte complet
+- ✅ Mettre à jour ces 4 fichiers au `/close` si pertinent
+- ✅ Toute commande IA (`/start`, `/close`, `/doc`, `/bump_version`) y fait référence
 - ❌ Ne pas créer de doc concurrente — détails additionnels dans `DOCS/`
 
 ## Directives essentielles
@@ -48,13 +49,42 @@
 
 ## Cycle de travail (obligatoire)
 
-**1️⃣ `/start`** : Lire les **3 organes** (README.md + ROADMAP.md + ARCHITECTURE.md à la racine) • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens de APPRENTISSAGES/meta.json) • Afficher recommandation ROI
+**1️⃣ `/start`** : Lire **4 organes** (README + ROADMAP + ARCHITECTURE + WORKFLOW) • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens) • Analyser ROADMAP → recommander tâches ROI • Afficher plan d'action
 
-**2️⃣ Travail** : Utiliser contexte + apprentissages • Logger issues/solutions • Tester
+**2️⃣ Travail** : Implémenter selon plan • Tests associés (v2.5.0+) • Logger issues/solutions → apprentissages
 
-**3️⃣ `/close`** : Mettre à jour les **3 organes** (README/ROADMAP/ARCHITECTURE racine) si pertinent • Documenter apprentissage si nouveau (créer APPRENTISSAGES/<domain>/<topic>.md, update meta.json, <500 tokens) • Commit
+**3️⃣ `/doc`** (v2.6.0+) : Exécuter avant `/close` → audit cohérence 4 organes + multi-LLM compliance • Proposer fixes si warnings majeurs • Générer rapport
 
-**Continuité** : `/close` → `/start` suivant crée accumulation de savoir automatique
+**4️⃣ `/close`** : Exécuter `/doc` → fix warnings si nécessaire • Documenter apprentissages (APPRENTISSAGES/<domain>/<topic>.md <500 tokens) • Update meta.json • Commit normalisé • Tag version si applicable
+
+**Continuité** : `/close` → `/start` suivant crée accumulation savoir auto
+
+## Session & Context management
+
+**Token budget/session** : ~5000-6500 tokens = 1-2 phases majeures max
+
+| Phase | Budget | Notes |
+|-------|--------|-------|
+| Lire 4 organes + apprentissages | 500-800 | `/start` |
+| Implémentation | 2000-3000 | tests inclus (v2.5.0+) |
+| `/doc` audit | 500 | avant `/close` (v2.6.0+) |
+| `/close` | 300 | apprentissages + commit |
+
+**Context reset** : ≥60% max context → créer `HANDOFF_<task_id>.md`, handoff à IA suivante, exécuter `/close`
+
+**Handoff format** (lire [WORKFLOW.md](../WORKFLOW.md) section 📋) :
+- État fichiers modifiés (✅/🔄/⏳)
+- Prochaine étape précise
+- Pièges identifiés
+- Apprentissages chargés
+
+## Tests & Couverture (v2.5.0+)
+
+**Minimum 90% couverture** → fail `/close` si <90%
+
+**Exécuter** : `pytest tests/ --cov=src --cov-fail-under=90`
+
+**Tests associés** : créer `tests/` dès création fonction (unit + integration)
 
 ## Système d'apprentissage
 
