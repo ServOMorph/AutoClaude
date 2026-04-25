@@ -1,9 +1,9 @@
-# 🔧 Refactorisation racine — Plan détaillé
+t# 🔧 Refactorisation racine — Plan détaillé
 
-**Objectif** : Structurer racine pour clarté + maintenabilité  
-**Durée estimée** : 15-20 min  
+**Objectif** : Structurer racine + automatiser versioning  
+**Durée estimée** : 25-30 min (6 phases)  
 **Branch** : v2.4.0  
-**Impact** : Documentation, build, tooling centralisés
+**Impact** : Documentation, build, tooling centralisés + /bump_version automatisé
 
 ---
 
@@ -141,7 +141,57 @@ grep -n "ARCHITECTURE\|COMET" .claude/commands/startV2.md .claude/commands/close
 
 ---
 
-## Phase 4 : Mettre à jour `.gitignore` (2 min)
+## Phase 3bis : Créer commande `/bump_version` (5 min)
+
+Automatiser le versioning complet du projet.
+
+### 3bis.1 — Vérifier fichiers créés
+```bash
+ls -la .claude/commands/bump_version.md
+ls -la .tooling/bump_version*.py
+ls -la .tooling/bump_version_files.json
+```
+
+**Devrait afficher** : 4 fichiers
+- `.claude/commands/bump_version.md` (guide/workflow)
+- `.tooling/bump_version.py` (script bump)
+- `.tooling/bump_changelog.py` (script changelog)
+- `.tooling/bump_version_files.json` (config fichiers à updater)
+
+### 3bis.2 — Tester analyse version
+```bash
+python .tooling/bump_version.py --analyze
+# Output: ✅ LISTED src/config/constants.py
+#         ✅ LISTED pyproject.toml
+#         ✅ LISTED README.md
+#         ⚠️  NEW?   (si fichiers trouvés non listés)
+# Action: si NEW?, ajouter à .tooling/bump_version_files.json
+```
+
+### 3bis.3 — Vérifier contenu config
+```bash
+cat .tooling/bump_version_files.json | grep -E '"path"|"pattern"|"required"'
+# Vérifier: X.Y.Z pattern dans constants.py, pyproject.toml, README.md, etc.
+```
+
+### 3bis.4 — Vérifier scripts intégrité
+```bash
+grep "def bump_files\|def create_changelog_entry" .tooling/bump_version*.py
+# Vérifier: fonctions clés présentes
+python .tooling/bump_version.py --help 2>/dev/null || echo "Script OK"
+python .tooling/bump_changelog.py --help 2>/dev/null || echo "Script OK"
+```
+
+### 3bis.5 — Documenter usage
+Vérifier que `.claude/commands/bump_version.md` contient :
+```bash
+grep -E "Analyser|Bumper|Documenter|Commit" .claude/commands/bump_version.md
+# Doit afficher: 4 étapes du workflow
+```
+
+---
+
+## Phase 5 : Mettre à jour `.gitignore` (2 min)
 
 **Ajouter au `.gitignore`** (si pas déjà présent) :
 ```
@@ -168,7 +218,7 @@ git status
 
 ---
 
-## Phase 5 : Commit (2 min)
+## Phase 6 : Commit (2 min)
 
 ```bash
 git add -A
@@ -192,6 +242,11 @@ Changements :
   • Supprimé .benchmarks/ (non utilisé)
   • Ajouté section "Intégrations IA" à README.md → lien vers COMET/
   • Mis à jour startV2.md, closeV2.md (références ARCHITECTURE)
+  • Créé /bump_version : commande + scripts + config
+    - .claude/commands/bump_version.md (guide workflow)
+    - .tooling/bump_version.py (script bump automatisé)
+    - .tooling/bump_changelog.py (script changelog template)
+    - .tooling/bump_version_files.json (liste fichiers + patterns)
   • Mis à jour .gitignore (build/, dist/, .benchmarks/ cachés)
 
 Racine avant : 13 fichiers + clutter  
@@ -238,11 +293,19 @@ AutoClaude/ (racine)
 │   ├── pyinstaller/             (*.spec files)
 │   ├── build/                   (.gitignore)
 │   └── dist/                    (.gitignore)
-└── .tooling/
-    ├── build.py
-    ├── audit_before.json
-    ├── audit_after.json
-    └── type_hints_todo.json
+├── .tooling/
+│   ├── build.py
+│   ├── audit_before.json
+│   ├── audit_after.json
+│   ├── type_hints_todo.json
+│   ├── bump_version.py              (script bump version)
+│   ├── bump_changelog.py            (script changelog)
+│   └── bump_version_files.json      (config fichiers)
+│
+└── .claude/commands/
+    ├── startV2.md                   (démarrage session)
+    ├── closeV2.md                   (clôture session)
+    └── bump_version.md              (versioning automatis)
 ```
 
 **Commandes de vérification** :

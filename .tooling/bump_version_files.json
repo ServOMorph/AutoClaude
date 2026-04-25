@@ -1,0 +1,57 @@
+{
+  "description": "Liste des fichiers à updater pour bump de version",
+  "version_pattern": "VERSION",
+  "files": [
+    {
+      "path": "src/config/constants.py",
+      "pattern": "VERSION = \"X.Y.Z\"",
+      "type": "python",
+      "required": true
+    },
+    {
+      "path": "pyproject.toml",
+      "pattern": "version = \"X.Y.Z\"",
+      "type": "toml",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "pattern": "badge/version-X.Y.Z",
+      "type": "markdown",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "pattern": "AutoClaude_vX.Y.Z.exe",
+      "type": "markdown",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "pattern": "(vX.Y.Z)",
+      "type": "markdown",
+      "required": false,
+      "notes": "Footer date"
+    },
+    {
+      "path": "build/pyinstaller/AutoClaude_vX.Y.Z.spec",
+      "pattern": "name='AutoClaude_vX.Y.Z'",
+      "type": "pyinstaller",
+      "required": false,
+      "notes": "Nouveau spec file par version"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "pattern": "## [X.Y.Z]",
+      "type": "markdown",
+      "required": true,
+      "notes": "Ajouter en haut avec timestamp"
+    }
+  ],
+  "analysis_tips": [
+    "Chercher [version] ou [VERSION] dans tous les fichiers",
+    "Vérifier les références dans DOCS/ (peut contenir numéros versions)",
+    "Vérifier .github/workflows/ (versions dans CI/CD)",
+    "Chercher patterns v2.X.X, AutoClaude_v, release- dans code"
+  ]
+}
