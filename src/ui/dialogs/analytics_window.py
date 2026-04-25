@@ -34,6 +34,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self._ctk_img = None
         self._img_label = None
         self._build_ui()
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.after(100, self._show)
 
     def _show(self):
@@ -135,3 +136,16 @@ class AnalyticsWindow(ctk.CTkToplevel):
 
         self._ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(_W, _H))
         self._img_label.configure(image=self._ctk_img, text="")
+
+    def _on_close(self):
+        """Fermeture propre : libérer la figure courante et détruire la fenêtre."""
+        plt.close("all")
+        self._ctk_img = None
+        if self._img_label:
+            self._img_label.configure(image=None)
+            self._img_label = None
+        try:
+            self.grab_release()
+        except Exception:
+            pass
+        self.destroy()

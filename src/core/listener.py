@@ -20,9 +20,13 @@ class InputListener:
         self._last_mouse_pos = None
         self._kb_listener = None
         self._mouse_listener = None
+        self._started = False
 
     def start(self):
         """TODO: description de start."""
+        if self._started:
+            return
+        self._started = True
         if _keyboard:
             self._kb_listener = _keyboard.Listener(on_press=self._on_press)
             self._kb_listener.start()
@@ -32,10 +36,19 @@ class InputListener:
 
     def stop(self):
         """TODO: description de stop."""
+        self._started = False
         if self._kb_listener:
-            self._kb_listener.stop()
+            try:
+                self._kb_listener.stop()
+            except Exception:
+                pass
+            self._kb_listener = None
         if self._mouse_listener:
-            self._mouse_listener.stop()
+            try:
+                self._mouse_listener.stop()
+            except Exception:
+                pass
+            self._mouse_listener = None
 
     def has_keyboard(self) -> bool:
         """TODO: description de has_keyboard."""
