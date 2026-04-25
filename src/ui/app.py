@@ -14,6 +14,7 @@ from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
 from src.ui.components.click_counter import ClickCounter
 from src.ui.components.overlay_toggle import OverlayToggle
+from src.core import click_stats
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
 from src.ui.dialogs.library_window import LibraryWindow
@@ -196,6 +197,7 @@ class AutoClaudeApp(ctk.CTk):
             image_path=image_path,
             interval=interval,
             auto_stop=auto_stop,
+            on_click=self._on_autoclick,
             on_stop=self._on_service_stopped,
         )
         self._service.start()
@@ -207,6 +209,13 @@ class AutoClaudeApp(ctk.CTk):
             self._service = None
         self._activate_btn.set_active(False)
         self._overlay.set_active(False)
+
+    def _on_autoclick(self, *_):
+        total = click_stats.get_total()
+        self.after(0, lambda: (
+            self._overlay.set_click_count(total),
+            self._click_counter.refresh(),
+        ))
 
     def _on_service_stopped(self):
         """TODO: description de _on_service_stopped."""

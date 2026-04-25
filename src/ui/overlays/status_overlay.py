@@ -38,10 +38,12 @@ class StatusOverlay(ctk.CTkToplevel):
         y = sh - OVERLAY_HEIGHT - OVERLAY_MARGIN
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
+        self._count: int = 0
+
         self._label = ctk.CTkLabel(
             self,
-            text="● AutoClaude OFF",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text="● OFF · 0",
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
             fg_color="transparent",
         )
@@ -55,10 +57,16 @@ class StatusOverlay(ctk.CTkToplevel):
 
     def set_active(self, state: bool) -> None:
         self._active = state
-        color = OVERLAY_COLOR_ACTIVE if state else OVERLAY_COLOR_INACTIVE
-        text = "● AutoClaude ON" if state else "● AutoClaude OFF"
-        self.configure(fg_color=color)
-        self._label.configure(text=text)
+        self.configure(fg_color=OVERLAY_COLOR_ACTIVE if state else OVERLAY_COLOR_INACTIVE)
+        self._refresh_label()
+
+    def set_click_count(self, count: int) -> None:
+        self._count = count
+        self._refresh_label()
+
+    def _refresh_label(self) -> None:
+        state = "ON" if self._active else "OFF"
+        self._label.configure(text=f"● {state} · {self._count}")
 
     def show(self) -> None:
         self._visible = True
