@@ -14,9 +14,9 @@ from src.ui.components.activate_button import ActivateButton
 from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
 from src.ui.components.click_counter import ClickCounter
-from src.ui.components.click_counter import ClickCounter
+from src.core import click_stats
+from src.ui.overlays.status_overlay import StatusOverlay
 from src.ui.dialogs.folder_picker import pick_folder
-from src.ui.dialogs.analytics_window import AnalyticsWindow
 from src.ui.dialogs.analytics_window import AnalyticsWindow
 
 
@@ -51,6 +51,10 @@ class AutoClaudeApp(ctk.CTk):
         self._build_ui()
         self.bind("<Escape>", lambda _: self._stop_service())
         self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+        self._overlay = StatusOverlay(self, on_toggle=self._activate_btn._toggle)
+        self._overlay.set_click_count(click_stats.get_total())
+        self._overlay.deiconify() # On l'affiche par défaut
 
         health_monitor.start()
         self._log.info("AutoClaude démarré (v%s)", APP_NAME)
@@ -177,6 +181,7 @@ class AutoClaudeApp(ctk.CTk):
             self._start_service()
         else:
             self._stop_service()
+        self._overlay.set_active(active)
 
     def _start_service(self):
         """TODO: description de _start_service."""
@@ -187,9 +192,17 @@ class AutoClaudeApp(ctk.CTk):
             image_path=image_path,
             interval=interval,
             auto_stop=auto_stop,
+            on_click=self._on_autoclick,
             on_stop=self._on_service_stopped,
         )
         self._service.start()
+
+    def _on_autoclick(self, *_):
+        total = click_stats.get_total()
+        self.after(0, lambda: (
+            self._overlay.set_click_count(total),
+            self._click_counter.refresh(),
+        ))
 
     def _stop_service(self):
         """TODO: description de _stop_service."""
@@ -197,11 +210,13 @@ class AutoClaudeApp(ctk.CTk):
             self._service.stop()
             self._service = None
         self._activate_btn.set_active(False)
+        self._overlay.set_active(False)
 
     def _on_service_stopped(self):
         """TODO: description de _on_service_stopped."""
         self.after(0, lambda: (
             self._activate_btn.set_active(False),
+            self._overlay.set_active(False),
         ))
 
     def _pick_folder(self):
@@ -221,7 +236,7 @@ class AutoClaudeApp(ctk.CTk):
         self._stop_service()
         health_monitor.stop()
         try:
-            pass
+            self._overlay.destroy()
         except Exception:
             pass
         self._log.info("AutoClaude fermé")

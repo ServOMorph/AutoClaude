@@ -1,5 +1,3 @@
-"""Fenêtre flottante always-on-top indiquant l'état de l'autoclick."""
-
 import sys
 import customtkinter as ctk
 from src.config.constants import (
@@ -7,81 +5,93 @@ from src.config.constants import (
     OVERLAY_ALPHA, OVERLAY_COLOR_ACTIVE, OVERLAY_COLOR_INACTIVE, OVERLAY_TEXT_COLOR,
 )
 
-_TOPMOST_REFRESH_MS = 2000
-
-
 class StatusOverlay(ctk.CTkToplevel):
-    """Indicateur flottant sans décoration, toujours au-dessus de toutes les fenêtres."""
-
-    def __init__(self, master, on_click: callable = None):
+    """Indicateur flottant always-on-top pour l'état de l'autoclick."""
+    
+    def __init__(self, master, on_toggle: callable):
         super().__init__(master)
-        self._on_click = on_click
+        self._on_toggle = on_toggle
         self._active = False
-        self._visible = False
 
-        self.overrideredirect(True)
-        self.attributes("-topmost", True)
+        # Configuration de la fenêtre
+        self.overrideredirect(True)  # Pas de bordures
+        self.attributes("-topmost", True)  # Toujours au-dessus
         self.attributes("-alpha", OVERLAY_ALPHA)
-
-        # N'apparaît pas dans Alt+Tab ni la barre des tâches (Windows uniquement)
+        
+        # Windows specific: hide from Taskbar
         if sys.platform == "win32":
             try:
                 self.attributes("-toolwindow", True)
             except Exception:
                 pass
 
-        self.configure(fg_color=OVERLAY_COLOR_INACTIVE)
-
-        sw = self.winfo_screenwidth()
-        sh = self.winfo_screenheight()
-        x = OVERLAY_MARGIN
-        y = sh - OVERLAY_HEIGHT - OVERLAY_MARGIN
+        # Positionnement en bas à droite
+        screen_w = self.winfo_screenwidth()
+        screen_h = self.winfo_screenheight()
+        x = screen_w - OVERLAY_WIDTH - OVERLAY_MARGIN
+        y = screen_h - OVERLAY_HEIGHT - OVERLAY_MARGIN
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
-        self._label = ctk.CTkLabel(
+        # Utilisation d'un CTkButton comme container principal pour garantir la cliquabilité sur Windows
+        self.main_btn = ctk.CTkButton(
             self,
-            text="● AutoClaude OFF",
+            text="",
+            fg_color=OVERLAY_COLOR_INACTIVE,
+            hover_color=OVERLAY_COLOR_INACTIVE, # Pas d'effet hover par défaut
+            corner_radius=10,
+            command=self._handle_toggle,
+            border_width=0
+        )
+        self.main_btn.pack(expand=True, fill="both")
+
+        self.label = ctk.CTkLabel(
+            self.main_btn,
+            text="CL OFF",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
-            fg_color="transparent",
+            fg_color="transparent"
         )
-        self._label.pack(expand=True, fill="both", padx=8)
+        self.label.pack(side="left", expand=True, padx=(10, 0))
+        self.label.bind("<Button-1>", lambda e: self._handle_toggle())
 
-        self._label.bind("<Button-1>", self._handle_click)
-        self.bind("<Button-1>", self._handle_click)
+        self.count_label = ctk.CTkLabel(
+            self.main_btn,
+            text="0",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=OVERLAY_TEXT_COLOR,
+            fg_color="transparent"
+        )
+        self.count_label.pack(side="right", expand=True, padx=(0, 10))
+        self.count_label.bind("<Button-1>", lambda e: self._handle_toggle())
 
-        self.withdraw()
-        self._schedule_keep_on_top()
+        self._keep_on_top()
+
+    def _handle_toggle(self):
+        self._active = not self._active
+        self.update_ui()
+        if self._on_toggle:
+            self._on_toggle()
 
     def set_active(self, state: bool) -> None:
-        self._active = state
-        color = OVERLAY_COLOR_ACTIVE if state else OVERLAY_COLOR_INACTIVE
-        text = "● AutoClaude ON" if state else "● AutoClaude OFF"
-        self.configure(fg_color=color)
-        self._label.configure(text=text)
+        if self._active != state:
+            self._active = state
+            self.update_ui()
 
-    def show(self) -> None:
-        self._visible = True
-        self.deiconify()
-        self.attributes("-topmost", True)
+    def update_ui(self):
+        if self._active:
+            self.main_btn.configure(fg_color=OVERLAY_COLOR_ACTIVE, hover_color=OVERLAY_COLOR_ACTIVE)
+            self.label.configure(text="CL ON")
+        else:
+            self.main_btn.configure(fg_color=OVERLAY_COLOR_INACTIVE, hover_color=OVERLAY_COLOR_INACTIVE)
+            self.label.configure(text="CL OFF")
 
-    def hide(self) -> None:
-        self._visible = False
-        self.withdraw()
+    def set_click_count(self, count: int):
+        self.count_label.configure(text=str(count))
 
-    def _handle_click(self, _event=None):
-        if self._on_click:
-            try:
-                self._on_click()
-            except Exception:
-                pass
-
-    def _schedule_keep_on_top(self):
-        """Re-applique topmost périodiquement pour rester au-dessus."""
-        if self._visible:
-            try:
-                self.attributes("-topmost", True)
-                self.lift()
-            except Exception:
-                pass
-        self.after(_TOPMOST_REFRESH_MS, self._schedule_keep_on_top)
+    def _keep_on_top(self):
+        try:
+            self.attributes("-topmost", True)
+            self.lift()
+        except Exception:
+            pass
+        self.after(2000, self._keep_on_top)
