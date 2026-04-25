@@ -61,7 +61,8 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.hide()
 
         health_monitor.start()
-        self.after(800, lambda: TipsDialog(self))
+        if settings.get("show_tips_on_start"):
+            self.after(800, lambda: TipsDialog(self))
         self._log.info("AutoClaude démarré (v%s)", APP_NAME)
 
     def _on_tk_exception(self, exc_type, exc_val, exc_tb):
