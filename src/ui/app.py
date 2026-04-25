@@ -14,6 +14,7 @@ from src.ui.components.activate_button import ActivateButton
 from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
 from src.ui.components.click_counter import ClickCounter
+from src.ui.components.overlay_toggle import OverlayToggle
 from src.core import click_stats
 from src.ui.overlays.status_overlay import StatusOverlay
 from src.ui.dialogs.folder_picker import pick_folder
@@ -54,7 +55,11 @@ class AutoClaudeApp(ctk.CTk):
 
         self._overlay = StatusOverlay(self, on_toggle=self._activate_btn._toggle)
         self._overlay.set_click_count(click_stats.get_total())
-        self._overlay.deiconify() # On l'affiche par défaut
+        
+        if settings.get("overlay_enabled"):
+            self._overlay.deiconify()
+        else:
+            self._overlay.withdraw()
 
         health_monitor.start()
         self._log.info("AutoClaude démarré (v%s)", APP_NAME)
@@ -142,6 +147,8 @@ class AutoClaudeApp(ctk.CTk):
             command=self._open_analytics,
         ).pack(side="right", padx=(4, 0))
 
+        OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 8))
+
         quit_btn = ctk.CTkButton(
             self,
             text="Quitter",
@@ -218,6 +225,12 @@ class AutoClaudeApp(ctk.CTk):
             self._activate_btn.set_active(False),
             self._overlay.set_active(False),
         ))
+
+    def _on_overlay_toggle(self, enabled: bool):
+        if enabled:
+            self._overlay.deiconify()
+        else:
+            self._overlay.withdraw()
 
     def _pick_folder(self):
         """TODO: description de _pick_folder."""
