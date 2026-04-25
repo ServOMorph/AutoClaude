@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "description": "Index des fichiers archivés — système de rappel rapide",
+  "last_updated": "2026-04-25",
+  "categories": {
+    "docs_legacy": {
+      "purpose": "Documents historiques remplacés par les 3 organes (README/ROADMAP/ARCHITECTURE) ou consolidés ailleurs",
+      "files": {
+        "ARCHITECTURE_AutoClaude.md": {
+          "from": "/ (racine)",
+          "archived_on": "2026-04-25",
+          "reason": "Remplacé par ARCHITECTURE.md à la racine (organe IA)",
+          "tags": ["architecture", "v2.0", "duplicate"],
+          "recall_when": "Besoin référence ancienne structure src/ détaillée"
+        },
+        "ARCHITECTURE_v2.0.md": {
+          "from": "DOCS/ARCHITECTURE.md",
+          "archived_on": "2026-04-25",
+          "reason": "Dupliqué — racine ARCHITECTURE.md est la source",
+          "tags": ["architecture", "v2.0", "duplicate"],
+          "recall_when": "Comparaison historique avec ARCHITECTURE.md actuel"
+        },
+        "ROADMAP_v2.3.0_historical.md": {
+          "from": "DOCS/ROADMAP.md",
+          "archived_on": "2026-04-25",
+          "reason": "Historique phases 1-9 (v1→v2.3.0) — résumé intégré dans ROADMAP.md racine",
+          "tags": ["roadmap", "historique", "v1", "v2.0", "v2.3.0"],
+          "recall_when": "Détails livrables phases 1-9 (tâches × fichiers × notes)"
+        },
+        "DEVELOPMENT_PLAN.md": {
+          "from": "DOCS/DEVELOPMENT_PLAN.md",
+          "archived_on": "2026-04-25",
+          "reason": "Plan initial v2.0 — 100% livré — archivé",
+          "tags": ["plan", "v2.0", "historique"],
+          "recall_when": "Référence design original UI/refacto v2.0 (palette, composants, threading)"
+        },
+        "PLAN_DE_TRAVAIL.md": {
+          "from": "DOCS/PLAN_DE_TRAVAIL.md",
+          "archived_on": "2026-04-25",
+          "reason": "Spec technique v2.5.0 — fusionnée dans DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md",
+          "tags": ["plan", "v2.5.0", "auto-updater", "tips", "sidebar"],
+          "recall_when": "Détails techniques auto-updater (workflow, gestion erreurs, format tips, API tab_registry)"
+        },
+        "REFACTOR_PLAN.md": {
+          "from": "DOCS/REFACTOR_PLAN.md",
+          "archived_on": "2026-04-25",
+          "reason": "Plan refacto racine — étapes consolidées dans ROADMAP.md Phase 10.1",
+          "tags": ["refacto", "v2.4.0", "structure"],
+          "recall_when": "Détails commandes shell exactes pour refacto racine (mkdir, mv, sed)"
+        }
+      }
+    },
+    "specs_pyinstaller": {
+      "purpose": "Specs PyInstaller anciennes versions (v2.2.1, v2.3.0, v2.4.0)",
+      "files": {
+        "AutoClaude.spec": {
+          "archived_on": "2026-04-25",
+          "reason": "Spec générique remplacée par specs versionnées",
+          "tags": ["pyinstaller", "build"]
+        },
+        "AutoClaude_v2.2.1.spec": {
+          "archived_on": "2026-04-25",
+          "reason": "Build v2.2.1 obsolète",
+          "tags": ["pyinstaller", "v2.2.1"],
+          "recall_when": "Régénérer build v2.2.1 pour debug régression"
+        },
+        "AutoClaude_v2.3.0.spec": {
+          "archived_on": "2026-04-25",
+          "reason": "Build v2.3.0 livré sur GitHub Release",
+          "tags": ["pyinstaller", "v2.3.0", "released"],
+          "recall_when": "Reproduire build de la release v2.3.0"
+        },
+        "AutoClaude_v2.4.0.spec": {
+          "archived_on": "2026-04-25",
+          "reason": "Build v2.4.0 (transition) — sera regénéré à la sortie",
+          "tags": ["pyinstaller", "v2.4.0", "transition"],
+          "recall_when": "Build courant v2.4.0 — récupérer comme template pour v2.5.0"
+        }
+      }
+    },
+    "tooling_artifacts": {
+      "purpose": "Outils & artefacts de développement non utilisés en runtime",
+      "files": {
+        "audit_before.json": {
+          "archived_on": "2026-04-25",
+          "reason": "Snapshot audit pré-refacto v2.0",
+          "tags": ["audit", "refacto", "snapshot"],
+          "recall_when": "Comparaison structure projet avant/après refacto v2.0"
+        },
+        "audit_after.json": {
+          "archived_on": "2026-04-25",
+          "reason": "Snapshot audit post-refacto v2.0",
+          "tags": ["audit", "refacto", "snapshot"],
+          "recall_when": "Validation que refacto v2.0 a bien atteint cible"
+        },
+        "type_hints_todo.json": {
+          "archived_on": "2026-04-25",
+          "reason": "Liste TODO type hints — partiellement traitée",
+          "tags": ["type-hints", "todo", "quality"],
+          "recall_when": "Reprendre amélioration type hints sur modules non-typés"
+        },
+        "build.py": {
+          "archived_on": "2026-04-25",
+          "reason": "Script build legacy — remplacé par .tooling/bump_version.py + specs PyInstaller",
+          "tags": ["build", "legacy", "tooling"],
+          "recall_when": "Référence ancienne logique de build automatisé"
+        }
+      }
+    },
+    "old_builds": {
+      "purpose": "Anciens builds compilés (placeholder, non versionné — voir .gitignore)",
+      "files": {}
+    }
+  },
+  "search_tips": {
+    "by_tag": "grep -r 'tags.*<tag>' ARCHIVES/meta.json",
+    "by_version": "grep -r 'v2.X.0' ARCHIVES/meta.json",
+    "list_all": "cat ARCHIVES/meta.json | python -c \"import json,sys; d=json.load(sys.stdin); [print(f'{c}/{f}') for c,v in d['categories'].items() for f in v.get('files',{})]\""
+  }
+}
