@@ -2,7 +2,15 @@
 
 > **Version actuelle** : v2.4.0 (branche `v2.4.0`) • **Cible** : v2.5.0
 > **Dernière MAJ** : 2026-04-25
-> **Statut global** : Phase 9 (v2.3.0) ✅ • Phase 10 (v2.4.0 infra) 🔄 • Phase 11 (v2.5.0) ⏳
+> **Statut global** : Phase 10 (v2.4.0) ✅ • Phase 11 (v2.5.0) ⏳
+
+---
+
+## 🎯 Vision
+
+> **AutoClaude = Centre de commande multi-IA** (Claude Code, Comet, Antigravity, et d'autres)
+>
+> L'autoclick est un module parmi d'autres. Le cœur du projet : une interface scalable et dynamique pour orchestrer plusieurs IA sur un projet, avec un **workflow IA-agnostique** partagé (même `/start` `/close` `/doc` quel que soit le LLM), des contenus pilotés par fichiers, et un système de handoff entre agents.
 
 ---
 
@@ -25,8 +33,11 @@
 | v2.0 | ✅ | UI CustomTkinter + sécurité CLAUDE.md |
 | v2.1-2.2 | ✅ | Stats, analyses, polish |
 | **v2.3.0** | ✅ | Overlay flottant + stabilité long-run (24h+) |
-| **v2.4.0** | 🔄 | Refacto infra + cycle apprentissage + bump auto |
-| **v2.5.0** | ⏳ | Auto-updater + tips + sidebar dynamique |
+| **v2.4.0** | ✅ | Refacto infra + cycle apprentissage + bump auto |
+| **v2.5.0** | ⏳ | Hub UI dynamique (sidebar + prompts + tips) + tests 90% |
+| **v2.6.0** | ⏳ | Workflow IA-agnostique + `/doc` + session management |
+| **v2.7.0** | ⏳ | Connecteurs IA (Comet, Antigravity, CC) + routeur tâches + tests |
+| **v2.8.0** | ⏳ | Auto-updater + polish distribution + final tests |
 
 ---
 
@@ -48,279 +59,370 @@ Détails complets dans [ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md](ARCHI
 
 ---
 
-## 🔄 Phase 10 — v2.4.0 : Infrastructure & Cycle d'apprentissage
+## ✅ Phase 10 — v2.4.0 : Infrastructure & Cycle d'apprentissage
 
 > Objectif : refondre racine projet, automatiser versioning, instaurer cycle de travail avec mémoire inter-sessions.
 
-### 10.1 — Refactorisation racine (30 min) ✅
+| Sous-phase | Livrables | Statut |
+|-----------|-----------|--------|
+| 10.1 — Refactorisation racine | `DOCS/`, `build/pyinstaller/`, `.tooling/`, `.gitignore` MAJ | ✅ |
+| 10.2 — `/bump_version` | Script bump + changelog + config fichiers + mode `--analyze` | ✅ |
+| 10.3 — Cycle standardisé | `/start`, `/close`, `CLAUDE.md` cycle + économie tokens | ✅ |
+| 10.4 — Système d'apprentissage | `APPRENTISSAGES/` + `meta.json` + domains + README | ✅ |
+| 10.5 — Roadmap consolidée | `ROADMAP.md` racine cohérente | ✅ |
 
-| Tâche | Fichier cible | Statut |
-|-------|--------------|--------|
-| 10.1.1 Créer `DOCS/PLANS_MAJ/`, `build/pyinstaller/`, `.tooling/` | structure | ✅ |
-| 10.1.2 Déplacer doc → `DOCS/` (ARCHITECTURE, CHANGELOG, etc.) | `DOCS/` | ✅ |
-| 10.1.3 Déplacer specs PyInstaller → `build/pyinstaller/` | `build/` | ✅ |
-| 10.1.4 Déplacer outils → `.tooling/` (build.py, audits) | `.tooling/` | ✅ |
-| 10.1.5 Conserver `COMET/` (Perplexity) + `COMET/README.md` | `COMET/` | ✅ |
-| 10.1.6 Mettre à jour `.gitignore` (build/, dist/, .benchmarks/) | `.gitignore` | ✅ |
-| 10.1.7 Section "Intégrations IA" dans `README.md` | `README.md` | ✅ |
+### Critères v2.4.0 ✅
 
-### 10.2 — Commande `/bump_version` (5 min) ✅
-
-| Tâche | Fichier cible | Statut |
-|-------|--------------|--------|
-| 10.2.1 Guide workflow | `.claude/commands/bump_version.md` | ✅ |
-| 10.2.2 Script bump | `.tooling/bump_version.py` | ✅ |
-| 10.2.3 Script changelog | `.tooling/bump_changelog.py` | ✅ |
-| 10.2.4 Config fichiers + patterns | `.tooling/bump_version_files.json` | ✅ |
-| 10.2.5 Mode `--analyze` (détection nouveaux fichiers) | — | ✅ |
-
-### 10.3 — Cycle de travail standardisé ✅
-
-| Tâche | Fichier cible | Statut |
-|-------|--------------|--------|
-| 10.3.1 Commande `/start` (load apprentissages) | `.claude/commands/start.md` | ✅ |
-| 10.3.2 Commande `/close` (doc apprentissages + commit) | `.claude/commands/close.md` | ✅ |
-| 10.3.3 CLAUDE.md cycle obligatoire + économie tokens | `.claude/CLAUDE.md` | ✅ |
-
-### 10.4 — Système d'apprentissage scalable ✅
-
-| Tâche | Fichier cible | Statut |
-|-------|--------------|--------|
-| 10.4.1 Structure racine `APPRENTISSAGES/` | `APPRENTISSAGES/` | ✅ |
-| 10.4.2 Index `meta.json` (version, count, by_severity) | `APPRENTISSAGES/meta.json` | ✅ |
-| 10.4.3 Domains : core, ui, security, bugs_resolved, workflows | sous-dossiers | ✅ |
-| 10.4.4 README format apprentissage + bonnes pratiques | `APPRENTISSAGES/README.md` | ✅ |
-| 10.4.5 Loader sélection (max 5-7 docs, 3000 tokens) | spec dans CLAUDE.md | ✅ |
-
-### 10.5 — Plan consolidé v2.5.0 ✅
-
-| Tâche | Fichier cible | Statut |
-|-------|--------------|--------|
-| 10.5.1 Roadmap consolidée | `DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md` | ✅ |
-| 10.5.2 Roadmap racine (ce fichier) | `ROADMAP.md` | ✅ |
-
-### Critères de validation v2.4.0
-
-| Critère | Statut |
-|---------|--------|
-| Racine claire (≤ 7 fichiers) | ✅ |
-| `/bump_version` fonctionnel + analyse | ✅ |
-| `/start` charge apprentissages | ✅ |
-| `/close` documente apprentissages | ✅ |
-| `APPRENTISSAGES/meta.json` initialisé | ✅ |
-| CLAUDE.md ≤ 60 lignes (économie tokens) | ✅ |
-| 3 organes synchronisés (README/ROADMAP/ARCHITECTURE) | ✅ |
+- Racine claire (≤ 7 fichiers hors doc)
+- `/bump_version` fonctionnel
+- `/start` charge apprentissages, `/close` documente
+- `APPRENTISSAGES/meta.json` initialisé
+- 3 organes synchronisés (README/ROADMAP/ARCHITECTURE)
 
 ---
 
-## ⏳ Phase 11 — v2.5.0 : Auto-updater + Tips + Sidebar
+## ⏳ Phase 11 — v2.5.0 : Hub UI dynamique + Tests
 
-> Objectif : 3 fonctionnalités majeures avec **architecture dynamique** (tout depuis `src/content/`, aucun hardcodé). Durée estimée : 3-4 jours.
+> Objectif : interface centrale scalable — tout contenu depuis `src/content/`, aucun hardcodé. Couverture tests 90%.
+> Durée estimée : 4-5 jours.
 
-### 11.1 — Auto-updater GitHub Releases (1j) ⏳
+### 11.1 — Sidebar dynamique (1.5j) ⏳
 
-> 2 exécutables distincts : `AutoClaude.exe` (app) + `AutoClaude_Updater.exe` (15-20 MB)
-
-**Fichiers à créer** :
-| Fichier | Rôle |
-|---------|------|
-| `src/core/update_checker.py` | GitHub API + comparaison versions (`packaging`) |
-| `src/ui/components/update_button.py` | Bouton "Vérifier mises à jour" |
-| `src/ui/dialogs/update_dialog.py` | Dialog confirmation + progress bar |
-| `updater/updater.py` | Standalone : download → kill app → replace → relaunch |
-| `updater/updater_config.json` | Config owner, repo, asset_name |
-| `updater/AutoClaude_Updater.spec` | PyInstaller spec updater |
-
-**Fichiers à modifier** :
-| Fichier | Changement |
-|---------|-----------|
-| `src/config/constants.py` | +`URL_GITHUB_API`, `UPDATER_CONFIG` |
-| `src/config/settings.py` | +`update_check_enabled` (default True) |
-| `src/ui/app.py` | +update_button + thread daemon check (2s delay) |
-| `requirements.txt` | +`requests>=2.31.0`, `packaging>=24.0` |
-
-**Workflow** : `GitHub API → compare VERSION → dialog → Popen(updater) → app.quit() → updater replace → relaunch`
-
-**Gestion erreurs** : timeout 5s • 404/rate limit silencieux • rollback `.bak` • download partiel (vérif taille > 1MB)
-
-### 11.2 — Tips dynamiques (0.5j) ⏳
-
-| Fichier | Rôle |
-|---------|------|
-| `src/content/tips/*.md` | Fichiers tips (core, ui, shortcuts, updates) |
-| `src/core/tips_loader.py` | Scanner + parser markdown |
-| `src/ui/dialogs/tips_dialog.py` | Dialog CTkToplevel : tip aléatoire au démarrage |
-
-**Modifications** :
-- `src/config/settings.py` → +`show_tips_on_startup` (default True)
-- `src/ui/app.py` → intégrer tips_dialog si setting actif
-
-**Scalabilité** : ajouter `.md` = tip dispo immédiatement, aucun code touché.
-
-### 11.3 — Sidebar dynamique (1.5j) ⏳
-
-**Architecture cible** :
+**Architecture** :
 ```
 src/content/
-├── tips/                  → Onglet Tips
-├── prompts/               → Onglet Prompts
+├── tips/           → Onglet Tips (1 onglet sidebar)
+├── prompts/        → Onglet Prompts (bibliothèque inter-IA)
 └── learnings/
-    ├── core/              → Sous-onglet
-    ├── ui/                → Sous-onglet
-    └── security/          → Sous-onglet
+    ├── core/       → Sous-onglet
+    ├── ui/         → Sous-onglet
+    └── security/   → Sous-onglet
 ```
 
-**Fichiers à créer** :
 | Fichier | Rôle |
 |---------|------|
 | `src/ui/sidebar/sidebar_panel.py` | CTkFrame gauche, nav dynamique |
-| `src/ui/sidebar/tab_registry.py` | Scanne `src/content/`, registry |
+| `src/ui/sidebar/tab_registry.py` | Scanne `src/content/`, génère registry |
 | `src/ui/sidebar/content_view.py` | Zone droite, contenu actif |
 | `src/ui/tabs/base_tab.py` | Classe abstraite (titre, icône, render) |
-| `src/ui/tabs/markdown_tab.py` | Renderer .md → CTkScrollableFrame |
+| `src/ui/tabs/markdown_tab.py` | Renderer `.md` → CTkScrollableFrame |
 | `src/ui/tabs/learning_tab.py` | Sous-onglets depuis sous-dossiers |
 | `src/ui/tabs/prompts_tab.py` | Liste prompts + copie rapide |
 | `src/ui/tabs/tips_tab.py` | Liste tips + filtre catégorie |
 
-**Scalabilité** : ajouter dossier dans `src/content/` = onglet auto-généré.
+**Scalabilité** : ajouter dossier `src/content/` = onglet auto-généré.
 
-### 11.4 — CLAUDE.md contraintes architecture (0.25j) ✅
+### 11.2 — Bibliothèque de prompts (0.5j) ⏳
 
-Section "Architecture dynamique" déjà présente dans [.claude/CLAUDE.md](.claude/CLAUDE.md) :
-- ✅ Source unique = `src/content/`
-- ✅ Loaders scannent toujours
-- ✅ UI auto-générée
-- ✅ Anti-patterns documentés
+| Fichier | Rôle |
+|---------|------|
+| `src/content/prompts/*.md` | Prompts partagés inter-IA (frontmatter : title, ia_target, tags) |
+| `src/core/prompts_loader.py` | Scanner + parser markdown |
 
-### 11.5 — Build & distribution v2.5.0 ⏳
+**Usage** : copie rapide depuis sidebar → coller dans Claude Code / Comet / Antigravity.
+
+### 11.3 — Tips au démarrage (0.5j) ⏳
+
+> Tips = onglet sidebar **ET** dialog optionnel au démarrage (pas de feature séparée)
+
+| Fichier | Rôle |
+|---------|------|
+| `src/content/tips/*.md` | Fichiers tips (core, ui, shortcuts) |
+| `src/core/tips_loader.py` | Scanner + parser markdown |
+| `src/ui/dialogs/tips_dialog.py` | Dialog CTkToplevel : tip aléatoire au démarrage |
+
+### 11.4 — Tests unitaires + intégration (1.5j) ⏳
+
+| Fichier | Couverture |
+|---------|-----------|
+| `tests/unit/` | Loaders, parsers, tab_registry (détection contenu) |
+| `tests/integration/` | Sidebar rendering, navigation onglets |
+| `tests/ui/` | CTkFrame interaction (mock Tkinter) |
+| `.tooling/coverage_report.py` | Rapport couverture + fail <90% |
+| `pytest.ini` | Config tests + min coverage 90% |
+
+**Exigence** : `/close` v2.5.0 échoue si couverture < 90%.
+
+### 11.5 — Documentation cohérence multi-LLM (0.5j) ⏳
+
+Exécuter `/doc` sur le projet :
+- Vérifier README, ROADMAP, ARCHITECTURE cohérence
+- Vérifier optimisation multi-LLM (README mention center command ? adaptable par IA ?)
+- Proposer améliorations
+
+### 11.6 — Build & commit v2.5.0 (0.25j) ⏳
 
 | Tâche | Statut |
 |-------|--------|
-| Bump version 2.4.0 → 2.5.0 (`/bump_version`) | ⏳ |
-| Build `AutoClaude_v2.5.0.spec` (≈ 120 MB) | ⏳ |
-| Build `AutoClaude_Updater.spec` (≈ 15-20 MB) | ⏳ |
-| GitHub Release v2.5.0 (assets : app + updater) | ⏳ |
-| CHANGELOG v2.5.0 complet | ⏳ |
+| Exécuter `/doc` — vérifier cohérence | ⏳ |
+| Tests couverture ≥90% | ⏳ |
+| Bump 2.4.0 → 2.5.0 (`/bump_version`) | ⏳ |
+| `/close` — documenter apprentissages | ⏳ |
+| GitHub commit + tag v2.5.0 | ⏳ |
 
-### Critères de validation v2.5.0
+### Critères v2.5.0
 
 | Critère | Statut |
 |---------|--------|
-| Auto-updater détecte nouvelle release | ⏳ |
-| Updater remplace exe sans corruption | ⏳ |
-| App relance après update | ⏳ |
-| Tips au démarrage (random depuis `src/content/tips/`) | ⏳ |
-| Sidebar liste onglets dynamiquement | ⏳ |
+| Sidebar liste onglets dynamiquement depuis `src/content/` | ⏳ |
 | Sous-onglets `learnings/` auto-générés | ⏳ |
+| Prompts copiables depuis sidebar | ⏳ |
+| Tips au démarrage (random depuis `src/content/tips/`) | ⏳ |
 | Ajouter `.md` = feature dispo sans code | ⏳ |
-| Aucun contenu hardcodé (audit grep) | ⏳ |
+| Tests couverture 90%+ | ⏳ |
+| `/doc` valide cohérence multi-LLM | ⏳ |
+
+---
+
+## ⏳ Phase 12 — v2.6.0 : Workflow IA-agnostique + `/doc` intégré
+
+> Objectif : que Comet, Antigravity, Claude Code suivent exactement le même cycle, avec `/doc` automatisé en fin de session.
+> Durée estimée : 3 jours.
+
+### 12.1 — Commande `/doc` (1j) ⏳
+
+**Purpose** : analyse + amélioration doc automatique multi-LLM.
+
+| Fichier | Rôle |
+|---------|------|
+| `.claude/commands/doc.md` | Procédure `/doc` — lire, auditer, proposer |
+| `src/core/doc_analyzer.py` | Script : scan fichiers organes, vérifier cohérence |
+| `src/core/doc_validator.py` | Règles : sections requises, format, multi-LLM compliance |
+
+**Workflow `/doc`** :
+1. Lire README/ROADMAP/ARCHITECTURE/WORKFLOW
+2. Chercher incohérences (ref mortes, versions désynchronisées, contenu hardcodé)
+3. Auditer optimisation multi-LLM (language agnostique ? adapters mentionnés ?)
+4. Proposer fichier `DOCS/doc_audit_<date>.md` avec :
+   - ✅ Cohérences établies
+   - ⚠️ Warnings (sections obsolètes, doublon)
+   - 🔧 Propositions (refactor, réorg)
+
+**Exécution** :
+```bash
+python -m src.core.doc_analyzer --check README.md ROADMAP.md ARCHITECTURE.md WORKFLOW.md
+# Sortie : rapport + exit code 1 si warnings > 0 (peut bloquer `/close`)
+```
+
+### 12.2 — `WORKFLOW.md` (4ème organe) (0.5j) ⏳
+
+Nouveau fichier racine décrivant le cycle de travail **sans référence à un LLM spécifique** :
+- Lire README/ROADMAP/ARCHITECTURE/WORKFLOW au démarrage
+- Charger apprentissages (`APPRENTISSAGES/meta.json`)
+- Format de rapport de session
+- Documenter apprentissages au close
+- Committer avec message normalisé
+
+### 12.3 — Adapters IA (0.5j) ⏳
+
+| Dossier | Contenu |
+|---------|---------|
+| `.claude/commands/` | `/start`, `/close`, `/doc`, `/bump_version` |
+| `.antigravity/commands/` | Équivalents pour Antigravity |
+| `.comet/commands/` | Équivalents pour Comet |
+
+Tous lisent `WORKFLOW.md` comme source de vérité. Adapters = traduction vers syntaxe IA cible uniquement.
+
+### 12.4 — Format tâche normalisé (1j) ⏳
+
+```
+TASKS/
+├── <id>_<slug>.md       frontmatter: assigned_to, status, handoff_from, created, updated
+└── README.md            format + workflow handoff
+```
+
+**Cycle handoff** : IA-A termine → écrit résultat dans `TASKS/<id>.md` → status = `done` → IA-B reprend avec contexte.
+
+### 12.5 — Integration `/doc` dans cycle (0.5j) ⏳
+
+Mettre à jour CLAUDE.md :
+```
+3️⃣ /close :
+   - Exécuter `/doc` — vérifier cohérence
+   - Si warnings : proposer fixes avant commit
+   - Documenter apprentissages
+   - Committer avec message normalisé
+```
+
+Comet/Antigravity font pareil dans `.comet/COMET.md`, `.antigravity/ANTIGRAVITY.md`.
+
+### Critères v2.6.0
+
+| Critère | Statut |
+|---------|--------|
+| `/doc` command fonctionnel + audit report | ⏳ |
+| `WORKFLOW.md` racine (4ème organe) | ⏳ |
+| `.antigravity/` + `.comet/` avec commandes `/start` `/close` `/doc` | ⏳ |
+| Format `TASKS/<id>.md` défini + README | ⏳ |
+| CLAUDE.md référence WORKFLOW.md + `/doc` dans `/close` | ⏳ |
+| `/doc` appelé avant chaque commit (v2.6 → suite) | ⏳ |
+
+---
+
+## ⏳ Phase 13 — v2.7.0 : Connecteurs IA + Routeur + Tests
+
+> Objectif : UI gestion tâches inter-IA. Couverture tests 90%+.
+> Durée estimée : 4-5 jours.
+
+### 13.1 — Adapters code (1j) ⏳
+
+| Fichier | Rôle |
+|---------|------|
+| `src/integrations/base_adapter.py` | Interface abstraite |
+| `src/integrations/claude_code.py` | Adapter Claude Code |
+| `src/integrations/antigravity.py` | Adapter Antigravity |
+| `src/integrations/comet.py` | Adapter Comet |
+
+### 13.2 — Onglet "Tâches" sidebar (1.5j) ⏳
+
+| Fichier | Rôle |
+|---------|------|
+| `src/content/tasks/` | Tâches TASKS/ exposées dans sidebar |
+| `src/ui/tabs/tasks_tab.py` | Liste tâches + statut + assignation IA |
+| `src/core/tasks_loader.py` | Scanne `TASKS/`, parse frontmatter |
+
+### 13.3 — Tests + `/doc` validation (1.5j) ⏳
+
+| Fichier | Couverture |
+|---------|-----------|
+| `tests/unit/integrations/` | Adapters (spawn, communicate) |
+| `tests/integration/tasks/` | Handoff IA-à-IA, parsing frontmatter |
+| `tests/ui/tasks_tab/` | Rendering tâches, assignation |
+
+**Avant `/close` v2.7.0** :
+- Couverture ≥90%
+- `/doc` audit sans warnings (ou fixes committed)
+
+### 13.4 — Session management optimization (1j) ⏳
+
+Pour chaque IA, documenter :
+- **Token budget par phase** (lire doc=500, implém=2000, tests=1000, close=500)
+- **Context reset points** (entre phases majeures)
+- **Handoff format** : ce qu'IA-A laisse à IA-B pour continuer
+  ```
+  HANDOFF_<task_id>.md :
+  - Contexte chargé au `/start` de IA-B
+  - Où on en est (phase, fichiers modifiés)
+  - Prochaine étape explicite
+  ```
+
+### 13.5 — Commit & close v2.7.0 (0.25j) ⏳
+
+Workflow strict :
+1. `/doc` audit (fail si warnings majeurs)
+2. Tests ≥90% (fail si <90%)
+3. `/close` — apprentissages + commit
+4. Tag version sur GitHub
+
+### Critères v2.7.0
+
+| Critère | Statut |
+|---------|--------|
+| 3+ adapters IA opérationnels | ⏳ |
+| Onglet Tâches dans sidebar | ⏳ |
+| Handoff IA-à-IA via `TASKS/` + `HANDOFF_*` | ⏳ |
+| Tests couverture 90%+ | ⏳ |
+| `/doc` appelé avant chaque commit | ⏳ |
+
+---
+
+## ⏳ Phase 14 — v2.8.0 : Auto-updater + Polish + Final Tests
+
+> Objectif : livraison autonome. Couverture tests 90%+. Audit `/doc` zéro warning.
+> Durée estimée : 2-3 jours.
+
+### 14.1 — Auto-updater (1j) ⏳
+
+> 2 exécutables distincts : `AutoClaude.exe` (app) + `AutoClaude_Updater.exe` (15-20 MB)
+
+| Fichier | Rôle |
+|---------|------|
+| `src/core/update_checker.py` | GitHub API + comparaison versions |
+| `src/ui/components/update_button.py` | Bouton "Vérifier mises à jour" |
+| `src/ui/dialogs/update_dialog.py` | Dialog confirmation + progress bar |
+| `updater/updater.py` | Standalone : download → kill app → replace → relaunch |
+
+### 14.2 — Final tests + `/doc` audit (0.75j) ⏳
+
+**Tests** : couverture 90%+ incluant updater
+**Audit** : `/doc` sans warnings majeurs
+
+### 14.3 — Build & release (0.5j) ⏳
+
+| Tâche | Statut |
+|-------|--------|
+| `/doc` audit final (fix warnings) | ⏳ |
+| Tests couverture ≥90% | ⏳ |
+| Bump 2.7.0 → 2.8.0 (`/bump_version`) | ⏳ |
+| `/close` + commit | ⏳ |
+| GitHub Release v2.8.0 (app + updater) | ⏳ |
 
 ---
 
 ## 📊 Résumé global
 
-| Phase | Version | Durée | Statut |
-|-------|---------|-------|--------|
-| 1-8 | v2.0 | — | ✅ |
-| 9 | v2.3.0 | — | ✅ |
-| 10.1 (refacto racine) | v2.4.0 | 30 min | ⏳ |
-| 10.2 (bump_version) | v2.4.0 | 5 min | ✅ |
-| 10.3 (cycle) | v2.4.0 | — | ✅ |
-| 10.4 (apprentissage) | v2.4.0 | — | ✅ |
-| 10.5 (roadmap) | v2.4.0 | — | ✅ |
-| 11.1 (auto-updater) | v2.5.0 | 1j | ⏳ |
-| 11.2 (tips) | v2.5.0 | 0.5j | ⏳ |
-| 11.3 (sidebar) | v2.5.0 | 1.5j | ⏳ |
-| 11.4 (constraints) | v2.5.0 | 0.25j | ✅ |
-| 11.5 (build/release) | v2.5.0 | 0.25j | ⏳ |
+| Phase | Version | Thème | Durée | Tests | Statut |
+|-------|---------|-------|-------|-------|--------|
+| 1-8 | v2.0 | Base | — | — | ✅ |
+| 9 | v2.3.0 | Overlay + stabilité | — | — | ✅ |
+| 10 | v2.4.0 | Infra + cycle | — | — | ✅ |
+| 11 | v2.5.0 | Hub UI + tests | 4-5j | 90% | ⏳ |
+| 12 | v2.6.0 | Workflow `/doc` | 3j | — | ⏳ |
+| 13 | v2.7.0 | Connecteurs + tests | 4-5j | 90% | ⏳ |
+| 14 | v2.8.0 | Auto-updater + final | 2-3j | 90% | ⏳ |
+
+---
+
+## 🔄 Intégration `/doc` dans workflow
+
+À partir de **v2.6.0**, chaque session :
+
+```
+/start
+  ├─ Lire README/ROADMAP/ARCHITECTURE/WORKFLOW
+  └─ Charger apprentissages
+
+Travail
+  ├─ Implémenter
+  └─ Tests
+
+/doc (avant /close)
+  ├─ Analyser cohérence
+  ├─ Vérifier multi-LLM compliance
+  └─ Proposer fixes → commit si nécessaire
+
+/close
+  ├─ Documenter apprentissages
+  ├─ Commit message normalisé
+  └─ Tag version
+```
+
+**Fréquence** : `/doc` systématique avant `/close` dès v2.6.0.
 
 ---
 
 ## 🚀 Prochaines étapes (ordre d'exécution)
 
-1. ⏳ **Phase 10.1** : exécuter refacto racine (DOCS/, build/pyinstaller/, .tooling/)
-2. ⏳ **Documenter** premiers apprentissages (bugs résolus v2.3.0 → APPRENTISSAGES/bugs_resolved/)
-3. ⏳ **Phase 11.1** : implémenter auto-updater
-4. ⏳ **Phase 11.2** : implémenter tips
-5. ⏳ **Phase 11.3** : implémenter sidebar
-6. ⏳ **Phase 11.5** : bump 2.5.0 + build + release
+1. ⏳ **Phase 11.1-11.3** : sidebar + prompts + tips
+2. ⏳ **Phase 11.4** : tests 90%+
+3. ⏳ **Phase 11.5** : `/doc` audit initial
+4. ⏳ **Phase 11.6** : commit v2.5.0
+5. ⏳ **Phase 12.1** : implémenter `/doc` command
+6. ⏳ **Phase 12.2-12.5** : WORKFLOW.md + adapters + intégration
+7. ⏳ **Phase 13** : connecteurs IA + tests
+8. ⏳ **Phase 14** : auto-updater + final tests
 
 ---
 
-## 🔮 Évolutions futures (hors v2.5.0)
+## 🔮 Évolutions futures (hors v2.8.0)
 
-- Internationalisation FR/EN
+- Internationalisation FR/EN (auditer avec `/doc`)
 - Personnalisation image cible depuis l'UI
 - Profils multiples (images selon contexte)
 - Mode "dry-run" (détecter sans cliquer)
-- Raccourci global système (activer/désactiver)
-- Tests automatisés (pytest)
+- Raccourci global système
 - Support Linux/macOS
-
----
-
-## 📂 Documents liés (sources analysées)
-
-| Fichier | Période couverte | Rôle | Cohérence |
-|---------|------------------|------|-----------|
-| [ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md](ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md) | v1 → v2.3.0 | Historique détaillé phases 1-9 | 📦 Archivé |
-| [ARCHIVES/docs_legacy/DEVELOPMENT_PLAN.md](ARCHIVES/docs_legacy/DEVELOPMENT_PLAN.md) | v2.0 (2026-04-23) | Plan initial UI/refacto | 📦 Archivé |
-| [ARCHIVES/docs_legacy/PLAN_DE_TRAVAIL.md](ARCHIVES/docs_legacy/PLAN_DE_TRAVAIL.md) | v2.5.0 features | Détails auto-updater + tips + sidebar | 📦 Archivé |
-| [ARCHIVES/docs_legacy/ROADMAP_v2.5.0.md](ARCHIVES/docs_legacy/ROADMAP_v2.5.0.md) | v2.4.0 → v2.5.0 | Plan consolidé phases + apprentissage | ✅ Source principale |
-| [ARCHIVES/docs_legacy/REFACTOR_PLAN.md](ARCHIVES/docs_legacy/REFACTOR_PLAN.md) | v2.4.0 (refacto racine) | Détails Phases 1-6 + stub Phase 7 | 📦 Archivé |
-| [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) | — | Architecture technique projet | ✅ |
-| [APPRENTISSAGES/README.md](APPRENTISSAGES/README.md) | — | Système d'apprentissage | ✅ |
-| [.claude/CLAUDE.md](.claude/CLAUDE.md) | — | Directives Claude Code | ✅ Optimisé tokens |
-| [DOCS/CHANGELOG.md](DOCS/CHANGELOG.md) | v1 → v2.3.0 | Historique versions | ✅ |
-
----
-
-## 🔍 Analyse de cohérence inter-documents
-
-### ✅ Cohérences établies
-
-| Document | Constat |
-|----------|---------|
-| `DEVELOPMENT_PLAN.md` (v2.0) | 100% des items livrés (Phases 1-8 ✅) → archive historique |
-| `DOCS/ROADMAP.md` | Phases 1-9 complètes, statut "v2.3.0 terminée" cohérent |
-| `constants.py VERSION = "2.4.0"` | Cohérent avec branche `v2.4.0` et plans en cours |
-| `PLAN_DE_TRAVAIL.md` ↔ `ROADMAP_v2.5.0.md` | Mêmes 3 features (updater/tips/sidebar), specs alignées |
-| `REFACTOR_PLAN.md` Phases 1-6 ↔ Phase 10.1 ci-dessus | Même contenu, pas de divergence |
-
-### ⚠️ Divergences détectées
-
-| Divergence | Impact | Action |
-|------------|--------|--------|
-| `PLAN_DE_TRAVAIL.md` et `ROADMAP_v2.5.0.md` se chevauchent (~70%) | Source dupliquée | Conserver `ROADMAP_v2.5.0.md` (consolidé), garder `PLAN_DE_TRAVAIL.md` comme spec technique détaillée |
-| `REFACTOR_PLAN.md` ligne ~330 : ref ancien `PLAN_DE_TRAVAIL.md` | Lien existe (DOCS/PLAN_DE_TRAVAIL.md) ✅ | Mais `Phase 7 stub` à supprimer (déjà dans ROADMAP) |
-| `DEVELOPMENT_PLAN.md` mentionne window 520×640 | Réalité : 520×860 (overlay v2.3.0) | Document historique, pas de mise à jour nécessaire |
-| Aucun document ne couvre Phase 9 (v2.3.0) sauf `DOCS/ROADMAP.md` | OK | Source unique = historique |
-
-### 📌 Hiérarchie clarifiée
-
-```
-ROADMAP.md (racine)              ← INDEX MAÎTRE (ce fichier)
-│
-├── Passé (v1 → v2.3.0)
-│   ├── DOCS/ROADMAP.md          ← Historique détaillé phases 1-9
-│   ├── DOCS/DEVELOPMENT_PLAN.md ← Plan original v2.0 (archive)
-│   └── DOCS/CHANGELOG.md        ← Versions livrées
-│
-├── Présent (v2.4.0 — en cours)
-│   ├── DOCS/REFACTOR_PLAN.md    ← Spec refacto racine (Phase 10.1)
-│   └── APPRENTISSAGES/          ← Cycle apprentissage actif
-│
-└── Futur (v2.5.0 — planifié)
-    ├── DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md  ← Plan consolidé
-    └── DOCS/PLAN_DE_TRAVAIL.md           ← Spec technique détaillée
-```
-
-### 🎯 Recommandations
-
-1. **`DOCS/PLAN_DE_TRAVAIL.md`** : conserver comme **spec technique détaillée** (workflow updater, gestion erreurs, format tips, API tab_registry) — complémentaire à ROADMAP_v2.5.0
-2. **`DOCS/REFACTOR_PLAN.md`** : retirer la "Phase 7 stub" (lignes 328+) qui duplique Phase 11 ci-dessus
-3. **`DOCS/DEVELOPMENT_PLAN.md`** : marquer comme **archive** (en-tête à ajouter : "📦 Archive — Plan v2.0 livré 2026-04-23")
-4. **`DOCS/ROADMAP.md`** : continuer comme historique uniquement, ne plus alimenter pour v2.4.0+
+- Intégrations additionnelles (Claude 4.7, autres IA)
 
 ---
 
