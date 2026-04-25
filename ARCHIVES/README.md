@@ -25,7 +25,9 @@ ARCHIVES/
 │   ├── ROADMAP_v2.3.0_historical.md
 │   ├── DEVELOPMENT_PLAN.md
 │   ├── PLAN_DE_TRAVAIL.md
-│   └── REFACTOR_PLAN.md
+│   ├── REFACTOR_PLAN.md
+│   ├── PLAN_v2.3.0_overlay_indicator.md
+│   └── ROADMAP_v2.5.0.md
 ├── specs_pyinstaller/          ← Specs PyInstaller anciennes versions
 │   ├── AutoClaude.spec
 │   ├── AutoClaude_v2.2.1.spec
@@ -84,7 +86,7 @@ for cat, val in d['categories'].items():
 
 ## 📋 Fichiers archivés (snapshot)
 
-### `docs_legacy/` (6 fichiers)
+### `docs_legacy/` (8 fichiers)
 
 | Fichier | Tags | Cas de rappel |
 |---------|------|--------------|
@@ -94,6 +96,8 @@ for cat, val in d['categories'].items():
 | `DEVELOPMENT_PLAN.md` | plan, v2.0 | Référence design original UI/refacto v2.0 |
 | `PLAN_DE_TRAVAIL.md` | plan, v2.5.0, updater, tips, sidebar | Détails techniques auto-updater (workflow, API) |
 | `REFACTOR_PLAN.md` | refacto, v2.4.0 | Détails commandes shell pour refacto racine |
+| `PLAN_v2.3.0_overlay_indicator.md` | plan, v2.3.0, overlay, released | Référence design overlay flottant + watchdog |
+| `ROADMAP_v2.5.0.md` | roadmap, v2.5.0, apprentissage | Détails algorithme sélection apprentissages |
 
 ### `specs_pyinstaller/` (4 fichiers)
 
@@ -170,4 +174,4 @@ cp ARCHIVES/<category>/<file> <destination>/
 
 ---
 
-**Dernière mise à jour** : 2026-04-25 • **Catégories** : 4 • **Fichiers archivés** : 14
+**Dernière mise à jour** : 2026-04-25 • **Catégories** : 4 • **Fichiers archivés** : 16

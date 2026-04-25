@@ -262,11 +262,11 @@ Section "Architecture dynamique" déjà présente dans [.claude/CLAUDE.md](.clau
 
 | Fichier | Période couverte | Rôle | Cohérence |
 |---------|------------------|------|-----------|
-| [DOCS/ROADMAP.md](DOCS/ROADMAP.md) | v1 → v2.3.0 | Historique détaillé phases 1-9 | ✅ Complet, terminé |
-| [DOCS/DEVELOPMENT_PLAN.md](DOCS/DEVELOPMENT_PLAN.md) | v2.0 (2026-04-23) | Plan initial UI/refacto | ✅ Historique, tout livré |
-| [DOCS/PLAN_DE_TRAVAIL.md](DOCS/PLAN_DE_TRAVAIL.md) | v2.5.0 features | Détails auto-updater + tips + sidebar (3 features) | ⚠️ Duplique partiellement ROADMAP_v2.5.0 |
-| [DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md](DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md) | v2.4.0 → v2.5.0 | Plan consolidé phases + apprentissage | ✅ Source principale |
-| [DOCS/REFACTOR_PLAN.md](DOCS/REFACTOR_PLAN.md) | v2.4.0 (refacto racine) | Détails Phases 1-6 + stub Phase 7 | ⚠️ Référence PLAN_DE_TRAVAIL.md (lien à corriger) |
+| [ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md](ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md) | v1 → v2.3.0 | Historique détaillé phases 1-9 | 📦 Archivé |
+| [ARCHIVES/docs_legacy/DEVELOPMENT_PLAN.md](ARCHIVES/docs_legacy/DEVELOPMENT_PLAN.md) | v2.0 (2026-04-23) | Plan initial UI/refacto | 📦 Archivé |
+| [ARCHIVES/docs_legacy/PLAN_DE_TRAVAIL.md](ARCHIVES/docs_legacy/PLAN_DE_TRAVAIL.md) | v2.5.0 features | Détails auto-updater + tips + sidebar | 📦 Archivé |
+| [ARCHIVES/docs_legacy/ROADMAP_v2.5.0.md](ARCHIVES/docs_legacy/ROADMAP_v2.5.0.md) | v2.4.0 → v2.5.0 | Plan consolidé phases + apprentissage | ✅ Source principale |
+| [ARCHIVES/docs_legacy/REFACTOR_PLAN.md](ARCHIVES/docs_legacy/REFACTOR_PLAN.md) | v2.4.0 (refacto racine) | Détails Phases 1-6 + stub Phase 7 | 📦 Archivé |
 | [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) | — | Architecture technique projet | ✅ |
 | [APPRENTISSAGES/README.md](APPRENTISSAGES/README.md) | — | Système d'apprentissage | ✅ |
 | [.claude/CLAUDE.md](.claude/CLAUDE.md) | — | Directives Claude Code | ✅ Optimisé tokens |

@@ -47,6 +47,20 @@
           "reason": "Plan refacto racine — étapes consolidées dans ROADMAP.md Phase 10.1",
           "tags": ["refacto", "v2.4.0", "structure"],
           "recall_when": "Détails commandes shell exactes pour refacto racine (mkdir, mv, sed)"
+        },
+        "PLAN_v2.3.0_overlay_indicator.md": {
+          "from": "DOCS/PLANS_MAJ/PLAN_v2.3.0_overlay_indicator.md",
+          "archived_on": "2026-04-25",
+          "reason": "Plan v2.3.0 (overlay flottant) — 100% livré, Phase 9 ✅",
+          "tags": ["plan", "v2.3.0", "overlay", "stabilité", "historique", "released"],
+          "recall_when": "Référence design overlay flottant + watchdog stabilité long-run"
+        },
+        "ROADMAP_v2.5.0.md": {
+          "from": "DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md",
+          "archived_on": "2026-04-25",
+          "reason": "Plan consolidé v2.5.0 — intégré dans ROADMAP.md racine (Phase 10-11)",
+          "tags": ["roadmap", "v2.5.0", "apprentissage", "auto-updater", "tips", "sidebar"],
+          "recall_when": "Détails algorithme sélection apprentissages + structure cycle/start/close"
         }
       }
     },
