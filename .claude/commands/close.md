@@ -57,19 +57,24 @@ git status
 
 ### 📚 Apprentissages stockés
 
-| Domain | Severity | Count |
-|--------|----------|-------|
-| core | HIGH | 2 |
-| ui | MEDIUM | 1 |
-| bugs_resolved | HIGH | 3 |
+**Nouveaux apprentissages créés cette session** :
 
-**Total** : [N] apprentissages | **Dernière MAJ** : 2026-04-25
-```
+| Domain | Severity | Fichier | Lien |
+|--------|----------|---------|------|
+| core | HIGH | detector_edge_cases.md | [📖 Lire](APPRENTISSAGES/core/detector_edge_cases.md) |
+| ui | MEDIUM | sidebar_rendering.md | [📖 Lire](APPRENTISSAGES/ui/sidebar_rendering.md) |
+| workflows | HIGH | async_handoff_pattern.md | [📖 Lire](APPRENTISSAGES/workflows/async_handoff_pattern.md) |
 
-**Affichage complet via** :
-```bash
-cat APPRENTISSAGES/meta.json | python -m json.tool
-```
+**État meta.json (capital connaissances accumulé)** :
 
-→ Capital connaissance accumulé visible avant `/start` suivant.
+| Domain | Count | Top HIGH/MEDIUM |
+|--------|-------|-----------------|
+| core | 5 | [detector_patterns.md](APPRENTISSAGES/core/detector_patterns.md), [autoclick_optimization.md](APPRENTISSAGES/core/autoclick_optimization.md) |
+| ui | 3 | [customtkinter_best_practices.md](APPRENTISSAGES/ui/customtkinter_best_practices.md) |
+| workflows | 2 | [multi_ia_handoff.md](APPRENTISSAGES/workflows/multi_ia_handoff.md), [agent_customization_navigation.md](APPRENTISSAGES/workflows/2026_04_25_agent_customization_navigation.md) |
+| bugs_resolved | 4 | [thread_freeze_fix.md](APPRENTISSAGES/bugs_resolved/thread_freeze_fix.md), … |
+
+**Total** : [N] apprentissages | **Dernière MAJ** : YYYY-MM-DD
+
+→ Capital connaissance accumulé visible avant `/start` suivant. **Clique sur liens pour consulter**.
 

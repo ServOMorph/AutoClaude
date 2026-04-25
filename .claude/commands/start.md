@@ -43,16 +43,30 @@
 
 ## 5️⃣ Charger apprentissages 📚
 
-Si travail sur feature connue (bug fix, refacto, dev) :
-```bash
-# Vérifier APPRENTISSAGES/meta.json (tags, sévérité)
-grep -r "domain\|severity" APPRENTISSAGES/meta.json | grep -E "core|ui|bugs_resolved|workflows"
-# Sélectionner TOP 5-7 docs (HIGH severity + domaine pertinent)
+### Démarche
+1. Lire `APPRENTISSAGES/meta.json` → identifier docs HIGH/MEDIUM pertinents par domaine
+2. Sélectionner TOP 5-7 docs (max 3000 tokens)
+3. **Afficher liens cliquables** vers fichiers .md chargés
+
+### Affichage apprentissages chargés
+
+**Si docs HIGH/MEDIUM trouvés** :
+```
+📚 **Apprentissages chargés** : [N] docs (~Y tokens)
+
+| Domain | Severity | Lien |
+|--------|----------|------|
+| core | HIGH | [detector_patterns.md](APPRENTISSAGES/core/detector_patterns.md) |
+| ui | HIGH | [customtkinter_best_practices.md](APPRENTISSAGES/ui/customtkinter_best_practices.md) |
+| workflows | HIGH | [multi_ia_handoff.md](APPRENTISSAGES/workflows/multi_ia_handoff.md) |
 ```
 
-Afficher : "Apprentissages chargés : X docs (~Y tokens pertinents)"
+**Si aucun apprentissage pertinent** :
+```
+📚 Pas d'apprentissages pertinents pour cette phase (système neuf ou domaine nouveau).
+```
 
-Sinon (première session / domaine nouveau) : "Pas d'apprentissages pertinents"
+→ Clique sur liens pour consulter contenu directement
 
 ---
 

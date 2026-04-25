@@ -97,3 +97,8 @@
 **Sélection** : MAX 5-7 docs HIGH/MEDIUM, MAX 3000 tokens • meta.json = index filtrage rapide
 
 **Gestion meta.json** : version, last_updated, total_learnings, domains (count), by_severity (file lists)
+
+**Affichage interactif** (v2.4.0+) :
+- `/start` → rapport affiche apprentissages **chargés comme liens cliquables** (tableau Domain/Severity/Lien)
+- `/close` → rapport affiche apprentissages **documentés comme liens cliquables** (nouveaux + capital accumulé)
+- Clique sur liens pour consulter contenu directement dans IDE
