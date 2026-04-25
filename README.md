@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
 > **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
@@ -35,7 +35,7 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 
 ### Option 1 : Télécharger l'exécutable (Windows)
 
-Télécharge `AutoClaude_v2.3.0.exe` depuis les [releases](https://github.com/ServOMorph/AutoClaude/releases) et double-clique pour lancer. Aucune dépendance Python requise.
+Télécharge `AutoClaude_v2.4.0.exe` depuis les [releases](https://github.com/ServOMorph/AutoClaude/releases) et double-clique pour lancer. Aucune dépendance Python requise.
 
 ### Option 2 : Installation depuis le code source
 
@@ -164,7 +164,7 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 25 avril 2026 (v2.3.0)
+Date : 25 avril 2026 (v2.4.0)
 
 ---
 
