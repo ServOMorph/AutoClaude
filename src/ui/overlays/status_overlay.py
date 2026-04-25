@@ -25,27 +25,24 @@ class StatusOverlay(ctk.CTkToplevel):
             except Exception:
                 pass
 
-        # Positionnement en bas à droite
-        screen_w = self.winfo_screenwidth()
+        # Positionnement en bas à gauche
         screen_h = self.winfo_screenheight()
-        x = screen_w - OVERLAY_WIDTH - OVERLAY_MARGIN
+        x = OVERLAY_MARGIN
         y = screen_h - OVERLAY_HEIGHT - OVERLAY_MARGIN
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
-        # Utilisation d'un CTkButton comme container principal pour garantir la cliquabilité sur Windows
-        self.main_btn = ctk.CTkButton(
+        # Frame principale cliquable
+        self.main_frame = ctk.CTkFrame(
             self,
-            text="",
             fg_color=OVERLAY_COLOR_INACTIVE,
-            hover_color=OVERLAY_COLOR_INACTIVE, # Pas d'effet hover par défaut
             corner_radius=10,
-            command=self._handle_toggle,
             border_width=0
         )
-        self.main_btn.pack(expand=True, fill="both")
+        self.main_frame.pack(expand=True, fill="both")
+        self.main_frame.bind("<Button-1>", lambda e: self._handle_toggle())
 
         self.label = ctk.CTkLabel(
-            self.main_btn,
+            self.main_frame,
             text="CL OFF",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
@@ -55,7 +52,7 @@ class StatusOverlay(ctk.CTkToplevel):
         self.label.bind("<Button-1>", lambda e: self._handle_toggle())
 
         self.count_label = ctk.CTkLabel(
-            self.main_btn,
+            self.main_frame,
             text="0",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
@@ -79,10 +76,10 @@ class StatusOverlay(ctk.CTkToplevel):
 
     def update_ui(self):
         if self._active:
-            self.main_btn.configure(fg_color=OVERLAY_COLOR_ACTIVE, hover_color=OVERLAY_COLOR_ACTIVE)
+            self.main_frame.configure(fg_color=OVERLAY_COLOR_ACTIVE)
             self.label.configure(text="CL ON")
         else:
-            self.main_btn.configure(fg_color=OVERLAY_COLOR_INACTIVE, hover_color=OVERLAY_COLOR_INACTIVE)
+            self.main_frame.configure(fg_color=OVERLAY_COLOR_INACTIVE)
             self.label.configure(text="CL OFF")
 
     def set_click_count(self, count: int):
