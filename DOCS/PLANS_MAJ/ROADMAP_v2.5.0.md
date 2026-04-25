@@ -115,7 +115,7 @@ def locate(image_path, threshold=0.8):
 
 ### Chargement des apprentissages dans `/start`
 
-Dans **startV2.md**, ajouter étape :
+Dans **start.md**, ajouter étape :
 
 ```
 ## 4️⃣ Charger apprentissages pertinents 📚
@@ -131,7 +131,7 @@ Basé sur le contexte du projet (technologies identifiées + type de travail) :
 **Algorithme de sélection** :
 
 ```python
-# startV2_learning_loader.py
+# start_learning_loader.py
 def select_learnings(project_context: dict) -> list[str]:
     """
     Sélectionne max 5-7 apprentissages pertinents.
@@ -160,7 +160,7 @@ def select_learnings(project_context: dict) -> list[str]:
 
 ### Documentation d'apprentissage dans `/close`
 
-Dans **closeV2.md**, ajouter étape :
+Dans **close.md**, ajouter étape :
 
 ```
 ## 4️⃣ Documenter apprentissages 📚
@@ -201,8 +201,8 @@ mkdir -p DOCS/PLANS_MAJ build/pyinstaller .tooling
 - COMET/ : conservé (Perplexity integration)
 
 ### Phase 3 : Mettre à jour commands (3 min)
-- startV2.md : référence DOCS/ARCHITECTURE.md
-- closeV2.md : même
+- start.md : référence DOCS/ARCHITECTURE.md
+- close.md : même
 - README.md : section Intégrations IA
 
 ### Phase 3bis : /bump_version (5 min)
@@ -280,13 +280,13 @@ Ajouter :
 - Cycle de travail : /start → travail → /close
 - Architecture dynamique : tout depuis src/content/
 - Système d'apprentissage : documenter bugs + patterns
-- Chargement apprentissages : startV2 intègre contexte
+- Chargement apprentissages : start intègre contexte
 
 ---
 
 ## 🎯 Mise à jour des fichiers references
 
-### .claude/commands/startV2.md
+### .claude/commands/start.md
 
 Ajouter étape 4️⃣ après "Rapport" :
 
@@ -302,7 +302,7 @@ Si travail sur feature connue (bug fix, refacto, etc.) :
 Sinon : "Pas d'apprentissages pertinents (première session / nouveau domaine)"
 ```
 
-### .claude/commands/closeV2.md
+### .claude/commands/close.md
 
 Ajouter étape avant commit :
 
@@ -327,7 +327,7 @@ Ajouter section :
 
 Chaque session suit ce cycle :
 
-1️⃣ **/start** (startV2.md)
+1️⃣ **/start** (start.md)
    - Lit ROADMAP + README + ARCHITECTURE
    - Charge apprentissages pertinents depuis APPRENTISSAGES/
    - Affiche recommandation ROI
@@ -336,7 +336,7 @@ Chaque session suit ce cycle :
    - Utilise contexte apprentissages chargés
    - Log issues et solutions
    
-3️⃣ **/close** (closeV2.md)
+3️⃣ **/close** (close.md)
    - Met à jour ROADMAP / README / ARCHITECTURE si besoin
    - Documente apprentissage si nouveau bug/pattern
    - Commit avec message explicite
@@ -374,7 +374,7 @@ Chaque session suit ce cycle :
 ## 🚀 Prochaines étapes
 
 1. Créer dossier `APPRENTISSAGES/` + structure de base
-2. Mettre à jour `startV2.md`, `closeV2.md`, `CLAUDE.md`
+2. Mettre à jour `start.md`, `close.md`, `CLAUDE.md`
 3. Exécuter Phases 1-6 (refacto racine)
 4. Documenter apprentissages premiers bugs/patterns
 5. Démarrer Phase 7 (v2.5.0 features)
@@ -383,4 +383,4 @@ Chaque session suit ce cycle :
 
 **Version** : v2.4.0 (branch v2.4.0)  
 **Créé** : 2024-04-25  
-**Consolidated into** : DOCS/PLANS_MAJ/PLAN_DE_TRAVAIL.md
+**Location** : DOCS/PLANS_MAJ/ROADMAP_v2.5.0.md

@@ -17,7 +17,7 @@ APPRENTISSAGES/
 ## Cycle d'apprentissage
 
 ### 📖 Chargement (`/start`)
-1. startV2.md charge apprentissages pertinents depuis APPRENTISSAGES/
+1. start.md charge apprentissages pertinents depuis APPRENTISSAGES/
 2. Sélectionne TOP 5-7 docs (HIGH severity + domaine détecté)
 3. Intègre dans contexte des prompts (max 3000 tokens)
 

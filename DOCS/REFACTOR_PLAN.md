@@ -75,7 +75,7 @@ ls -la COMET/README.md
 
 ## Phase 3 : Mettre à jour `.claude/commands/` (3 min)
 
-### 3.1 — Mettre à jour `startV2.md`
+### 3.1 — Mettre à jour `start.md`
 **Ligne 6** : Changer référence ARCHITECTURE
 
 ```diff
@@ -85,10 +85,10 @@ ls -la COMET/README.md
 
 **Commande** :
 ```bash
-sed -i 's|`ARCHITECTURE_AutoClaude.md`|`DOCS/ARCHITECTURE.md`|g' .claude/commands/startV2.md
+sed -i 's|`ARCHITECTURE_AutoClaude.md`|`DOCS/ARCHITECTURE.md`|g' .claude/commands/start.md
 ```
 
-### 3.2 — Mettre à jour `closeV2.md`
+### 3.2 — Mettre à jour `close.md`
 **Ligne 13** : Changer référence dans tableau
 
 ```diff
@@ -98,7 +98,7 @@ sed -i 's|`ARCHITECTURE_AutoClaude.md`|`DOCS/ARCHITECTURE.md`|g' .claude/command
 
 **Commande** :
 ```bash
-sed -i 's|`ARCHITECTURE_AutoClaude.md`|`DOCS/ARCHITECTURE.md`|g' .claude/commands/closeV2.md
+sed -i 's|`ARCHITECTURE_AutoClaude.md`|`DOCS/ARCHITECTURE.md`|g' .claude/commands/close.md
 ```
 
 ### 3.3 — Mettre à jour `README.md`
@@ -132,10 +132,10 @@ grep -n "Intégrations IA" README.md
 
 ### 3.4 — Vérification commands
 ```bash
-grep -n "ARCHITECTURE\|COMET" .claude/commands/startV2.md .claude/commands/closeV2.md README.md
+grep -n "ARCHITECTURE\|COMET" .claude/commands/start.md .claude/commands/close.md README.md
 # Doit afficher : 
-#   startV2.md:6: DOCS/ARCHITECTURE.md
-#   closeV2.md:13: DOCS/ARCHITECTURE.md
+#   start.md:6: DOCS/ARCHITECTURE.md
+#   close.md:13: DOCS/ARCHITECTURE.md
 #   README.md: "Intégrations IA — Perplexity & Comet" + COMET/README.md
 ```
 
@@ -241,7 +241,7 @@ Changements :
   • Créé COMET/README.md (documentation intégrations IA Perplexity)
   • Supprimé .benchmarks/ (non utilisé)
   • Ajouté section "Intégrations IA" à README.md → lien vers COMET/
-  • Mis à jour startV2.md, closeV2.md (références ARCHITECTURE)
+  • Mis à jour start.md, close.md (références ARCHITECTURE)
   • Créé /bump_version : commande + scripts + config
     - .claude/commands/bump_version.md (guide workflow)
     - .tooling/bump_version.py (script bump automatisé)
@@ -303,8 +303,8 @@ AutoClaude/ (racine)
 │   └── bump_version_files.json      (config fichiers)
 │
 └── .claude/commands/
-    ├── startV2.md                   (démarrage session)
-    ├── closeV2.md                   (clôture session)
+    ├── start.md                   (démarrage session)
+    ├── close.md                   (clôture session)
     └── bump_version.md              (versioning automatis)
 ```
 
@@ -327,7 +327,7 @@ ls -la | grep -E "AutoClaude.*\.spec|audit_|type_hints_todo|ARCHITECTURE_Auto"
 
 ## Phase 7 : Fonctionnalités majeures v2.5.0 (3-4 jours) 🚀
 
-Voir [PLAN_DE_TRAVAIL.md](PLAN_DE_TRAVAIL.md) pour le plan complet.
+Voir [ROADMAP_v2.5.0.md](PLANS_MAJ/ROADMAP_v2.5.0.md) pour le plan complet.
 
 ### 7.1 — Auto-updater GitHub Releases (1j)
 
