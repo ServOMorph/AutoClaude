@@ -6,15 +6,16 @@
             "workflows/2026_04_25_agent_customization_navigation.md",
             "workflows/2026_04_25_interactive_learnings_navigation.md",
             "bugs_resolved/2026_04_25_ctklabel_bind_windows.md",
-            "ui/2026_04_25_tips_inline_vs_popup.md"
+            "ui/2026_04_25_tips_inline_vs_popup.md",
+            "bugs_resolved/2026_04_25_pytest_patching_static_imports.md"
         ]
     },
     "domains": {
         "workflows": 2,
-        "bugs_resolved": 1,
+        "bugs_resolved": 2,
         "ui": 1
     },
-    "total_learnings": 4,
+    "total_learnings": 5,
     "version": "2.4.0",
-    "last_updated": "2026-04-25T20:00:00Z"
+    "last_updated": "2026-04-25T21:00:00Z"
 }
