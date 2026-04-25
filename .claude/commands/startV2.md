@@ -41,10 +41,30 @@
 3. [Option C] — ROI 0.7:1 (3-4j)
 ```
 
-## 5️⃣ Question
+## 5️⃣ Charger apprentissages 📚
+
+Si travail sur feature connue (bug fix, refacto, dev) :
+```bash
+# Vérifier APPRENTISSAGES/meta.json (tags, sévérité)
+grep -r "domain\|severity" APPRENTISSAGES/meta.json | grep -E "core|ui|bugs_resolved|workflows"
+# Sélectionner TOP 5-7 docs (HIGH severity + domaine pertinent)
+```
+
+Afficher : "Apprentissages chargés : X docs (~Y tokens pertinents)"
+
+Sinon (première session / domaine nouveau) : "Pas d'apprentissages pertinents"
+
+---
+
+## 6️⃣ Question
 > "Commencer par [Meilleur] ou autre ?"
 
 ---
+**Cycle de travail** :
+- ✅ /start : analyse + apprentissages → **vous êtes ici**
+- 🔧 Travail : implémentation, debug, refacto
+- 📝 /close : documenter apprentissages + commit
+
 **Économies d'optimisation** :
 - ✂️ Sections verbales → listes compactes
 - ✂️ Explications longues → 1 ligne max

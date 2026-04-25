@@ -10,7 +10,22 @@
 |-----|--------|
 | `ROADMAP.md` | Cocher ✅ tâches, mettre date |
 | `README.md` | Refléter état, nouvelles features |
-| `ARCHITECTURE_AutoClaude.md` | Régénérer si N fichiers touchés > 3 |
+| `DOCS/ARCHITECTURE.md` | Régénérer si N fichiers touchés > 3 |
+
+## 3️⃣ Documenter apprentissages 📚
+
+Si **bug résolu** ou **pattern découvert** :
+
+1. **Créer** : `APPRENTISSAGES/<domain>/<topic>.md`
+   - Domaines : core, ui, security, bugs_resolved, workflows
+   
+2. **Contenu** : title, domain, tags, severity, problème, solution, code, pièges
+   
+3. **Mettre à jour** : `APPRENTISSAGES/meta.json` (count, by_severity)
+   
+4. **Vérifier** : Compact (< 500 tokens)
+
+Sinon : "Aucun apprentissage à documenter"
 
 ## 4️⃣ Commit
 ```bash

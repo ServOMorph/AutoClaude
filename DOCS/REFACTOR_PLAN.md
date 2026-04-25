@@ -327,7 +327,7 @@ ls -la | grep -E "AutoClaude.*\.spec|audit_|type_hints_todo|ARCHITECTURE_Auto"
 
 ## Phase 7 : Fonctionnalités majeures v2.5.0 (3-4 jours) 🚀
 
-Voir `C:\Users\raph6\.claude\plans\PLAN_DE_TRAVAIL.md` pour le plan complet.
+Voir [PLAN_DE_TRAVAIL.md](PLAN_DE_TRAVAIL.md) pour le plan complet.
 
 ### 7.1 — Auto-updater GitHub Releases (1j)
 

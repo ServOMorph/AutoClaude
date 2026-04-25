@@ -112,3 +112,103 @@ Ce fichier guide Claude Code pour ce repository.
 
 ❌ Dupliquer contenu : `src/ui/tips.py` contient une copie des tips
 ✅ Une source : `src/content/tips/` lue par `tips_loader` et `tips_dialog`
+
+## Cycle de travail standardisé (OBLIGATOIRE)
+
+Chaque session suit ce cycle pour garantir continuité et apprentissage :
+
+### 1️⃣ Démarrage — `/start` (startV2.md)
+- Lire ROADMAP, README, ARCHITECTURE
+- Analyser contexte projet (technologies, type de travail)
+- **Charger apprentissages pertinents** depuis APPRENTISSAGES/
+  - Scanner meta.json
+  - Sélectionner TOP 5-7 docs (HIGH severity + domaine)
+  - Intégrer dans contexte (max 3000 tokens)
+- Afficher recommandation ROI (meilleur choix)
+
+### 2️⃣ Travail
+- Utiliser contexte + apprentissages chargés
+- Logger issues et solutions
+- Tester et valider changements
+
+### 3️⃣ Clôture — `/close` (closeV2.md)
+- Mettre à jour ROADMAP, README, ARCHITECTURE
+- **Documenter apprentissage si nouveau** (bug résolu / pattern)
+  - Créer APPRENTISSAGES/<domain>/<topic>.md
+  - Format : title, domain, tags, severity, code, pièges
+  - Mettre à jour APPRENTISSAGES/meta.json
+  - Vérifier compact (< 500 tokens)
+- Commit avec message explicite
+- Fin session
+
+### Continuité inter-sessions
+Les apprentissages documentés dans `/close` sont automatiquement chargés dans `/start` suivant, créant une accumulation progressive de savoir.
+
+## Système d'apprentissage
+
+### Structure
+```
+APPRENTISSAGES/                  ← Racine (parallèle à DOCS/, src/)
+├── meta.json                    ← Index (version, count, domains)
+├── core/                        ← Patterns : détection, clic, listener
+├── ui/                          ← Patterns : CustomTkinter, theme, components
+├── security/                    ← Sécurité : protection, permissions
+├── bugs_resolved/               ← Bugs résolus (datés)
+└── workflows/                   ← Workflows : versioning, build, update
+```
+
+### Format apprentissage (.md)
+
+```markdown
+---
+title: "Titre apprentissage"
+domain: "core|ui|security|bugs_resolved|workflows"
+tags: ["tag1", "tag2"]
+severity: "high|medium|low"       # HIGH = critical, MEDIUM = useful, LOW = nice-to-know
+created: "2024-04-25"
+updated: "2024-04-25"
+version: "v2.4.0"                 # Version du projet quand découvert
+---
+
+## Problème
+Description du problème/pattern
+
+## Solution
+Comment ça a été résolu
+
+## Code pattern (si applicable)
+```python
+# code example
+```
+
+## Pièges à éviter
+- ❌ Piège 1
+- ✅ Good practice 1
+```
+
+### Sélection apprentissages (optimisé tokens)
+- Chargement : max 5-7 docs, max 3000 tokens
+- Critères : domaine + sévérité HIGH/MEDIUM
+- Meta.json = index (petit fichier, peut être toujours chargé pour filtrage rapide)
+- Fallback : si aucun apprentissage pertinent = "Pas d'apprentissages (première session / domaine nouveau)"
+
+### Gestion meta.json
+```json
+{
+  "version": "v2.4.0",
+  "last_updated": "2024-04-25T09:47:00Z",
+  "total_learnings": 15,
+  "domains": {
+    "core": 4,
+    "ui": 5,
+    "security": 2,
+    "bugs_resolved": 3,
+    "workflows": 1
+  },
+  "by_severity": {
+    "high": ["detector.md", "listener.md", ...],
+    "medium": ["customtkinter_patterns.md", ...],
+    "low": [...]
+  }
+}
+```
