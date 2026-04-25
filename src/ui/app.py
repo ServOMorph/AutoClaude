@@ -55,6 +55,7 @@ class AutoClaudeApp(ctk.CTk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
         self._overlay = StatusOverlay(self, on_click=self._activate_btn._toggle)
+        self._overlay.set_click_count(click_stats.get_total())
         if settings.get("overlay_enabled"):
             self._overlay.show()
         else:
