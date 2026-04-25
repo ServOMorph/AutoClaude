@@ -9,6 +9,7 @@ from src.core.logger import get_logger
 from src.ui import theme
 from src.ui.components.header import Header
 from src.ui.components.warning_banner import WarningBanner
+from src.ui.components.tips_banner import TipsBanner
 from src.ui.components.activate_button import ActivateButton
 from src.ui.components.protection_button import ProtectionButton
 from src.ui.components.footer import Footer
@@ -18,7 +19,6 @@ from src.core import click_stats
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
 from src.ui.dialogs.library_window import LibraryWindow
-from src.ui.dialogs.tips_dialog import TipsDialog
 from src.ui.overlays.status_overlay import StatusOverlay
 
 
@@ -61,8 +61,6 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.hide()
 
         health_monitor.start()
-        if settings.get("show_tips_on_start"):
-            self.after(800, lambda: TipsDialog(self))
         self._log.info("AutoClaude démarré (v%s)", APP_NAME)
 
     def _on_tk_exception(self, exc_type, exc_val, exc_tb):
@@ -79,15 +77,9 @@ class AutoClaudeApp(ctk.CTk):
 
         Header(self).pack(fill="x", padx=20, pady=(20, 12))
 
-        WarningBanner(
-            self,
-            text=(
-                "• AutoClaude clique automatiquement sur les YES de ClaudeCode (VSCode)\n\n"
-                "• ⚠️ À utiliser avec beaucoup de prudence — augmente l'autonomie de ClaudeCode\n\n"
-                "• 🔒 Sécurité : protégez votre projet en le sélectionnant et en cliquant "
-                "\"Protéger\" — restrictions périmètre injectées automatiquement dans .claude/CLAUDE.md du projet"
-            ),
-        ).pack(fill="x", padx=20, pady=(0, 16))
+        self._banner_slot = ctk.CTkFrame(self, fg_color="transparent")
+        self._banner_slot.pack(fill="x", padx=20, pady=(0, 16))
+        self._show_banner()
 
         ctk.CTkButton(
             self,
@@ -180,6 +172,26 @@ class AutoClaudeApp(ctk.CTk):
         quit_btn.pack(pady=(0, 12))
 
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
+
+    _WARNING_TEXT = (
+        "• AutoClaude clique automatiquement sur les YES de ClaudeCode (VSCode)\n\n"
+        "• ⚠️ À utiliser avec beaucoup de prudence — augmente l'autonomie de ClaudeCode\n\n"
+        "• 🔒 Sécurité : protégez votre projet en le sélectionnant et en cliquant "
+        "\"Protéger\" — restrictions périmètre injectées automatiquement dans .claude/CLAUDE.md du projet"
+    )
+
+    def _show_banner(self):
+        for w in self._banner_slot.winfo_children():
+            w.destroy()
+        if settings.get("show_tips_on_start"):
+            TipsBanner(self._banner_slot, on_close=self._show_warning).pack(fill="x")
+        else:
+            self._show_warning()
+
+    def _show_warning(self):
+        for w in self._banner_slot.winfo_children():
+            w.destroy()
+        WarningBanner(self._banner_slot, text=self._WARNING_TEXT).pack(fill="x")
 
     def _on_toggle(self, active: bool):
         """TODO: description de _on_toggle."""
