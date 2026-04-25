@@ -11,7 +11,6 @@ _DEFAULTS = {
     "interval": DEFAULT_INTERVAL,
     "auto_stop": False,
     "image_path": "",
-    "overlay_enabled": True,
 }
 
 

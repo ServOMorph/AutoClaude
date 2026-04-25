@@ -24,7 +24,6 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 - Protection de projet Claude Code via injection dans `.claude/CLAUDE.md`
 - **Compteur de clics** avec historique persisté
 - **Analyses graphiques** : navigation temporelle (Récent / Tout), bandeau de statistiques (total, moyenne, record, jours actifs), graphes par heure/jour/semaine/mois/année
-- **Indicateur flottant** : overlay always-on-top en bas à gauche de l'écran, cliquable pour activer/désactiver l'autoclick depuis n'importe quelle application
 - Logs rotatifs (`~/.autoclaude/logs/`) et watchdog de stabilité pour une utilisation longue durée
 - Interface sombre SéréniaTech (CustomTkinter)
 - Paramètres persistés localement (`~/.autoclaude/settings.json`)
@@ -94,16 +93,7 @@ L'interface permet de :
 3. **Appliquer ou retirer** la protection Claude Code sur ce dossier
 4. **Compter les clics** — affichage en temps réel du nombre total, avec reset possible
 5. **Visualiser les analyses** — navigation par période, mode Récent/Tout, stats chiffrées
-6. **Afficher/masquer l'indicateur flottant** — overlay visible par-dessus toutes les applications
 
-### Indicateur flottant
-
-Un petit indicateur apparaît en bas à gauche de l'écran, par-dessus toutes les fenêtres :
-
-- 🔵 **Bleu — AutoClaude OFF** : autoclick inactif
-- 🔴 **Rouge — AutoClaude ON** : autoclick actif
-
-Un clic sur l'indicateur active ou désactive l'autoclick directement, sans revenir à la fenêtre principale. L'affichage se contrôle via le switch **"Afficher l'indicateur flottant"** dans l'UI.
 
 ### Analyses
 
