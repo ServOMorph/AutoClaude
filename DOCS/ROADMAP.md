@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
-> Dernière mise à jour : 2026-04-23
-> Statut global : **Phase 8 terminée** — Projet prêt pour publication publique
+> Dernière mise à jour : 2026-04-25
+> Statut global : **Phase 9 (v2.3.0) terminée** — Overlay flottant + Stabilité long-run déployés
 
 ---
 
@@ -172,7 +172,46 @@ is_running() → bool
 
 ---
 
-## Évolutions futures (hors v2.0)
+## Phase 9 — v2.3.0 Overlay + Stabilité ✅
+
+> Objectif : overlay flottant always-on-top + stabilité long-run (24h+ sans crash).
+
+| Tâche | Fichier cible | Statut | Notes |
+|-------|--------------|--------|-------|
+| 9.1 Logger centralisé | `src/core/logger.py` | ✅ | Rotation 5 Mo × 3, `~/.autoclaude/logs/` |
+| 9.2 Health Monitor | `src/core/health_monitor.py` | ✅ | Snapshot psutil toutes les 5 min, alertes RSS/handles/threads |
+| 9.3 Auto-restart service | `src/core/autoclick_service.py` | ✅ | Max 3 tentatives, `stop()` non-bloquant |
+| 9.4 Buffer click_stats | `src/core/click_stats.py` | ✅ | Flush atomique, réduction I/O ~95% |
+| 9.5 Listener idempotence | `src/core/listener.py` | ✅ | Guard `_started` pour éviter double-démarrage |
+| 9.6 Libération matplotlib | `src/ui/dialogs/analytics_window.py` | ✅ | `plt.close()` + `CTkImage = None` + destroy handler |
+| 9.7 Hook Tk exception | `src/ui/app.py` | ✅ | `report_callback_exception` pour audit |
+| 9.8 StatusOverlay Toplevel | `src/ui/overlays/status_overlay.py` | ✅ | Always-on-top, bas-gauche, cliquable (CTkButton) |
+| 9.9 OverlayToggle switch | `src/ui/components/overlay_toggle.py` | ✅ | Persisté dans settings.json |
+| 9.10 Analyses améliorées | `src/ui/dialogs/analytics_window.py` | ✅ | Mode Récent/Tout + navigation + bandeau stats |
+| 9.11 Version bump 2.3.0 | `src/config/constants.py`, `pyproject.toml` | ✅ | Partout : VERSION, height, specs |
+| 9.12 Build PyInstaller | `AutoClaude_v2.3.0.spec` | ✅ | Exe 120 MB, prêt distribution |
+| 9.13 GitHub Release v2.3.0 | GitHub | ✅ | Exe upload, notes complet |
+| 9.14 CHANGELOG complet | `CHANGELOG.md` | ✅ | v1.0.0 → v2.3.0, Keep a Changelog format |
+
+### Critères v2.3.0
+
+| Critère | Statut |
+|---------|--------|
+| Overlay visible bas-gauche, cliquable | ✅ |
+| Overlay reste topmost (refresh 2s) | ✅ |
+| Stop() non-bloquant < 100ms | ✅ |
+| Click stats write < 20 clics | ✅ |
+| Health monitor < 1% CPU | ✅ |
+| Analyses Récent/Tout mode | ✅ |
+| Analyses navigation Précédent/Suivant | ✅ |
+| Stats banner (total, moy, record, actifs) | ✅ |
+| Exe téléchargeable 120 MB | ✅ |
+| Release GitHub publiée | ✅ |
+| 24h test sans crash | ✅ (validé en logs) |
+
+---
+
+## Évolutions futures (hors v2.3.0)
 
 > Non planifiées — consignées pour référence.
 
@@ -195,3 +234,4 @@ is_running() → bool
 | 2026-04-23 | Création de la roadmap — v1 complète, v2.0 planifiée |
 | 2026-04-23 | Phases 1→7 complètes — UI v2.0 fonctionnelle |
 | 2026-04-23 | Phase 8 complète — ARCHITECTURE, SECURITY, CHARTE_GRAPHIQUE, README, LICENSE |
+| 2026-04-25 | Phase 9 complète — v2.3.0 publiée (overlay + analyses + stabilité long-run) |
