@@ -32,7 +32,7 @@
 
 ## ✅ Phases historiques (v1 → v2.3.0)
 
-Détails complets dans [DOCS/ROADMAP.md](DOCS/ROADMAP.md).
+Détails complets dans [ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md](ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md).
 
 | Phase | Version | Livrables | Statut |
 |-------|---------|-----------|--------|
@@ -52,17 +52,17 @@ Détails complets dans [DOCS/ROADMAP.md](DOCS/ROADMAP.md).
 
 > Objectif : refondre racine projet, automatiser versioning, instaurer cycle de travail avec mémoire inter-sessions.
 
-### 10.1 — Refactorisation racine (30 min) ⏳
+### 10.1 — Refactorisation racine (30 min) ✅
 
 | Tâche | Fichier cible | Statut |
 |-------|--------------|--------|
-| 10.1.1 Créer `DOCS/PLANS_MAJ/`, `build/pyinstaller/`, `.tooling/` | structure | ⏳ |
-| 10.1.2 Déplacer doc → `DOCS/` (ARCHITECTURE, CHANGELOG, etc.) | `DOCS/` | ⏳ |
-| 10.1.3 Déplacer specs PyInstaller → `build/pyinstaller/` | `build/` | ⏳ |
-| 10.1.4 Déplacer outils → `.tooling/` (build.py, audits) | `.tooling/` | ⏳ |
+| 10.1.1 Créer `DOCS/PLANS_MAJ/`, `build/pyinstaller/`, `.tooling/` | structure | ✅ |
+| 10.1.2 Déplacer doc → `DOCS/` (ARCHITECTURE, CHANGELOG, etc.) | `DOCS/` | ✅ |
+| 10.1.3 Déplacer specs PyInstaller → `build/pyinstaller/` | `build/` | ✅ |
+| 10.1.4 Déplacer outils → `.tooling/` (build.py, audits) | `.tooling/` | ✅ |
 | 10.1.5 Conserver `COMET/` (Perplexity) + `COMET/README.md` | `COMET/` | ✅ |
-| 10.1.6 Mettre à jour `.gitignore` (build/, dist/, .benchmarks/) | `.gitignore` | ⏳ |
-| 10.1.7 Section "Intégrations IA" dans `README.md` | `README.md` | ⏳ |
+| 10.1.6 Mettre à jour `.gitignore` (build/, dist/, .benchmarks/) | `.gitignore` | ✅ |
+| 10.1.7 Section "Intégrations IA" dans `README.md` | `README.md` | ✅ |
 
 ### 10.2 — Commande `/bump_version` (5 min) ✅
 
@@ -103,12 +103,13 @@ Détails complets dans [DOCS/ROADMAP.md](DOCS/ROADMAP.md).
 
 | Critère | Statut |
 |---------|--------|
-| Racine claire (≤ 7 fichiers) | ⏳ |
+| Racine claire (≤ 7 fichiers) | ✅ |
 | `/bump_version` fonctionnel + analyse | ✅ |
 | `/start` charge apprentissages | ✅ |
 | `/close` documente apprentissages | ✅ |
 | `APPRENTISSAGES/meta.json` initialisé | ✅ |
 | CLAUDE.md ≤ 60 lignes (économie tokens) | ✅ |
+| 3 organes synchronisés (README/ROADMAP/ARCHITECTURE) | ✅ |
 
 ---
 

@@ -180,7 +180,26 @@ AutoClaude utilise **3 fichiers à la racine** comme source de vérité unique p
 3. /close met à jour les 3 fichiers si pertinent + commit
 ```
 
-Cf. [.claude/CLAUDE.md](.claude/CLAUDE.md) pour les directives IA et [APPRENTISSAGES/](APPRENTISSAGES/) pour la mémoire inter-sessions.
+Cf. [.claude/CLAUDE.md](.claude/CLAUDE.md) pour les directives IA.
+
+### 📚 Système d'apprentissage inter-sessions
+
+[APPRENTISSAGES/](APPRENTISSAGES/) stocke la mémoire accumulée du projet entre les sessions IA :
+- **Format** : fichiers `.md` avec métadonnées (domain, severity, tags)
+- **Domains** : core, ui, security, bugs_resolved, workflows
+- **Sélection** : max 5-7 docs HIGH/MEDIUM par session (3000 tokens)
+- **Cycle** : `/start` charge learnings pertinents → travail → `/close` documente solution si nouveau
+
+Voir [APPRENTISSAGES/README.md](APPRENTISSAGES/README.md) pour le détail.
+
+### 🗃️ Archives & historique
+
+[ARCHIVES/](ARCHIVES/) conserve les fichiers obsolètes avec index searchable :
+- **Catégories** : docs_legacy, specs_pyinstaller, tooling_artifacts, old_builds
+- **Métadonnées** : reason, tags, recall_when (quand le ressortir)
+- **Recherche** : `python .tooling/archive_search.py <query>`
+
+Rien n'est perdu — tout est archivé et récupérable. Voir [ARCHIVES/README.md](ARCHIVES/README.md).
 
 ---
 
