@@ -1,20 +1,20 @@
-﻿{
-    "by_severity":  {
-                        "low":  [
-
-                                ],
-                        "medium":  [
-
-                                   ],
-                        "high":  [
-                                     "workflows/2026_04_25_agent_customization_navigation.md",
-                                     "workflows/2026_04_25_interactive_learnings_navigation.md"
-                                 ]
-                    },
-    "domains":  {
-                    "workflows":  2
-                },
-    "total_learnings":  2,
-    "version":  "2.4.0",
-    "last_updated":  "2026-04-25T18:00:00Z"
+{
+    "by_severity": {
+        "low": [],
+        "medium": [],
+        "high": [
+            "workflows/2026_04_25_agent_customization_navigation.md",
+            "workflows/2026_04_25_interactive_learnings_navigation.md",
+            "bugs_resolved/2026_04_25_ctklabel_bind_windows.md",
+            "ui/2026_04_25_tips_inline_vs_popup.md"
+        ]
+    },
+    "domains": {
+        "workflows": 2,
+        "bugs_resolved": 1,
+        "ui": 1
+    },
+    "total_learnings": 4,
+    "version": "2.4.0",
+    "last_updated": "2026-04-25T20:00:00Z"
 }

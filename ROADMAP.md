@@ -86,7 +86,7 @@ Détails complets dans [ARCHIVES/docs_legacy/ROADMAP_v2.3.0_historical.md](ARCHI
 > Objectif : interface centrale scalable — tout contenu depuis `src/content/`, aucun hardcodé. Couverture tests 90%.
 > Durée estimée : 4-5 jours.
 
-### 11.1 — Sidebar dynamique (1.5j) ⏳
+### 11.1 — Sidebar dynamique (1.5j) ✅
 
 **Architecture** :
 ```
@@ -112,7 +112,7 @@ src/content/
 
 **Scalabilité** : ajouter dossier `src/content/` = onglet auto-généré.
 
-### 11.2 — Bibliothèque de prompts (0.5j) ⏳
+### 11.2 — Bibliothèque de prompts (0.5j) ✅
 
 | Fichier | Rôle |
 |---------|------|
@@ -121,15 +121,15 @@ src/content/
 
 **Usage** : copie rapide depuis sidebar → coller dans Claude Code / Comet / Antigravity.
 
-### 11.3 — Tips au démarrage (0.5j) ⏳
+### 11.3 — Tips au démarrage (0.5j) ✅
 
-> Tips = onglet sidebar **ET** dialog optionnel au démarrage (pas de feature séparée)
+> Tips = onglet sidebar **ET** bannière inline au démarrage (TipsBanner remplace WarningBanner)
 
 | Fichier | Rôle |
 |---------|------|
 | `src/content/tips/*.md` | Fichiers tips (core, ui, shortcuts) |
-| `src/core/tips_loader.py` | Scanner + parser markdown |
-| `src/ui/dialogs/tips_dialog.py` | Dialog CTkToplevel : tip aléatoire au démarrage |
+| `src/core/content_loader.py` | Scanner + parser markdown (tips + prompts + learnings) |
+| `src/ui/components/tips_banner.py` | Bannière inline : navigation, disable setting, swap → WarningBanner |
 
 ### 11.4 — Tests unitaires + intégration (1.5j) ⏳
 
