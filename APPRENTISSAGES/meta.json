@@ -1,18 +1,18 @@
 {
   "version": "v2.4.0",
-  "last_updated": "2024-04-25T09:54:00Z",
-  "total_learnings": 0,
+  "last_updated": "2026-04-25T16:00:00Z",
+  "total_learnings": 1,
   "description": "Système d'apprentissage scalable — bug resolutions, patterns, workflows",
   "domains": {
     "core": 0,
     "ui": 0,
     "security": 0,
     "bugs_resolved": 0,
-    "workflows": 0
+    "workflows": 1
   },
   "by_severity": {
     "high": [],
-    "medium": [],
+    "medium": ["workflows/2026_04_25_multi_ia_strategic_reposition.md"],
     "low": []
   },
   "structure": {
@@ -20,6 +20,6 @@
     "ui": "Patterns : CustomTkinter, système de thème, architecture composants",
     "security": "Sécurité : protection CLAUDE.md, permissions système",
     "bugs_resolved": "Bugs résolus (datés) : 2024-04-25_thread_freeze.md, etc.",
-    "workflows": "Workflows : bump_version, auto-updater, build PyInstaller"
+    "workflows": "Workflows : bump_version, auto-updater, build PyInstaller, reposition multi-IA"
   }
 }
