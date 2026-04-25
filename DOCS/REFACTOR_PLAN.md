@@ -325,6 +325,75 @@ ls -la | grep -E "AutoClaude.*\.spec|audit_|type_hints_todo|ARCHITECTURE_Auto"
 
 ---
 
+## Phase 7 : Fonctionnalités majeures v2.5.0 (3-4 jours) 🚀
+
+Voir `C:\Users\raph6\.claude\plans\PLAN_DE_TRAVAIL.md` pour le plan complet.
+
+### 7.1 — Auto-updater GitHub Releases (1j)
+
+**Fichiers à créer** :
+- `src/core/update_checker.py` — GitHub API, comparaison versions
+- `src/ui/components/update_button.py` — Bouton "Vérifier mises à jour"
+- `src/ui/dialogs/update_dialog.py` — Dialog CTk + progress
+- `updater/updater.py` — Script standalone : download → kill app → remplace .exe
+- `updater/updater_config.json` — Config owner, repo, asset_name
+- `updater/AutoClaude_Updater.spec` — PyInstaller spec updater (15-20 MB)
+
+**Fichiers à modifier** :
+- `src/config/constants.py` — +URL_GITHUB_API
+- `src/config/settings.py` — +update_check_enabled (default: True)
+- `src/ui/app.py` — +update_button + check auto thread daemon 2s
+- `requirements.txt` — +requests>=2.31.0, packaging>=24.0
+
+**Workflow** : GitHub API → compare VERSION → update_dialog → Popen(updater.exe) → app.quit() → updater remplace → relance
+
+### 7.2 — Tips dynamiques au démarrage (0.5j)
+
+**Fichiers à créer** :
+- `src/content/tips/` — Dossier contenant tips .md (core.md, ui.md, shortcuts.md, updates.md)
+- `src/core/tips_loader.py` — Scanne src/content/tips/*.md, retourne liste de tips
+- `src/ui/dialogs/tips_dialog.py` — Dialog CTkToplevel : tip aléatoire au démarrage
+
+**Fichiers à modifier** :
+- `src/config/settings.py` — +show_tips_on_startup (default: True)
+- `src/ui/app.py` — Appeler tips_dialog si setting activé
+
+**Scalabilité** : Ajouter un .md dans src/content/tips/ = tips disponibles immédiatement
+
+### 7.3 — Sidebar menu dynamique (1.5j)
+
+**Architecture** :
+```
+src/content/
+  tips/           → Onglet Tips
+  prompts/        → Onglet Prompts
+  learnings/
+    core/         → Sous-onglet Apprentissages / Core
+    ui/           → Sous-onglet Apprentissages / UI
+    security/     → Sous-onglet Apprentissages / Sécurité
+```
+
+**Fichiers à créer** :
+- `src/ui/sidebar/sidebar_panel.py` — CTkFrame gauche, génère nav dynamiquement
+- `src/ui/sidebar/tab_registry.py` — Scanne src/content/, construit registry des onglets
+- `src/ui/sidebar/content_view.py` — Zone droite, affiche contenu onglet actif
+- `src/ui/tabs/base_tab.py` — Classe abstraite : titre, icône, render()
+- `src/ui/tabs/markdown_tab.py` — Renderer : .md → CTkScrollableFrame
+- `src/ui/tabs/learning_tab.py` — Sous-onglets depuis sous-dossiers
+- `src/ui/tabs/prompts_tab.py` — Liste prompts avec copie rapide
+- `src/ui/tabs/tips_tab.py` — Liste tips avec filtre catégorie
+
+**Fichiers à modifier** :
+- `src/ui/app.py` — Intégrer sidebar + content_view dans layout
+
+**Scalabilité** : Ajouter dossier dans src/content/ = onglet + sous-onglets auto-générés
+
+### 7.4 — Mise à jour CLAUDE.md (0.25j)
+
+Ajouter section "Architecture dynamique" → **tout dynamique, aucun contenu hardcodé**
+
+---
+
 ## Rollback (si nécessaire)
 
 ```bash
@@ -333,4 +402,6 @@ git reset --hard HEAD~1
 
 ---
 
-**Prêt ?** Exécute chaque phase ou lance tout d'un coup ?
+**Status** : Phase 1-6 prêtes (refacto racine + /bump_version). Phase 7 (v2.5.0) planifiée.
+
+Exécuter Phase 1-6 maintenant, puis Phase 7 après ?

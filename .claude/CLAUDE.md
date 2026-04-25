@@ -71,3 +71,44 @@ Ce fichier guide Claude Code pour ce repository.
 - ❌ Pas de lectures massives de fichiers volumineux
 - ❌ Pas de `git log` complet (utiliser `-n 5` ou `-n 20`)
 - ❌ Pas de requêtes imprécises (préparer la requête avant)
+
+## Architecture dynamique (v2.5.0+)
+
+**Contrainte centrale** : Tout contenu est dynamique, aucun hardcodé.
+
+### Principes
+
+- ✅ **Source unique** : `src/content/` est la source de vérité pour tous les contenus (tips, prompts, learnings)
+- ✅ **Loaders** : Scannent toujours les dossiers, jamais de listes statiques
+- ✅ **UI auto-générée** : Reconstruit depuis fichiers/registry, pas de widgets hardcodés
+- ✅ **Extensibilité** : Ajouter un fichier .md ou dossier = fonctionnalité disponible immédiatement
+- ❌ Pas de contenu hardcodé dans le code (strings, listes, configurations)
+- ❌ Pas de UI générées manuellement (tout dynamique via loaders)
+- ❌ Pas de registry statiques (scanned à chaque session)
+
+### Implémentation
+
+**Tips** :
+- Scannent `src/content/tips/*.md` au démarrage
+- Ajouter un .md = tip disponible, aucun code changeé
+
+**Sidebar & Onglets** :
+- `tab_registry.py` : scanne `src/content/` toutes les phases UI (au démarrage, on refresh)
+- Chaque dossier en `src/content/` = onglet (tips, prompts, learnings, custom...)
+- Sous-dossiers en `src/content/learnings/` = sous-onglets auto (core/, ui/, security/...)
+
+**Fichiers de contenu** :
+- Format : `.md` (Markdown)
+- Parsage dynamique : `tips_loader`, `markdown_tab` renderer
+- Contenu = source de vérité, pas de réplica dans le code
+
+### Anti-patterns
+
+❌ Hardcoder une liste : `tips = [{"id": "tip1", "title": "..."}]`
+✅ Scanner et charger : `def load_all_tips() -> list[dict]: ...`
+
+❌ Créer des widgets statiques : `self.buttons = [CTkButton(...), CTkButton(...)]`
+✅ Générer depuis registry : `for tab in registry: self.add_tab(tab)`
+
+❌ Dupliquer contenu : `src/ui/tips.py` contient une copie des tips
+✅ Une source : `src/content/tips/` lue par `tips_loader` et `tips_dialog`
