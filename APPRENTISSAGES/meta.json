@@ -7,13 +7,14 @@
 
                                    ],
                         "high":  [
-                                     "workflows/2026_04_25_agent_customization_navigation.md"
+                                     "workflows/2026_04_25_agent_customization_navigation.md",
+                                     "workflows/2026_04_25_interactive_learnings_navigation.md"
                                  ]
                     },
     "domains":  {
-                    "workflows":  1
+                    "workflows":  2
                 },
-    "total_learnings":  1,
+    "total_learnings":  2,
     "version":  "2.4.0",
-    "last_updated":  "2026-04-25"
+    "last_updated":  "2026-04-25T18:00:00Z"
 }
