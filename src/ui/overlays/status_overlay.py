@@ -40,11 +40,10 @@ class StatusOverlay(ctk.CTkToplevel):
 
         self._count: int = 0
 
-        # CTkButton instead of CTkLabel: command is always reliable on Windows
         self._label = ctk.CTkButton(
             self,
-            text="● OFF · 0",
-            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+            text="● Claude OFF   0",
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
             fg_color="transparent",
             hover_color="#ffffff22",
@@ -68,7 +67,7 @@ class StatusOverlay(ctk.CTkToplevel):
 
     def _refresh_label(self) -> None:
         state = "ON" if self._active else "OFF"
-        self._label.configure(text=f"● {state} · {self._count}")
+        self._label.configure(text=f"● Claude {state}   {self._count}")
 
     def show(self) -> None:
         self._visible = True
