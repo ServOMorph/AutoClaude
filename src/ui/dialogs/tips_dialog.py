@@ -7,14 +7,13 @@ from src.core.content_loader import load_tips
 from src.ui import theme
 from src.ui.tabs.markdown_tab import MarkdownView
 
-_W, _H = 460, 480
 _HEADER_COLOR = "#1C2F3F"
 _ACCENT = "#A5C9CA"
 _BADGE_BG = "#24404F"
 
 
 class TipsDialog(ctk.CTkToplevel):
-    """Tip du jour — superposé à la fenêtre principale, design SéréniaTech."""
+    """Tip du jour — superposé à la fenêtre principale, même taille."""
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -32,15 +31,10 @@ class TipsDialog(ctk.CTkToplevel):
         self.configure(fg_color=theme.PALETTE["bg"])
         self.attributes("-topmost", True)
 
-        # Bordure visible via frame wrapper
-        border = ctk.CTkFrame(self, fg_color=_ACCENT, corner_radius=14)
-        border.pack(fill="both", expand=True, padx=1, pady=1)
-
-        self._inner = ctk.CTkFrame(border, fg_color=theme.PALETTE["bg"], corner_radius=12)
-        self._inner.pack(fill="both", expand=True, padx=1, pady=1)
+        self._inner = self  # pas de border wrapper, on travaille directement
 
         self._build()
-        self._center_on(parent)
+        self._snap_to(parent)
         self.lift()
         self.focus_force()
 
@@ -54,7 +48,7 @@ class TipsDialog(ctk.CTkToplevel):
 
         # Header
         header = ctk.CTkFrame(self._inner, fg_color=_HEADER_COLOR, corner_radius=0,
-                               height=72)
+                               height=88)
         header.pack(fill="x")
         header.pack_propagate(False)
 
@@ -120,12 +114,11 @@ class TipsDialog(ctk.CTkToplevel):
             wraplength=400, justify="left",
         ).pack(anchor="w", padx=20, pady=(14, 4))
 
-        # Contenu markdown
+        # Contenu markdown — prend tout l'espace disponible
         MarkdownView(
             self._inner, tip["content"],
-            height=230,
             fg_color=theme.PALETTE["bg_secondary"],
-        ).pack(fill="x", padx=16, pady=(0, 12))
+        ).pack(fill="both", expand=True, padx=16, pady=(0, 12))
 
         # Footer
         ctk.CTkFrame(self._inner, fg_color=theme.PALETTE["border"], height=1).pack(fill="x", padx=0)
@@ -176,12 +169,10 @@ class TipsDialog(ctk.CTkToplevel):
             settings.set("show_tips_on_start", False)
         self.destroy()
 
-    def _center_on(self, parent):
-        self.update_idletasks()
-        px = parent.winfo_x()
-        py = parent.winfo_y()
-        pw = parent.winfo_width()
-        ph = parent.winfo_height()
-        x = px + (pw - _W) // 2
-        y = py + (ph - _H) // 2
-        self.geometry(f"{_W}x{_H}+{x}+{y}")
+    def _snap_to(self, parent):
+        parent.update_idletasks()
+        w = parent.winfo_width()
+        h = parent.winfo_height()
+        x = parent.winfo_x()
+        y = parent.winfo_y()
+        self.geometry(f"{w}x{h}+{x}+{y}")
