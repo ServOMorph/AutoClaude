@@ -347,7 +347,19 @@ Workflow strict :
 **Tests** : couverture 90%+ incluant updater
 **Audit** : `/doc` sans warnings majeurs
 
-### 14.3 — Build & release (0.5j) ⏳
+### 14.3 — Deuxième Overlay (0.5j) ⏳
+
+> Overlay complémentaire (design à finaliser — inspiré projet "Bot ou pas Bot")
+
+| Fichier | Rôle |
+|---------|------|
+| `src/ui/overlays/secondary_overlay.py` | Nouvel overlay flottant (stats/contrôles/info) |
+| `src/ui/app.py` | Instanciation + gestion lifecycle |
+| `tests/ui/test_secondary_overlay.py` | Tests rendering + interactions |
+
+**À définir** : fonctionnalités (stats temps réel, contrôles, info supplémentaires)
+
+### 14.4 — Build & release (0.5j) ⏳
 
 | Tâche | Statut |
 |-------|--------|

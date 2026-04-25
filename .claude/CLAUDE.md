@@ -49,7 +49,7 @@
 
 ## Cycle de travail (obligatoire)
 
-**1️⃣ `/start`** : Lire **4 organes** (README + ROADMAP + ARCHITECTURE + WORKFLOW) • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens) • Analyser ROADMAP → recommander tâches ROI • Afficher plan d'action
+**1️⃣ `/start`** : `/model haiku` (optimiser token budget) • Lire **4 organes** (README + ROADMAP + ARCHITECTURE + WORKFLOW) • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens) • Analyser ROADMAP → recommander tâches ROI • Afficher plan d'action
 
 **2️⃣ Travail** : Implémenter selon plan • Tests associés (v2.5.0+) • Logger issues/solutions → apprentissages
 
