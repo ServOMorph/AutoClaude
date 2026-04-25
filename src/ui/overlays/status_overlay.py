@@ -40,17 +40,19 @@ class StatusOverlay(ctk.CTkToplevel):
 
         self._count: int = 0
 
-        self._label = ctk.CTkLabel(
+        # CTkButton instead of CTkLabel: command is always reliable on Windows
+        self._label = ctk.CTkButton(
             self,
             text="● OFF · 0",
             font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
             fg_color="transparent",
+            hover_color="#ffffff22",
+            corner_radius=0,
+            border_width=0,
+            command=self._handle_click,
         )
-        self._label.pack(expand=True, fill="both", padx=8)
-
-        self._label.bind("<Button-1>", self._handle_click)
-        self.bind("<Button-1>", self._handle_click)
+        self._label.pack(expand=True, fill="both")
 
         self.withdraw()
         self._schedule_keep_on_top()
@@ -77,12 +79,9 @@ class StatusOverlay(ctk.CTkToplevel):
         self._visible = False
         self.withdraw()
 
-    def _handle_click(self, _event=None):
+    def _handle_click(self):
         if self._on_click:
-            try:
-                self._on_click()
-            except Exception:
-                pass
+            self._on_click()
 
     def _schedule_keep_on_top(self):
         """Re-applique topmost périodiquement pour rester au-dessus."""
