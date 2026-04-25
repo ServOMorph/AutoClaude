@@ -16,6 +16,8 @@ from src.ui.components.click_counter import ClickCounter
 from src.ui.components.overlay_toggle import OverlayToggle
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
+from src.ui.dialogs.library_window import LibraryWindow
+from src.ui.dialogs.tips_dialog import TipsDialog
 from src.ui.overlays.status_overlay import StatusOverlay
 
 
@@ -58,6 +60,7 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.hide()
 
         health_monitor.start()
+        self.after(800, lambda: TipsDialog(self))
         self._log.info("AutoClaude démarré (v%s)", APP_NAME)
 
     def _on_tk_exception(self, exc_type, exc_val, exc_tb):
@@ -143,6 +146,21 @@ class AutoClaudeApp(ctk.CTk):
             command=self._open_analytics,
         ).pack(side="right", padx=(4, 0))
 
+        ctk.CTkButton(
+            self,
+            text="📚  Bibliothèque",
+            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
+            fg_color=theme.PALETTE["bg_secondary"],
+            hover_color=theme.PALETTE["border"],
+            text_color=theme.PALETTE["text"],
+            border_color=theme.PALETTE["border"],
+            border_width=1,
+            corner_radius=8,
+            width=360,
+            height=38,
+            command=self._open_library,
+        ).pack(pady=(0, 8))
+
         OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 8))
 
         quit_btn = ctk.CTkButton(
@@ -214,6 +232,9 @@ class AutoClaudeApp(ctk.CTk):
     def _open_analytics(self):
         """TODO: description de _open_analytics."""
         AnalyticsWindow(self)
+
+    def _open_library(self):
+        LibraryWindow(self)
 
     def _on_close(self):
         """TODO: description de _on_close."""

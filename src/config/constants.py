@@ -11,6 +11,7 @@ ASSETS_DIR = ROOT_DIR / "assets"
 ASSET_YES_PNG = ASSETS_DIR / "yes.png"
 ASSET_LOGO_PNG = ASSETS_DIR / "Icone AutoClaude.png"
 ASSET_LOGO_ICO = ASSETS_DIR / "Icone AutoClaude.ico"
+CONTENT_DIR = ROOT_DIR / "src" / "content"
 
 # URLs
 URL_WEBSITE = "https://serenia-tech.fr"
