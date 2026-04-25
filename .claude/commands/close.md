@@ -5,12 +5,14 @@
 - Décisions & problèmes résolus
 - Points en suspens
 
-## 2️⃣ Mettre à jour docs
-| Doc | Action |
-|-----|--------|
-| `ROADMAP.md` | Cocher ✅ tâches, mettre date |
-| `README.md` | Refléter état, nouvelles features |
-| `DOCS/ARCHITECTURE.md` | Régénérer si N fichiers touchés > 3 |
+## 2️⃣ Mettre à jour les 3 organes de communication (OBLIGATOIRE si pertinent)
+| Doc (racine) | Action |
+|--------------|--------|
+| **`ROADMAP.md`** | Cocher ✅ tâches, mettre date, ajuster priorités |
+| **`README.md`** | Refléter nouvelles features, version, install |
+| **`ARCHITECTURE.md`** | Régénérer si N fichiers structurels touchés > 3 |
+
+→ Ces 3 fichiers = source de vérité pour toute IA collaborant sur le projet
 
 ## 3️⃣ Documenter apprentissages 📚
 

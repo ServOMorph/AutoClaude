@@ -356,5 +356,5 @@ screeninfo>=0.8.1
 - Tests automatisés (pytest)
 
 ---
-
+K
 *Document rédigé le 2026-04-23 — AutoClaude v2.0*

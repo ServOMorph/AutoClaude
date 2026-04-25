@@ -151,7 +151,36 @@ src/config/     constantes et persistance JSON
 assets/         yes.png, logo.png
 ```
 
-Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions techniques.
+Voir [ARCHITECTURE.md](ARCHITECTURE.md) pour le détail des décisions techniques.
+
+---
+
+## 🤝 Organes de communication entre IA
+
+AutoClaude utilise **3 fichiers à la racine** comme source de vérité unique pour toute IA collaborant sur le projet (Claude Code, Perplexity/Comet, etc.) :
+
+| Fichier | Rôle | Public |
+|---------|------|--------|
+| **[README.md](README.md)** | Vue d'ensemble : usage, install, fonctionnalités | Utilisateurs + IA |
+| **[ROADMAP.md](ROADMAP.md)** | Phases, statuts, priorités, prochaines étapes | IA + contributeurs |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | Structure technique, décisions, dépendances | IA + développeurs |
+
+### Principe
+
+- ✅ **Source unique** : tout IA lit ces 3 fichiers pour comprendre le projet
+- ✅ **Toujours à jour** : `/close` les met à jour systématiquement après chaque session
+- ✅ **Référencés partout** : `.claude/CLAUDE.md` et toutes les commandes (`/start`, `/close`, `/bump_version`) y font référence
+- ❌ **Pas de duplication** : les détails complémentaires vont dans `DOCS/` (historique, plans, specs techniques)
+
+### Workflow IA
+
+```
+1. IA lit  : README.md + ROADMAP.md + ARCHITECTURE.md  (contexte complet)
+2. IA travaille avec le cycle /start → travail → /close
+3. /close met à jour les 3 fichiers si pertinent + commit
+```
+
+Cf. [.claude/CLAUDE.md](.claude/CLAUDE.md) pour les directives IA et [APPRENTISSAGES/](APPRENTISSAGES/) pour la mémoire inter-sessions.
 
 ---
 

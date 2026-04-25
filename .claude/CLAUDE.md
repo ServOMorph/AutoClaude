@@ -1,5 +1,18 @@
 # CLAUDE.md
 
+## 🤝 Organes de communication (OBLIGATOIRE)
+
+**3 fichiers racine = source de vérité unique pour toute IA** :
+- **[README.md](../README.md)** : usage + install + features
+- **[ROADMAP.md](../ROADMAP.md)** : phases, statuts, priorités
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** : structure technique, décisions
+
+**Règles** :
+- ✅ Lire ces 3 fichiers au `/start` pour contexte complet
+- ✅ Mettre à jour ces 3 fichiers au `/close` si pertinent
+- ✅ Toute commande IA (`/start`, `/close`, `/bump_version`) y fait référence
+- ❌ Ne pas créer de doc concurrente — détails additionnels dans `DOCS/`
+
 ## Directives essentielles
 
 **Langue** : français | **Ton** : synthétique, direct | **Initiatives** : aucune hors demande explicite
@@ -35,11 +48,11 @@
 
 ## Cycle de travail (obligatoire)
 
-**1️⃣ `/start`** : Lire ROADMAP/README/ARCHITECTURE • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens de APPRENTISSAGES/meta.json) • Afficher recommandation ROI
+**1️⃣ `/start`** : Lire les **3 organes** (README.md + ROADMAP.md + ARCHITECTURE.md à la racine) • Charger apprentissages (TOP 5-7 HIGH, max 3000 tokens de APPRENTISSAGES/meta.json) • Afficher recommandation ROI
 
 **2️⃣ Travail** : Utiliser contexte + apprentissages • Logger issues/solutions • Tester
 
-**3️⃣ `/close`** : Mettre à jour docs • Documenter apprentissage si nouveau (créer APPRENTISSAGES/<domain>/<topic>.md, update meta.json, <500 tokens) • Commit
+**3️⃣ `/close`** : Mettre à jour les **3 organes** (README/ROADMAP/ARCHITECTURE racine) si pertinent • Documenter apprentissage si nouveau (créer APPRENTISSAGES/<domain>/<topic>.md, update meta.json, <500 tokens) • Commit
 
 **Continuité** : `/close` → `/start` suivant crée accumulation de savoir automatique
 

@@ -2,6 +2,8 @@
 
 Workflow complet : analyser → bumper → documenter changelog.
 
+> ℹ️ **Avant de bumper** : vérifier que les **3 organes** (`README.md`, `ROADMAP.md`, `ARCHITECTURE.md` racine) reflètent l'état du projet. La version est référencée dans README.md (badge) et ROADMAP.md (statut).
+
 ## Workflow
 
 ```
@@ -104,6 +106,7 @@ Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
 - **Ajouter patterns** : si nouveau fichier trouvé, l'ajouter à `.tooling/bump_version_files.json`
 - **Editer changelog** : le script crée template, toi remplir détails
 - **Semantic Versioning** : MAJOR.MINOR.PATCH (2.4.0 → 2.5.0 = MINOR bump)
+- **Synchroniser organes** : après bump, vérifier que ROADMAP.md (statut version) et README.md (badge + install) sont alignés
 
 ---
 

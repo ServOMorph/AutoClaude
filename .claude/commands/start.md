@@ -1,11 +1,11 @@
 # /start — Analyse Roadmap
 
-## 1️⃣ Lire & Analyser
-- `ROADMAP.md` : phase actuelle, statuts ✅/🔄/⏳
-- `README.md` : contexte global
-- `ARCHITECTURE_AutoClaude.md` : arcitecture du projet
-- Tâches "En cours" ou "À démarrer"
-- Métriques de succès
+## 1️⃣ Lire les 3 organes de communication (OBLIGATOIRE)
+- **`README.md`** (racine) : contexte global, usage, features
+- **`ROADMAP.md`** (racine) : phase actuelle, statuts ✅/🔄/⏳, priorités
+- **`ARCHITECTURE.md`** (racine) : structure technique, décisions
+
+→ Identifier tâches "En cours" / "À démarrer" + métriques de succès
 
 ## 2️⃣ Rapport (5-7 lignes)
 ```
