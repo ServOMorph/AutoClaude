@@ -14,9 +14,9 @@ class Header(ctk.CTkFrame):
 
         try:
             img = Image.open(ASSET_LOGO_PNG)
-            self._logo_img = ctk.CTkImage(img, size=(120, 120))
+            self._logo_img = ctk.CTkImage(img, size=(80, 80))
             logo_label = ctk.CTkLabel(self, image=self._logo_img, text="")
-            logo_label.pack(pady=(16, 4))
+            logo_label.pack(pady=(12, 4))
         except Exception:
             pass
 
@@ -24,10 +24,4 @@ class Header(ctk.CTkFrame):
             self, text=APP_NAME,
             font=theme.font_title(),
             text_color="#DB7759",
-        ).pack()
-
-        ctk.CTkLabel(
-            self, text="Automatiseur de clics GUI",
-            font=theme.font_small(),
-            text_color="#0078D4",
-        ).pack(pady=(2, 12))
+        ).pack(pady=(0, 12))

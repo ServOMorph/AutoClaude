@@ -1,7 +1,8 @@
 """TODO: description du module."""
 
+import webbrowser
 import customtkinter as ctk
-from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG
+from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
 from src.core import health_monitor
@@ -72,7 +73,7 @@ class AutoClaudeApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=0)
         self.grid_columnconfigure(0, weight=1)
 
-        Header(self).pack(fill="x", padx=20, pady=(20, 12))
+        Header(self).pack(fill="x", padx=20, pady=(12, 8))
 
         WarningBanner(
             self,
@@ -148,16 +149,33 @@ class AutoClaudeApp(ctk.CTk):
         quit_btn = ctk.CTkButton(
             self,
             text="Quitter",
-            font=ctk.CTkFont(family=theme._font(), size=18, weight="bold"),
+            font=ctk.CTkFont(family=theme._font(), size=27, weight="bold"),
             fg_color="#1A202C",
             hover_color="#2d3748",
             text_color="#DB775B",
             corner_radius=8,
-            width=200,
-            height=38,
+            width=240,
+            height=50,
             command=self._on_close,
         )
         quit_btn.pack(pady=(0, 12))
+
+        ctk.CTkLabel(
+            self,
+            text="Pour les mises à jour suivez le repo :",
+            font=ctk.CTkFont(size=12),
+            text_color=theme.PALETTE["text_muted"],
+        ).pack(pady=(0, 4))
+
+        github_link = ctk.CTkLabel(
+            self,
+            text=URL_GITHUB,
+            font=ctk.CTkFont(size=16, weight="bold", underline=True),
+            text_color=theme.PALETTE["primary"],
+            cursor="hand2"
+        )
+        github_link.pack(pady=(0, 12))
+        github_link.bind("<Button-1>", lambda _: webbrowser.open(URL_GITHUB))
 
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
 

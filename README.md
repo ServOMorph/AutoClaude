@@ -155,6 +155,15 @@ Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions
 
 ---
 
+## Mises à jour
+
+Pour rester informé des dernières versions et améliorations d'AutoClaude, n'hésitez pas à suivre le dépôt GitHub officiel :
+[https://github.com/ServOMorph/AutoClaude](https://github.com/ServOMorph/AutoClaude)
+
+Vous y trouverez les notes de version, les nouvelles fonctionnalités et les correctifs de bugs.
+
+---
+
 ## Licence
 
 MIT — voir [LICENSE](LICENSE)
