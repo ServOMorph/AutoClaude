@@ -155,6 +155,26 @@ Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions
 
 ---
 
+## Intégrations IA — Perplexity & Comet
+
+AutoClaude peut être utilisé en tandem avec d'autres IA via **Comet** (plateforme Perplexity).
+
+### 🌌 Dossier COMET/
+
+Le dossier `COMET/` contient des fichiers d'initialisation pour Perplexity :
+- `PROMPT_PERPLEXITY.txt` — Instructions système pour contextualiser Perplexity
+- `ARCHITECTURE_AutoClaude.md` — Structure du projet
+- `CODE_BUNDLE_AutoClaude.md` — Bundle code complet
+
+**Usage** :
+1. Copier le contenu de `PROMPT_PERPLEXITY.txt`
+2. Charger dans Perplexity ou Comet comme contexte initial
+3. Perplexity peut alors collaborer sur AutoClaude avec compréhension complète du projet
+
+Voir [COMET/README.md](COMET/README.md) pour le détail.
+
+---
+
 ## Licence
 
 MIT — voir [LICENSE](LICENSE)
