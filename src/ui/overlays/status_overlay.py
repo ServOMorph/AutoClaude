@@ -38,17 +38,19 @@ class StatusOverlay(ctk.CTkToplevel):
         y = sh - OVERLAY_HEIGHT - OVERLAY_MARGIN
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
-        self._label = ctk.CTkLabel(
+        self._btn = ctk.CTkButton(
             self,
             text="● AutoClaude OFF",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=OVERLAY_TEXT_COLOR,
-            fg_color="transparent",
+            fg_color=OVERLAY_COLOR_INACTIVE,
+            hover_color=OVERLAY_COLOR_INACTIVE,
+            border_width=0,
+            corner_radius=8,
+            cursor="hand2",
+            command=self._handle_click,
         )
-        self._label.pack(expand=True, fill="both", padx=8)
-
-        self._label.bind("<Button-1>", self._handle_click)
-        self.bind("<Button-1>", self._handle_click)
+        self._btn.pack(expand=True, fill="both")
 
         self.withdraw()
         self._schedule_keep_on_top()
@@ -58,7 +60,7 @@ class StatusOverlay(ctk.CTkToplevel):
         color = OVERLAY_COLOR_ACTIVE if state else OVERLAY_COLOR_INACTIVE
         text = "● AutoClaude ON" if state else "● AutoClaude OFF"
         self.configure(fg_color=color)
-        self._label.configure(text=text)
+        self._btn.configure(text=text, fg_color=color, hover_color=color)
 
     def show(self) -> None:
         self._visible = True

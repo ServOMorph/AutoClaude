@@ -103,9 +103,31 @@ def get_events() -> list[str]:
 
 def aggregate(period: str) -> list[tuple[str, int]]:
     """TODO: description de aggregate."""
-    events = get_events()
-    counts: dict[str, int] = defaultdict(int)
+    return aggregate_events(period, get_events())
 
+
+def filter_events_range(
+    start: "datetime | None",
+    end: "datetime | None",
+) -> list[str]:
+    """Retourne les events dans [start, end[."""
+    all_events = get_events()
+    if start is None and end is None:
+        return all_events
+    result = []
+    for ts in all_events:
+        try:
+            dt = datetime.fromisoformat(ts).astimezone()
+            if (start is None or dt >= start) and (end is None or dt < end):
+                result.append(ts)
+        except ValueError:
+            continue
+    return result
+
+
+def aggregate_events(period: str, events: list[str]) -> list[tuple[str, int]]:
+    """Agrège une liste d'events déjà filtrés."""
+    counts: dict[str, int] = defaultdict(int)
     for ts in events:
         try:
             dt = datetime.fromisoformat(ts).astimezone()
@@ -124,5 +146,22 @@ def aggregate(period: str) -> list[tuple[str, int]]:
         else:
             key = dt.strftime("%d/%m")
         counts[key] += 1
-
     return sorted(counts.items())
+
+
+def get_stats_for_events(events: list[str]) -> dict:
+    """Calcule total, moyenne/jour actif, record journalier, jours actifs."""
+    if not events:
+        return {"total": 0, "avg_per_day": 0.0, "record": 0, "active_days": 0}
+    daily: dict[str, int] = defaultdict(int)
+    for ts in events:
+        try:
+            dt = datetime.fromisoformat(ts).astimezone()
+            daily[dt.strftime("%Y-%m-%d")] += 1
+        except ValueError:
+            continue
+    total = sum(daily.values())
+    active_days = len(daily)
+    record = max(daily.values()) if daily else 0
+    avg_per_day = round(total / active_days, 1) if active_days > 0 else 0.0
+    return {"total": total, "avg_per_day": avg_per_day, "record": record, "active_days": active_days}
