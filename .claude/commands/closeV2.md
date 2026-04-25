@@ -11,15 +11,6 @@
 | `ROADMAP.md` | Cocher ✅ tâches, mettre date |
 | `README.md` | Refléter état, nouvelles features |
 | `ARCHITECTURE_AutoClaude.md` | Régénérer si N fichiers touchés > 3 |
-| `.claude/CLAUDE.md` | Ajouter patterns/décisions si clé |
-
-## 3️⃣ Apprentissages 📚
-Si **itérations multiples** ou **pattern essai→succès** :
-```bash
-python /c/Users/raph6/Documents/ServOMorph/Agents_IA_V2/.claude/learnings/learning_manager.py \
-  analyze "[projet]"
-```
-→ Reporter N apprentissages enregistrés
 
 ## 4️⃣ Commit
 ```bash
@@ -47,10 +38,3 @@ git status
 - [suggestions]
 ```
 
----
-**Cohérence** :
-- ✅ Format compact comme `startV2.md` (listes, tableaux, symboles)
-- ✅ Pas redondance (références exactes, pas explication)
-- ✅ Suit `CLAUDE.md` économie tokens (bullet points, 1 ligne/concept)
-- ✅ Inclut ARCHITECTURE_AutoClaude.md régénération (> 3 fichiers)
-- ✅ Apprentissages détectés automatiquement
