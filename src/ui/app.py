@@ -138,7 +138,7 @@ class AutoClaudeApp(ctk.CTk):
             command=self._open_analytics,
         ).pack(side="right", padx=(4, 0))
 
-        ctk.CTkButton(
+        quit_btn = ctk.CTkButton(
             self,
             text="Quitter",
             font=ctk.CTkFont(family=theme._font(), size=27, weight="bold"),
