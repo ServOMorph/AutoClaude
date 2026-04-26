@@ -214,15 +214,16 @@ is_running() → bool
 ## Phase 10 — Préparation merge sur main 🔄
 
 > Objectif : préparer le merge de la branche MAJ sur main — cohérence doc/code, tests, fixes pré-merge.
+> **Statut** : Tous les bloquants corrigés (10.1–10.4 ✅) — Recommandations en cours (10.5, 10.6, 10.8)
 
 ### Blocages critiques (doivent être corrigés avant merge)
 
 | Tâche | Statut | Subtâches | Critère acceptation |
 |-------|--------|-----------|-------------------|
-| 10.1 Corriger `requirements.txt` — ajouter `psutil` | ⏳ | 1. Ouvrir `requirements.txt`<br/>2. Vérifier présence `psutil>=5.9.0`<br/>3. Si manquant, ajouter dans liste obligatoire<br/>4. Tester `pip install -r requirements.txt` | Installation depuis source réussit sans erreur dépendance |
-| 10.2 Fixer log version (app.py:65) | ⏳ | 1. Ouvrir `src/ui/app.py` ligne 65<br/>2. Importer `VERSION` depuis `src.config.constants`<br/>3. Remplacer `APP_NAME` par `VERSION` dans le log<br/>4. Tester logs — vérifier "v2.3.0" au lieu de "vAutoClaude" | Logs affichent "v2.3.0" correctement |
-| 10.3 Mettre à jour README — périodes analytics | ✅ | Corriger "Heure/Jour/Semaine/Mois/Année" → "Aujourd'hui/7j/30j/12m/Tout" + clarifier Mode Récent/Tout | README cohérent avec code |
-| 10.4 Valider/clarifier Mode Récent/Tout | 🔄 | 1. Vérifier `src/ui/dialogs/analytics_window.py` — les deux modes existent-ils?<br/>2. Si oui: ✅ fonctionnalité complete<br/>3. Si non: clarifier README (retirer mentions Mode Tout si absent) | CHANGELOG et README alignés avec features présentes |
+| 10.1 Corriger `requirements.txt` — ajouter `psutil` | ✅ | ✅ Ajouté `psutil>=5.9.0` dans dependencies<br/>✅ Déplacé pyinstaller en commentaires<br/>✅ Documenté dépendances optionnelles | `pip install -r requirements.txt` réussit sans erreur |
+| 10.2 Fixer log version (app.py:65) | ✅ | ✅ Importé `VERSION` depuis constants<br/>✅ Remplacé `APP_NAME` par `VERSION`<br/>✅ Logs affichent "v2.3.0" correctement | Startup log: "AutoClaude démarré (v2.3.0)" |
+| 10.3 Mettre à jour README — périodes analytics | ✅ | ✅ Corrigé "Heure/Jour/Semaine/Mois/Année" → "Aujourd'hui/7j/30j/12m/Tout" | README cohérent avec code |
+| 10.4 Valider/clarifier Mode Récent/Tout | ✅ | ✅ Vérifié analytics_window.py — 5 périodes + sélecteur<br/>✅ Clarifiée CHANGELOG v2.3.0 pour matcher implémentation<br/>✅ Confirmé: pas de pagination, mais Mode Récent (windowed) + Tout (all) via sélecteur | CHANGELOG et README alignés avec features |
 
 ### Recommandations (avant merge idéalement)
 
@@ -237,7 +238,7 @@ is_running() → bool
 
 | Critère | Statut | Notes |
 |---------|--------|-------|
-| Tous les bloquants (10.1–10.4) corrigés | 🔄 | 10.3 ✅, 10.4 en cours |
+| Tous les bloquants (10.1–10.4) corrigés | ✅ | 10.1 psutil, 10.2 version log, 10.3 README, 10.4 CHANGELOG |
 | Tests unitaires existants | ⏳ | Recommandé — permet CI futur |
 | README cohérent avec le code | 🔄 | 10.3/10.7 ✅ |
 | CHANGELOG à jour jusqu'à la date du merge | ⏳ | À finaliser lors du merge |
@@ -253,7 +254,7 @@ is_running() → bool
 
 | Tâche | Statut | Objectif | Délivrables |
 |-------|--------|---------|-------------|
-| 11.1 Configurer CI/CD GitHub | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` |
+| 11.1 Configurer CI/CD GitHub Actions | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` + `pytest.yml` |
 | 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
 | 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
 | 11.4 Documenter API interne | ⏳ | Générer docstrings valides pour Sphinx | `docs/api/` avec HTML buildable |
