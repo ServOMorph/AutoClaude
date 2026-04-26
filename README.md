@@ -142,6 +142,53 @@ AutoClaude est conçu pour tourner en continu. Les logs sont disponibles dans `~
 
 ---
 
+## Configuration fine-tuning
+
+Le fichier `config.py` à la racine du projet permet d'ajuster le comportement sans modifier le code :
+
+| Variable | Valeur | Description |
+|----------|--------|-------------|
+| `DEBUG_COMPTEUR` | `True/False` | Affiche les cercles rouges de debug à chaque clic |
+| `COOLDOWN_DURATION` | `3.0-5.0` (sec) | Attente après chaque clic avant nouvelle détection (élevez si re-clics fantômes) |
+| `CONFIDENCE_THRESHOLD` | `0.85-0.95` | Sévérité de la détection d'image (élevez pour moins de faux positifs) |
+| `PRE_CLICK_DELAY` | `0.5-2.0` (sec) | Délai après détection avant de cliquer (élevez si bouton anime) |
+
+**Exemple :**
+```python
+# Pour éviter les faux positifs sur boutons bleus
+CONFIDENCE_THRESHOLD = 0.95
+
+# Pour boutons qui tardent à disparaître
+COOLDOWN_DURATION = 5.0
+
+# Pour debug visuel des clics
+DEBUG_COMPTEUR = True
+```
+
+---
+
+## Problèmes connus
+
+### Comptage des clics imprécis
+- **Symptôme** : Le compteur enregistre parfois plus ou moins de clics que prévu
+- **Cause potentielle** : Timing critique entre détection, clic et disparition du bouton
+- **Solution** : Ajustez dans `config.py` :
+  - Augmentez `COOLDOWN_DURATION` si clics doublés
+  - Augmentez `CONFIDENCE_THRESHOLD` pour strictitude accrue
+  - Augmentez `PRE_CLICK_DELAY` pour laisser le bouton stable avant clic
+- **Debug** : Activez `DEBUG_COMPTEUR = True` pour visualiser chaque clic via un cercle rouge
+
+### Faux positifs de détection (image)
+- **Symptôme** : Clics sur des éléments qui ne sont pas le bouton visé
+- **Cause** : Couleurs proches (bleu, gris) ou éléments UI similaires
+- **Solution** : Augmentez `CONFIDENCE_THRESHOLD` à 0.90-0.95 dans `config.py`
+
+### Le bouton n'est pas détecté
+- **Cause** : Confiance trop stricte, ou image cible différente sur l'écran
+- **Solution** : Baissez `CONFIDENCE_THRESHOLD` à 0.80-0.85, ou mettez à jour `assets/yes.png`
+
+---
+
 ## Architecture
 
 ```
@@ -174,7 +221,7 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 26 avril 2026 (v2.4.0)
+Date : 26 avril 2026 (v2.4.2)
 
 ---
 
