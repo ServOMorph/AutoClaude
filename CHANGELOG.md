@@ -12,6 +12,14 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.4] — 2026-04-26
+
+### Corrigé
+
+- **Debug circle timing** : cercle rouge dessiné AVANT le clic au lieu d'après. Permet de vérifier visuellement la position cible avant exécution du clic.
+
+---
+
 ## [2.4.3] — 2026-04-26
 
 ### Ajouté

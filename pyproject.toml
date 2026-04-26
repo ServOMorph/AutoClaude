@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "autoclaude"
-version = "2.4.3"
+version = "2.4.4"
 description = "Outil d'autoclick pour Claude Code — détecte et clique automatiquement les boutons de confirmation dans VS Code"
 readme = "README.md"
 license = {text = "MIT"}
