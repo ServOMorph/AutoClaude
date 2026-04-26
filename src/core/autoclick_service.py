@@ -89,7 +89,7 @@ class AutoclickService:
                     click_stats.increment()
                     if self._on_click:
                         self._on_click(x, y)
-                    time.sleep(1.0)  # laisser le bouton disparaître avant la prochaine détection
+                    time.sleep(2.0)  # laisser le bouton disparaître + Claude Code traiter avant la prochaine détection
                 else:
                     time.sleep(self._interval)
             else:
