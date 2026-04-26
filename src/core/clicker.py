@@ -40,6 +40,16 @@ def click(x: int, y: int) -> bool:
     return False
 
 
+def move_away() -> None:
+    """Déplace la souris hors du bouton cliqué pour éviter l'état hover sur le prochain scan.
+    Déplacement relatif < 50px pour ne pas déclencher le mode auto_stop."""
+    if _pyautogui:
+        try:
+            _pyautogui.move(0, -45, duration=0.05)
+        except Exception:
+            pass
+
+
 def has_clicker() -> bool:
     """TODO: description de has_clicker."""
     return bool(_click_fn or _pyautogui)

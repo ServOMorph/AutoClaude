@@ -124,7 +124,9 @@ class AutoClaudeApp(ctk.CTk):
             self, text="Appuyer sur ESC pour désactiver",
             font=ctk.CTkFont(size=11),
             text_color=theme.PALETTE["text_muted"],
-        ).pack(pady=(0, 12))
+        ).pack(pady=(0, 4))
+
+        OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 12))
 
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(pady=(0, 16))
@@ -146,8 +148,6 @@ class AutoClaudeApp(ctk.CTk):
             height=38,
             command=self._open_analytics,
         ).pack(side="right", padx=(4, 0))
-
-        OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 8))
 
         quit_btn = ctk.CTkButton(
             self,

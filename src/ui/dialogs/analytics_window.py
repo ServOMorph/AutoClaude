@@ -9,15 +9,15 @@ from PIL import Image
 from src.core import click_stats
 from src.ui import theme
 
-_PERIODS = {
-    "Heure": "hour",
-    "Jour": "day",
-    "Semaine": "week",
-    "Mois": "month",
-    "Année": "year",
+_WINDOWS = {
+    "Aujourd'hui": "today",
+    "7 jours":     "7d",
+    "30 jours":    "30d",
+    "12 mois":     "12m",
+    "Tout":        "all",
 }
 
-_W, _H = 640, 340
+_W, _H = 640, 300
 
 
 class AnalyticsWindow(ctk.CTkToplevel):
@@ -27,12 +27,13 @@ class AnalyticsWindow(ctk.CTkToplevel):
         super().__init__(master, **kwargs)
         self.withdraw()
         self.title("Analyses — Clics AutoClaude")
-        self.geometry("720x520")
+        self.geometry("720x580")
         self.resizable(False, False)
         self.configure(fg_color=theme.PALETTE["bg"])
-        self._current_period = "hour"
+        self._current_window = "today"
         self._ctk_img = None
         self._img_label = None
+        self._stat_labels: dict[str, ctk.CTkLabel] = {}
         self._build_ui()
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.after(100, self._show)
@@ -43,7 +44,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self.lift()
         self.focus_force()
         self.grab_set()
-        self._draw(self._current_period)
+        self._draw(self._current_window)
 
     def _build_ui(self):
         """TODO: description de _build_ui."""
@@ -56,9 +57,9 @@ class AnalyticsWindow(ctk.CTkToplevel):
 
         seg = ctk.CTkSegmentedButton(
             self,
-            values=list(_PERIODS.keys()),
-            command=self._on_period_change,
-            font=ctk.CTkFont(family="Segoe UI", size=18),
+            values=list(_WINDOWS.keys()),
+            command=self._on_window_change,
+            font=ctk.CTkFont(family="Segoe UI", size=15),
             fg_color=theme.PALETTE["bg_secondary"],
             selected_color=theme.PALETTE["primary"],
             selected_hover_color=theme.PALETTE["primary"],
@@ -66,59 +67,89 @@ class AnalyticsWindow(ctk.CTkToplevel):
             unselected_hover_color=theme.PALETTE["border"],
             text_color=theme.PALETTE["text"],
         )
-        seg.pack(pady=(0, 12))
-        seg.set("Heure")
+        seg.pack(pady=(0, 10))
+        seg.set("Aujourd'hui")
 
-        frame = ctk.CTkFrame(self, fg_color=theme.PALETTE["bg_secondary"], corner_radius=10)
-        frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+        # Graphique
+        chart_frame = ctk.CTkFrame(self, fg_color=theme.PALETTE["bg_secondary"], corner_radius=10)
+        chart_frame.pack(fill="x", padx=20, pady=(0, 8))
 
-        self._img_label = ctk.CTkLabel(frame, text="Chargement…", text_color=theme.PALETTE["text_muted"])
+        self._img_label = ctk.CTkLabel(chart_frame, text="Chargement…", text_color=theme.PALETTE["text_muted"])
         self._img_label.pack(fill="both", expand=True, padx=8, pady=8)
 
-    def _on_period_change(self, label: str):
-        """TODO: description de _on_period_change."""
-        self._current_period = _PERIODS[label]
-        self._draw(self._current_period)
+        # Bandeau de stats
+        stats_frame = ctk.CTkFrame(self, fg_color=theme.PALETTE["bg_secondary"], corner_radius=10)
+        stats_frame.pack(fill="x", padx=20, pady=(0, 16))
 
-    def _draw(self, period: str):
+        stat_defs = [
+            ("total",              "Total",         "—"),
+            ("avg_per_active_day", "Moy/jour actif","—"),
+            ("record",             "Record",        "—"),
+            ("active_days",        "Jours actifs",  "—"),
+        ]
+
+        for key, label_text, default in stat_defs:
+            col = ctk.CTkFrame(stats_frame, fg_color="transparent")
+            col.pack(side="left", expand=True, fill="both", padx=4, pady=10)
+
+            ctk.CTkLabel(
+                col,
+                text=label_text,
+                font=ctk.CTkFont(family="Segoe UI", size=11),
+                text_color=theme.PALETTE["text_muted"],
+            ).pack()
+
+            val_lbl = ctk.CTkLabel(
+                col,
+                text=default,
+                font=ctk.CTkFont(family="Segoe UI", size=20, weight="bold"),
+                text_color=theme.PALETTE["primary"],
+            )
+            val_lbl.pack()
+            self._stat_labels[key] = val_lbl
+
+    def _on_window_change(self, label: str):
+        """TODO: description de _on_window_change."""
+        self._current_window = _WINDOWS[label]
+        self._draw(self._current_window)
+
+    def _draw(self, window: str):
         """TODO: description de _draw."""
         if self._img_label is None:
             return
 
-        data = click_stats.aggregate(period)
+        data, stats = click_stats.aggregate_windowed(window)
         labels = [d[0] for d in data]
         values = [d[1] for d in data]
 
-        bg = theme.PALETTE["bg_secondary"]
+        bg      = theme.PALETTE["bg_secondary"]
         primary = theme.PALETTE["primary"]
-        text_color = theme.PALETTE["text"]
-        muted = theme.PALETTE["text_muted"]
+        text_c  = theme.PALETTE["text"]
+        muted   = theme.PALETTE["text_muted"]
+
+        max_val = max(values) if values else 1
+        colors = [primary if v == max_val and v > 0 else primary + "99" for v in values]
 
         dpi = 100
         fig, ax = plt.subplots(figsize=(_W / dpi, _H / dpi), dpi=dpi, facecolor=bg)
         ax.set_facecolor(bg)
 
-        if values:
-            bars = ax.bar(labels, values, color=primary, width=0.5, zorder=2)
-            for bar in bars:
-                h = bar.get_height()
-                ax.text(
-                    bar.get_x() + bar.get_width() / 2,
-                    h + 0.05,
-                    str(int(h)),
-                    ha="center", va="bottom",
-                    color=text_color,
-                    fontsize=9,
-                )
+        if any(v > 0 for v in values):
+            ax.bar(range(len(labels)), values, color=colors, width=0.6, zorder=2)
+            ax.set_xticks(range(len(labels)))
+            rotation = 30 if len(labels) > 10 else 0
+            ax.set_xticklabels(labels, rotation=rotation, ha="right" if rotation else "center", fontsize=8)
+            for i, v in enumerate(values):
+                if v > 0:
+                    ax.text(i, v + max_val * 0.01, str(v), ha="center", va="bottom",
+                            color=text_c, fontsize=8)
         else:
-            ax.text(
-                0.5, 0.5, "Aucune donnée pour cette période",
-                ha="center", va="center",
-                transform=ax.transAxes,
-                color=muted, fontsize=13,
-            )
+            ax.text(0.5, 0.5, "Aucune donnée pour cette période",
+                    ha="center", va="center", transform=ax.transAxes,
+                    color=muted, fontsize=13)
+            ax.set_xticks([])
 
-        ax.tick_params(colors=muted, labelsize=9)
+        ax.tick_params(colors=muted, labelsize=8)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.spines["left"].set_color(muted)
@@ -136,6 +167,28 @@ class AnalyticsWindow(ctk.CTkToplevel):
 
         self._ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(_W, _H))
         self._img_label.configure(image=self._ctk_img, text="")
+
+        # Mise à jour bandeau stats
+        avg = stats["avg_per_active_day"]
+        self._stat_labels["total"].configure(text=str(stats["total"]))
+        self._stat_labels["avg_per_active_day"].configure(text=f"{avg:.1f}")
+        self._stat_labels["record"].configure(text=str(stats["record"]))
+        self._stat_labels["active_days"].configure(text=str(stats["active_days"]))
+
+        ctk.CTkButton(
+            self,
+            text="Fermer",
+            font=ctk.CTkFont(family="Segoe UI", size=14),
+            fg_color=theme.PALETTE["bg_secondary"],
+            hover_color=theme.PALETTE["border"],
+            text_color=theme.PALETTE["text"],
+            border_color=theme.PALETTE["border"],
+            border_width=1,
+            corner_radius=8,
+            width=120,
+            height=34,
+            command=self._on_close,
+        ).pack(pady=(0, 16))
 
     def _on_close(self):
         """Fermeture propre : libérer la figure courante et détruire la fenêtre."""

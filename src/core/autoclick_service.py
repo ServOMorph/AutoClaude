@@ -85,6 +85,7 @@ class AutoclickService:
             if coords:
                 x, y = coords
                 if clicker.click(x, y):
+                    clicker.move_away()
                     click_stats.increment()
                     if self._on_click:
                         self._on_click(x, y)

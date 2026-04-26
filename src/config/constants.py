@@ -14,7 +14,7 @@ ASSET_LOGO_ICO = ASSETS_DIR / "Icone AutoClaude.ico"
 
 # URLs
 URL_WEBSITE = "https://serenia-tech.fr"
-URL_GITHUB = "https://github.com/ServOMorph"
+URL_GITHUB = "https://github.com/ServOMorph/AutoClaude"
 
 # UI — palette SéréniaTech
 COLOR_BG = "#1a202c"
