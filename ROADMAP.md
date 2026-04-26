@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
 > Dernière mise à jour : 2026-04-26
-> Statut global : **Phase 9 (v2.3.0) terminée** — Phase 10 (préparation merge) en cours
+> Statut global : **Phase 9 (v2.3.0) terminée** — **Phase 10 (préparation merge) en cours** — Phase 11 planifiée
 
 ---
 
@@ -211,46 +211,78 @@ is_running() → bool
 
 ---
 
-## Phase 10 — Préparation merge sur main ⏳
+## Phase 10 — Préparation merge sur main 🔄
 
 > Objectif : préparer le merge de la branche MAJ sur main — cohérence doc/code, tests, fixes pré-merge.
 
-| Tâche | Statut | Notes |
-|-------|--------|-------|
-| 10.1 Corriger `requirements.txt` — ajouter `psutil` | ⏳ | `psutil>=5.9.0` manquant (bloquant installation depuis source) |
-| 10.2 Fixer log version (app.py:65) | ⏳ | Importer `VERSION` depuis constants au lieu de `APP_NAME` |
-| 10.3 Mettre à jour README — périodes analytics | ⏳ | Corriger "Heure/Jour/Semaine/Mois/Année" → "Aujourd'hui/7j/30j/12m/Tout" |
-| 10.4 Retirer ou implémenter Mode Récent/Tout | ⏳ | CHANGELOG promet pagination, README la mentionne, code ne l'a pas |
-| 10.5 Ajouter tests unitaires | ⏳ | `aggregate_windowed()`, `daily_totals`, StatusOverlay drag/position |
-| 10.6 Nettoyer TODO comments | ⏳ | Remplacer 74 docstrings génériques par vraies descriptions |
-| 10.7 Mettre à jour date README | ⏳ | 25 avril → 26 avril 2026 |
-| 10.8 Harmoniser noms assets dans doc | ⏳ | logo.png → Icone AutoClaude.png (ou réconcilier) |
+### Blocages critiques (doivent être corrigés avant merge)
+
+| Tâche | Statut | Subtâches | Critère acceptation |
+|-------|--------|-----------|-------------------|
+| 10.1 Corriger `requirements.txt` — ajouter `psutil` | ⏳ | 1. Ouvrir `requirements.txt`<br/>2. Vérifier présence `psutil>=5.9.0`<br/>3. Si manquant, ajouter dans liste obligatoire<br/>4. Tester `pip install -r requirements.txt` | Installation depuis source réussit sans erreur dépendance |
+| 10.2 Fixer log version (app.py:65) | ⏳ | 1. Ouvrir `src/ui/app.py` ligne 65<br/>2. Importer `VERSION` depuis `src.config.constants`<br/>3. Remplacer `APP_NAME` par `VERSION` dans le log<br/>4. Tester logs — vérifier "v2.3.0" au lieu de "vAutoClaude" | Logs affichent "v2.3.0" correctement |
+| 10.3 Mettre à jour README — périodes analytics | ✅ | Corriger "Heure/Jour/Semaine/Mois/Année" → "Aujourd'hui/7j/30j/12m/Tout" + clarifier Mode Récent/Tout | README cohérent avec code |
+| 10.4 Valider/clarifier Mode Récent/Tout | 🔄 | 1. Vérifier `src/ui/dialogs/analytics_window.py` — les deux modes existent-ils?<br/>2. Si oui: ✅ fonctionnalité complete<br/>3. Si non: clarifier README (retirer mentions Mode Tout si absent) | CHANGELOG et README alignés avec features présentes |
+
+### Recommandations (avant merge idéalement)
+
+| Tâche | Statut | Subtâches | Priorité |
+|-------|--------|-----------|----------|
+| 10.5 Ajouter tests unitaires | ⏳ | 1. Créer `tests/test_click_stats.py` — test `aggregate_windowed()`<br/>2. Créer `tests/test_analytics.py` — test `daily_totals` persistence<br/>3. Créer `tests/test_overlay.py` — test StatusOverlay drag et position save/load<br/>4. Exécuter `pytest` pour vérifier couverture | Tous les tests passent, couverture >70% |
+| 10.6 Nettoyer TODO comments | ⏳ | 1. Grep: `grep -r "TODO" src/` → lister 74 entrées<br/>2. Remplacer docstrings génériques par descriptions spécifiques<br/>3. Identifier et supprimer les TODOs obsolètes<br/>4. Laisser seulement les vrais blocages pour futures phases | Aucun "TODO" ou "FIXME" vague dans le code |
+| 10.7 Mettre à jour date README | ✅ | Changer "25 avril" → "26 avril 2026" | README affiche bonne date |
+| 10.8 Harmoniser noms assets dans doc | ⏳ | 1. Vérifier fichiers réels dans `assets/` (ls -la assets/)<br/>2. Réconcilier refs dans README + docs<br/>3. Si logo.png et Icone AutoClaude.png dupliqués: garder un seul nom uniforme<br/>4. Mettre à jour toutes les refs | Nomenclature cohérente partout |
 
 ### Critères d'acceptation merge
 
-| Critère | Statut |
-|---------|--------|
-| Tous les bloquants (10.1–10.4) corrigés | ⏳ |
-| Tests des features [Unreleased] présents | ⏳ |
-| README cohérent avec le code | ⏳ |
-| CHANGELOG à jour jusqu'à la date du merge | ⏳ |
-| Version pyproject/constants/badges synchronisées | ✅ |
+| Critère | Statut | Notes |
+|---------|--------|-------|
+| Tous les bloquants (10.1–10.4) corrigés | 🔄 | 10.3 ✅, 10.4 en cours |
+| Tests unitaires existants | ⏳ | Recommandé — permet CI futur |
+| README cohérent avec le code | 🔄 | 10.3/10.7 ✅ |
+| CHANGELOG à jour jusqu'à la date du merge | ⏳ | À finaliser lors du merge |
+| Version pyproject/constants/badges synchronisées | ✅ | v2.3.0 partout |
+| Pas de chemin absolu personnel dans le code | ✅ | Audit complet, aucun trouvé |
+| Pas de secrets (clés, tokens) visibles | ✅ | Audit complet, aucun trouvé |
 
 ---
 
-## Évolutions futures (hors v2.3.0)
+## Phase 11 — Post-merge : Amélioration continu ⏳
 
-> Non planifiées — consignées pour référence.
+> Objectif (après merge main) : stabiliser, documenter, et préparer futures versions.
+
+| Tâche | Statut | Objectif | Délivrables |
+|-------|--------|---------|-------------|
+| 11.1 Configurer CI/CD GitHub | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` |
+| 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
+| 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
+| 11.4 Documenter API interne | ⏳ | Générer docstrings valides pour Sphinx | `docs/api/` avec HTML buildable |
+| 11.5 Tester sur Python 3.11 + 3.12 | ⏳ | Vérifier compatibilité declared (3.10+) | Passage tests sur 3.11 et 3.12 |
+| 11.6 Support macOS basique | ⏳ | Alerter sur permissions écran, tester mouse listener | Marquer comme "expérimental macOS" |
+| 11.7 Refactoring logger | ⏳ | Consolider logique version + exception hook | Moins de dépendances circulaires |
+| 11.8 Release v2.4.0 | ⏳ | Bump version, CHANGELOG, exe PyInstaller | Tag + release GitHub |
+
+### Post-merge quick wins
+
+Réalisables rapidement si ressources disponibles après merge :
+- Ajouter favicon dans la fenêtre (CTk supporte `.ico`)
+- Optim mémoire : lazy-load matplotlib si analytics jamais utilisées
+- Cacher périodiquement les événements click_stats (compacter JSON tous les 7j)
+- Dark mode / light mode toggle dans UI (CustomTkinter supporte)
+
+---
+
+## Évolutions futures (backlog)
+
+> Non planifiées — consignées pour référence après v2.4.0.
 
 - Internationalisation FR/EN
-- Personnalisation de l'image cible depuis l'UI
-- Statistiques : nombre de clics, uptime
-- Profils multiples (images différentes selon contexte)
-- Mode "dry-run" : détecter sans cliquer
-- Raccourci global système pour activer/désactiver
-- Installeur Windows (.exe via PyInstaller)
-- Tests automatisés (pytest)
-- Support Linux/macOS (doc permissions écran macOS)
+- Personnalisation de l'image cible depuis l'UI (image picker)
+- Profils multiples (images différentes selon contexte actif)
+- Mode "dry-run" : détecter sans cliquer (useful pour validation avant activation)
+- Raccourci global système pour activer/désactiver (sans revenir à fenêtre principale)
+- Tests de performance : mesurer latence détection → clic
+- Support Linux/macOS production-ready (actuellement expérimental)
 
 ---
 
@@ -264,3 +296,4 @@ is_running() → bool
 | 2026-04-25 | Phase 9 complète — v2.3.0 publiée (overlay + analyses + stabilité long-run) |
 | 2026-04-26 | Fixes crash long-run — cache total click_stats, pruning events 365j, _keep_on_top robuste, _on_autoclick sans lambda leak |
 | 2026-04-26 | Refactoring racine du projet + analytics refactoring + Phase 10 (préparation merge) — 8 tâches bloquantes/recommandées identifiées |
+| 2026-04-26 | Phase 10 expansion — README updated, ROADMAP moved to root, Phase 11 backlog + CI/CD planning |
