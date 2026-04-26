@@ -12,6 +12,14 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.2] — 2026-04-26
+
+### Corrigé
+
+- **Re-clic fantôme après disparition du bouton** : le bouton s'affichait encore pendant la boucle suivante et était re-cliqué à une position désormais vide. Ajouté cooldown de 3 secondes après chaque clic — pendant ce délai, la détection est ignorée. Permet au bouton de complètement disparaître avant relance de la détection.
+
+---
+
 ## [2.4.1] — 2026-04-26
 
 ### Corrigé
