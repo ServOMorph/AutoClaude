@@ -256,7 +256,7 @@ is_running() → bool
 
 | Tâche | Statut | Objectif | Délivrables |
 |-------|--------|---------|-------------|
-| 11.0 **FIX: Double-click bug** | 🔴 | Debugger pourquoi compteur compte 2x les clics (timestamps off) | Root cause + fix |
+| 11.0 **FIX: Double-click bug** | 🔄 | ✅ Root cause: sleep(0.4)s trop court | Fix appliqué: sleep(1.0)s post-click |
 | 11.1 Configurer CI/CD GitHub Actions | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` + `pytest.yml` |
 | 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
 | 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
@@ -303,3 +303,4 @@ Réalisables rapidement si ressources disponibles après merge :
 | 2026-04-26 | Phase 10 expansion — README updated, ROADMAP moved to root, Phase 11 backlog + CI/CD planning |
 | 2026-04-26 | **Phase 10 ✅ COMPLÈTE** — All blockers (10.1-10.4) + recommendations (10.5-10.8) done. 42 tests pass. Ready for merge. |
 | 2026-04-26 | Test isolation fix — click_stats tests now use tmp_path, no longer erase real user data. Bug discovered: double-click counting. |
+| 2026-04-26 | **Phase 11.0 ✅ ROOT CAUSE FIXED** — Timestamp analysis: 680ms pair gaps = sleep(0.4) + locate() time. Button stays visible >700ms. Fix: sleep(1.0) post-click. Awaiting production test. |
