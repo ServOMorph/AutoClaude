@@ -149,7 +149,7 @@ src/core/       détection, clic, listener, service autoclick, logger, health mo
 src/ui/         interface CustomTkinter + composants + dialogs + overlays
 src/security/   ClaudeMdProtector
 src/config/     constantes et persistance JSON
-assets/         yes.png, logo.png
+assets/         yes.png, Icone AutoClaude.png, Icone AutoClaude.ico, ui-screenshot.png
 ```
 
 Voir [DOCS/ARCHITECTURE.md](DOCS/ARCHITECTURE.md) pour le détail des décisions techniques.
