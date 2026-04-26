@@ -6,19 +6,21 @@ from src.config.constants import (
 )
 from src.config import settings
 
+
 class StatusOverlay(ctk.CTkToplevel):
     """Indicateur flottant always-on-top pour l'état de l'autoclick."""
-    
+
     def __init__(self, master, on_toggle: callable):
         super().__init__(master)
-        self._on_toggle = on_toggle
-        self._active = False
+        self.on_toggle = on_toggle
+        self.active = False
 
         # Configuration de la fenêtre
+        self.title("AutoClaude Overlay")
         self.overrideredirect(True)  # Pas de bordures
         self.attributes("-topmost", True)  # Toujours au-dessus
         self.attributes("-alpha", OVERLAY_ALPHA)
-        
+
         # Windows specific: hide from Taskbar
         if sys.platform == "win32":
             try:
@@ -36,7 +38,7 @@ class StatusOverlay(ctk.CTkToplevel):
             screen_h = self.winfo_screenheight()
             x = OVERLAY_MARGIN
             y = screen_h - OVERLAY_HEIGHT - OVERLAY_MARGIN
-            
+
         self.geometry(f"{OVERLAY_WIDTH}x{OVERLAY_HEIGHT}+{x}+{y}")
 
         # Frame principale cliquable
@@ -65,8 +67,8 @@ class StatusOverlay(ctk.CTkToplevel):
             fg_color="transparent"
         )
         self.count_label.pack(side="right", expand=True, padx=(0, 10))
-        
-        # Drag & Drop et Toggle
+
+        # Drag & Toggle
         self._drag_start_x = 0
         self._drag_start_y = 0
         self._is_dragging = False
@@ -87,7 +89,7 @@ class StatusOverlay(ctk.CTkToplevel):
         # Si on bouge de plus de 2 pixels, on considère que c'est un drag
         if abs(event.x - self._drag_start_x) > 2 or abs(event.y - self._drag_start_y) > 2:
             self._is_dragging = True
-            
+
         x = self.winfo_x() + (event.x - self._drag_start_x)
         y = self.winfo_y() + (event.y - self._drag_start_y)
         self.geometry(f"+{x}+{y}")
@@ -102,18 +104,18 @@ class StatusOverlay(ctk.CTkToplevel):
         self._is_dragging = False
 
     def _handle_toggle(self):
-        self._active = not self._active
+        self.active = not self.active
         self.update_ui()
-        if self._on_toggle:
-            self._on_toggle()
+        if self.on_toggle:
+            self.on_toggle()
 
     def set_active(self, state: bool) -> None:
-        if self._active != state:
-            self._active = state
+        if self.active != state:
+            self.active = state
             self.update_ui()
 
     def update_ui(self):
-        if self._active:
+        if self.active:
             self.main_frame.configure(fg_color=OVERLAY_COLOR_ACTIVE)
             self.label.configure(text="CL ON")
         else:
@@ -126,10 +128,9 @@ class StatusOverlay(ctk.CTkToplevel):
     def _keep_on_top(self):
         try:
             if not self.winfo_exists():
-                return  # widget détruit — stop la boucle
-            if self.state() == "normal":
-                self.attributes("-topmost", True)
-                self.lift()
+                return
+            self.attributes("-topmost", True)
+            self.lift()
             self.after(2000, self._keep_on_top)
         except Exception:
             pass
