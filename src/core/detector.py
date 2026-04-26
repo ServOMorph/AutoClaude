@@ -1,5 +1,6 @@
 """TODO: description du module."""
 
+from config import CONFIDENCE_THRESHOLD
 from src.core.monitors import get_all_monitors
 
 try:
@@ -128,8 +129,10 @@ def _outils_find(path: str):
     return None
 
 
-def locate(path: str, confidence: float = 0.8) -> tuple[int, int] | None:
+def locate(path: str, confidence: float = None) -> tuple[int, int] | None:
     """TODO: description de locate."""
+    if confidence is None:
+        confidence = CONFIDENCE_THRESHOLD
     coords = _outils_find(path)
     if coords:
         return coords
