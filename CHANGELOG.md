@@ -12,6 +12,21 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.3] — 2026-04-26
+
+### Ajouté
+
+- **Configuration fine-tuning** : variables `CONFIDENCE_THRESHOLD`, `PRE_CLICK_DELAY`, `COOLDOWN_DURATION`, `DEBUG_COMPTEUR` maintenant tuneables dans `config.py` sans toucher au code
+- **Documentation des problèmes connus** : guide complet pour comptage imprécis, faux positifs, non-détection avec solutions
+
+### Modifié
+
+- **Detection strictness configurable** : `CONFIDENCE_THRESHOLD` (défaut 0.90) remplace hardcoded 0.8, réduit faux positifs sur bleu
+- **Pre-click stabilization** : ajouté `PRE_CLICK_DELAY` (défaut 1.0s) après détection avant clic, assure bouton prêt
+- **README expansion** : tableau de config, troubleshooting, exemples pratiques
+
+---
+
 ## [2.4.2] — 2026-04-26
 
 ### Corrigé
