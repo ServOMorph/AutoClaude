@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
-> Dernière mise à jour : 2026-04-26
-> Statut global : **Phase 9 (v2.3.0) terminée** — **Phase 10 (préparation merge) en cours** — Phase 11 planifiée
+> Dernière mise à jour : 2026-04-26 (phase 10 complète)
+> Statut global : **Phase 9 (v2.3.0) ✅ terminée** — **Phase 10 (préparation merge) ✅ COMPLÈTE** — Phase 11 à démarrer post-merge
 
 ---
 
@@ -211,10 +211,11 @@ is_running() → bool
 
 ---
 
-## Phase 10 — Préparation merge sur main ✅
+## Phase 10 — Préparation merge sur main ✅ COMPLÈTE
 
 > Objectif : préparer le merge de la branche MAJ sur main — cohérence doc/code, tests, fixes pré-merge.
-> **Statut** : ✅ **COMPLÈTE** — Tous bloquants (10.1–10.4) + recommandations (10.5, 10.6, 10.8) terminés
+> **Statut** : ✅ **COMPLÈTE** (26 avril 2026) — Tous bloquants (10.1–10.4) + recommandations (10.5, 10.6, 10.7, 10.8) terminés
+> **Note** : Bug découvert pendant tests — compteur compte 2x les clics (à investiguer post-merge)
 
 ### Blocages critiques (doivent être corrigés avant merge)
 
@@ -251,9 +252,11 @@ is_running() → bool
 ## Phase 11 — Post-merge : Amélioration continu ⏳
 
 > Objectif (après merge main) : stabiliser, documenter, et préparer futures versions.
+> **Note PRÉ-MERGE** : Bug à fixer en Phase 11.1 — compteur clics compte 2x (timestamps show 680ms gaps, not 400ms)
 
 | Tâche | Statut | Objectif | Délivrables |
 |-------|--------|---------|-------------|
+| 11.0 **FIX: Double-click bug** | 🔴 | Debugger pourquoi compteur compte 2x les clics (timestamps off) | Root cause + fix |
 | 11.1 Configurer CI/CD GitHub Actions | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` + `pytest.yml` |
 | 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
 | 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
@@ -298,4 +301,5 @@ Réalisables rapidement si ressources disponibles après merge :
 | 2026-04-26 | Fixes crash long-run — cache total click_stats, pruning events 365j, _keep_on_top robuste, _on_autoclick sans lambda leak |
 | 2026-04-26 | Refactoring racine du projet + analytics refactoring + Phase 10 (préparation merge) — 8 tâches bloquantes/recommandées identifiées |
 | 2026-04-26 | Phase 10 expansion — README updated, ROADMAP moved to root, Phase 11 backlog + CI/CD planning |
-| 2026-04-26 | **Phase 10 ✅ COMPLÈTE** — All blockers (10.1-10.4) + recommendations (10.5-10.8) done. 39 tests pass. Ready for merge. |
+| 2026-04-26 | **Phase 10 ✅ COMPLÈTE** — All blockers (10.1-10.4) + recommendations (10.5-10.8) done. 42 tests pass. Ready for merge. |
+| 2026-04-26 | Test isolation fix — click_stats tests now use tmp_path, no longer erase real user data. Bug discovered: double-click counting. |
