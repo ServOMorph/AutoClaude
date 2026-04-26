@@ -4,26 +4,40 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
-## [Unreleased] — branche MAJ
+## [Unreleased]
 
 ### Corrigé
 
-- **Crash long-run** : cache `_total_on_disk` en mémoire pour éviter la relecture JSON à chaque clic ; pruning des événements au-delà de 365j ; `_keep_on_top` s'arrête proprement si widget détruit (`winfo_exists()`), skip si masqué
-- **Détection échouée après premier clic** : état hover du bouton empêchant la re-détection — `move_away()` utilise maintenant un déplacement relatif <50px au lieu d'absolu vers (5,5)
-- **Interval=150s sauvegardé** : `settings.json` avait `interval: 150` ce qui ralentissait la détection à 2,5 min — resetté à 0,5s par défaut
-- **Lien GitHub** : URL mise à jour vers `https://github.com/ServOMorph/AutoClaude` (était juste `/ServOMorph`)
+### Ajouté
 
-### Modifié
+---
 
-- **OverlayToggle** : déplacé dans l'UI sous le bouton Activer (avant c'était avant le compteur)
-- **Lambda leak dans `_on_autoclick`** : refactorisé pour déléguer à `_refresh_click_ui()` au lieu de créer un lambda par clic
+## [2.4.0] — 2026-04-26
+
+### Corrigé
+
+- **Double-click bug** : compteur comptait 2x les clics — `sleep(0.4)` après clic insuffisant pour laisser bouton disparaître. Passé à `sleep(1.0)` post-clic. Root cause: 0.4s sleep + 280ms locate() = 680ms, but button stays visible >700ms
+- **Crash long-run** : cache `_total_on_disk` en mémoire pour éviter la relecture JSON à chaque clic ; pruning des événements au-delà de 365j ; `_keep_on_top` s'arrête proprement si widget détruit (`winfo_exists()`)
+- **Détection échouée après premier clic** : état hover du bouton empêchant la re-détection — `move_away()` utilise maintenant un déplacement relatif <50px
+- **Interval=150s sauvegardé** : `settings.json` avait `interval: 150` ce qui ralentissait la détection — resetté à 0,5s par défaut
+- **Lien GitHub** : URL mise à jour vers `https://github.com/ServOMorph/AutoClaude`
+- **Version logging** : logs affichaient "vAutoClaude" au lieu de "v2.4.0" — importé VERSION constant correctement
 
 ### Ajouté
 
-- **Analytics fenêtrées** : remplacement des 5 périodes vagues (heure/jour/semaine/mois/année) par 5 vues temporelles précises — Aujourd'hui (heure), 7j (jour), 30j (jour), 12m (mois), Tout (année)
-- **`daily_totals` persistés** : dict `{"YYYY-MM-DD": count}` stocké dans click_stats.json, jamais purgé — permet l'historique multi-année même si les événements bruts sont limités à 365j
-- **Bandeau de statistiques** : dans la fenêtre analyses — Total, Moy/jour actif, Record, Jours actifs
-- **Bouton Fermer** : dans la fenêtre analyses (en plus de la croix)
+- **Tests unitaires** : 42 tests (`test_click_stats.py` 12 tests + `test_status_overlay.py` 9 tests), isolation via fixture tmp_path
+- **Analytics fenêtrées** : 5 vues temporelles — Aujourd'hui, 7j, 30j, 12m, Tout
+- **`daily_totals` persistés** : dict multi-année dans click_stats.json, jamais purgé
+- **Bandeau de statistiques** : Total, Moy/jour actif, Record, Jours actifs
+- **Bouton Fermer** : dans la fenêtre analyses
+
+### Modifié
+
+- **requirements.txt** : psutil ajouté (dépendance obligatoire Health Monitor)
+- **ROADMAP.md** : déplacé de DOCS/ → racine, Phase 10-11 expansion documentée
+- **README.md** : analytics périodes correctes, date mise à jour, assets harmonisés
+- **OverlayToggle** : déplacé sous le bouton Activer
+- **Lambda leak** : refactorisé `_on_autoclick` pour éviter lambdas par clic
 
 ---
 
