@@ -34,7 +34,7 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 - **Overlay flottant always-on-top** (`StatusOverlay`) en bas-gauche, cliquable pour activer/désactiver autoclick sans revenir à la fenêtre principale
 - **Overlay draggable** avec persistance de la position (`overlay_x`, `overlay_y` dans settings.json)
 - **OverlayToggle** : switch dans l'UI pour afficher/masquer l'overlay
-- **Analytics améliorées** : 5 périodes (heure/jour/semaine/mois/année), modes Récent/Tout, navigation Précédent/Suivant (pagination par jour/mois/année), stats chiffrées (total, moy, record, jours actifs), graphes avec labels lisibles
+- **Analytics améliorées** : sélecteur 5 périodes (Aujourd'hui/7j/30j/12m/Tout), stats chiffrées (total, moyenne, record, jours actifs), graphes avec labels lisibles et couleurs hiérarchisées
 - **Logger centralisé** (`src/core/logger.py`) : rotation 5 Mo × 3 fichiers dans `~/.autoclaude/logs/`
 - **Health Monitor** (`src/core/health_monitor.py`) : snapshot psutil toutes les 5 min (RSS, handles, threads), alertes si dépassement seuils
 - **Auto-restart service** (`_run_with_restart`) : jusqu'à 3 tentatives de redémarrage sur exception inattendue

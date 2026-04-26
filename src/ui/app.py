@@ -2,7 +2,7 @@
 
 import webbrowser
 import customtkinter as ctk
-from src.config.constants import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB
+from src.config.constants import APP_NAME, VERSION, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
 from src.core import health_monitor
@@ -62,7 +62,7 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.withdraw()
 
         health_monitor.start()
-        self._log.info("AutoClaude démarré (v%s)", APP_NAME)
+        self._log.info("AutoClaude démarré (v%s)", VERSION)
 
     def _on_tk_exception(self, exc_type, exc_val, exc_tb):
         """Hook global Tk — log les exceptions silencieuses au lieu de crasher."""
