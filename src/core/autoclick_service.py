@@ -3,7 +3,7 @@
 import time
 import threading
 
-from config import COOLDOWN_DURATION
+from config import COOLDOWN_DURATION, PRE_CLICK_DELAY
 from src.core import detector, clicker, click_stats
 from src.core.listener import InputListener
 from src.core.monitors import get_all_monitors
@@ -93,6 +93,7 @@ class AutoclickService:
             coords = detector.locate(self._image_path)
             if coords:
                 x, y = coords
+                time.sleep(PRE_CLICK_DELAY)  # Attendre que le bouton soit stable avant de cliquer
                 if clicker.click(x, y):
                     self._last_click_time = time.time()
                     clicker.move_away()

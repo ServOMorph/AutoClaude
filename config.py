@@ -13,3 +13,8 @@ COOLDOWN_DURATION = 4.0
 # Défaut ancien: 0.8 (trop permissif sur bleu)
 # Recommandé: 0.90-0.95 pour YES button strict
 CONFIDENCE_THRESHOLD = 0.90
+
+# Délai avant de cliquer après détection (en secondes)
+# Assure que le bouton est stable avant le clic
+# Augmentez si le bouton bouge/anime avant d'être cliquable
+PRE_CLICK_DELAY = 1.0
