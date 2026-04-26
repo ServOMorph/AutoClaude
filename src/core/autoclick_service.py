@@ -93,13 +93,13 @@ class AutoclickService:
             coords = detector.locate(self._image_path)
             if coords:
                 x, y = coords
+                if self._on_click:
+                    self._on_click(x, y)  # Afficher le cercle AVANT le clic pour debug
                 time.sleep(PRE_CLICK_DELAY)  # Attendre que le bouton soit stable avant de cliquer
                 if clicker.click(x, y):
                     self._last_click_time = time.time()
                     clicker.move_away()
                     click_stats.increment()
-                    if self._on_click:
-                        self._on_click(x, y)
                     time.sleep(2.0)  # laisser le bouton disparaître + Claude Code traiter
                 else:
                     time.sleep(self._interval)
