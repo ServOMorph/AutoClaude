@@ -3,6 +3,7 @@
 import time
 import threading
 
+from config import COOLDOWN_DURATION
 from src.core import detector, clicker, click_stats
 from src.core.listener import InputListener
 from src.core.monitors import get_all_monitors
@@ -32,7 +33,7 @@ class AutoclickService:
         self._listener: InputListener | None = None
         self._log = get_logger()
         self._last_click_time = 0
-        self._cooldown_duration = 3.0  # Cooldown de 3s après un clic pour éviter re-détection
+        self._cooldown_duration = COOLDOWN_DURATION
 
     def start(self):
         """TODO: description de start."""
