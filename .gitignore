@@ -42,6 +42,15 @@ Thumbs.db
 # Logs
 *.log
 
+# Tests / Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Fichiers de travail temporaires
+audit_*.json
+type_hints_todo.json
+
 # Build
 build/
 dist/
