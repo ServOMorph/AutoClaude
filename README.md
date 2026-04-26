@@ -23,7 +23,7 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 - Arrêt via Esc, fermeture fenêtre ou mouvement souris (mode auto-stop)
 - Protection de projet Claude Code via injection dans `.claude/CLAUDE.md`
 - **Compteur de clics** avec historique persisté
-- **Analyses graphiques** : navigation temporelle (Récent / Tout), bandeau de statistiques (total, moyenne, record, jours actifs), graphes par heure/jour/semaine/mois/année
+- **Analyses graphiques** : navigation temporelle (Récent / Tout), bandeau de statistiques (total, moyenne, record, jours actifs), graphes par Aujourd'hui/7j/30j/12m/Tout
 - **Indicateur flottant** : overlay always-on-top en bas à gauche de l'écran, cliquable pour activer/désactiver l'autoclick depuis n'importe quelle application
 - Logs rotatifs (`~/.autoclaude/logs/`) et watchdog de stabilité pour une utilisation longue durée
 - Interface sombre SéréniaTech (CustomTkinter)
@@ -109,9 +109,9 @@ Un clic sur l'indicateur active ou désactive l'autoclick directement, sans reve
 ### Analyses
 
 La fenêtre d'analyses offre :
-- **5 périodes** : Heure, Jour, Semaine, Mois, Année
-- **Mode Récent** (défaut) : fenêtre glissante — 24h / 30 jours / 12 semaines / 12 mois
-- **Mode Tout** : historique complet avec navigation Précédent / Suivant (paginé par jour, mois ou année)
+- **5 périodes** : Aujourd'hui, 7 jours, 30 jours, 12 mois, Tout
+- **Mode Récent** (défaut) : fenêtre glissante — dernières 24h / 7 derniers jours / 30 derniers jours / 12 derniers mois
+- **Mode Tout** : historique complet avec navigation Précédent / Suivant (paginé par jour, mois ou année selon la période)
 - **Bandeau de stats** : total, moyenne par jour actif, record journalier, jours actifs
 
 ### Arrêt
@@ -174,7 +174,7 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 25 avril 2026 (v2.3.0)
+Date : 26 avril 2026 (v2.3.0)
 
 ---
 
