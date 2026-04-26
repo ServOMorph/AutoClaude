@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
-> Dernière mise à jour : 2026-04-25
-> Statut global : **Phase 9 (v2.3.0) terminée** — Overlay flottant + Stabilité long-run déployés
+> Dernière mise à jour : 2026-04-26
+> Statut global : **Phase 9 (v2.3.0) terminée** — Overlay flottant + Stabilité long-run déployés + fixes crash long-run
 
 ---
 
@@ -235,3 +235,4 @@ is_running() → bool
 | 2026-04-23 | Phases 1→7 complètes — UI v2.0 fonctionnelle |
 | 2026-04-23 | Phase 8 complète — ARCHITECTURE, SECURITY, CHARTE_GRAPHIQUE, README, LICENSE |
 | 2026-04-25 | Phase 9 complète — v2.3.0 publiée (overlay + analyses + stabilité long-run) |
+| 2026-04-26 | Fixes crash long-run — cache total click_stats, pruning events 365j, _keep_on_top robuste, _on_autoclick sans lambda leak |

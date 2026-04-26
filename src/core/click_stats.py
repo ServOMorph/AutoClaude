@@ -3,7 +3,7 @@
 import json
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from collections import defaultdict
 
@@ -19,8 +19,12 @@ _buffer_count = 0
 _buffer_events: list[str] = []
 _FLUSH_EVERY = 20       # flush toutes les 20 clics
 _FLUSH_INTERVAL = 60.0  # flush toutes les 60 secondes au plus tard
+_EVENTS_MAX_DAYS = 365  # on ne conserve que les 365 derniers jours d'événements
 
 _last_flush_time = time.monotonic()
+
+# Cache du total sur disque — évite de relire le JSON à chaque appel get_total()
+_total_on_disk: int | None = None
 
 
 def _load_raw() -> dict:
@@ -30,6 +34,19 @@ def _load_raw() -> dict:
         return json.loads(_STATS_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return {"total": 0, "events": []}
+
+
+def _prune_events(events: list[str]) -> list[str]:
+    """Supprime les événements de plus de _EVENTS_MAX_DAYS jours."""
+    cutoff = datetime.now(timezone.utc) - timedelta(days=_EVENTS_MAX_DAYS)
+    pruned = []
+    for ts in events:
+        try:
+            if datetime.fromisoformat(ts).astimezone(timezone.utc) >= cutoff:
+                pruned.append(ts)
+        except ValueError:
+            pass
+    return pruned
 
 
 def _write_raw(data: dict) -> None:
@@ -46,16 +63,25 @@ def _write_raw(data: dict) -> None:
             pass
 
 
+def _ensure_total_cache() -> None:
+    """Charge le total depuis le disque si le cache est vide. Doit être appelé sous _lock."""
+    global _total_on_disk
+    if _total_on_disk is None:
+        _total_on_disk = _load_raw().get("total", 0)
+
+
 def _flush_locked(data: dict | None = None) -> None:
     """Flush le buffer vers le disque. Doit être appelé sous _lock."""
-    global _buffer_count, _buffer_events, _last_flush_time
+    global _buffer_count, _buffer_events, _last_flush_time, _total_on_disk
     if not _buffer_events and _buffer_count == 0:
         return
     if data is None:
         data = _load_raw()
-    data["total"] = data.get("total", 0) + _buffer_count
-    data["events"] = data.get("events", []) + _buffer_events
+    new_total = data.get("total", 0) + _buffer_count
+    data["total"] = new_total
+    data["events"] = _prune_events(data.get("events", []) + _buffer_events)
     _write_raw(data)
+    _total_on_disk = new_total
     _buffer_count = 0
     _buffer_events = []
     _last_flush_time = time.monotonic()
@@ -81,16 +107,17 @@ def flush_buffer() -> None:
 def get_total() -> int:
     """TODO: description de get_total."""
     with _lock:
-        base = _load_raw().get("total", 0)
-        return base + _buffer_count
+        _ensure_total_cache()
+        return _total_on_disk + _buffer_count
 
 
 def reset() -> None:
     """TODO: description de reset."""
-    global _buffer_count, _buffer_events
+    global _buffer_count, _buffer_events, _total_on_disk
     with _lock:
         _buffer_count = 0
         _buffer_events = []
+        _total_on_disk = 0
         _write_raw({"total": 0, "events": []})
 
 

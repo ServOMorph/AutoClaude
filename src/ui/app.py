@@ -205,11 +205,12 @@ class AutoClaudeApp(ctk.CTk):
         self._service.start()
 
     def _on_autoclick(self, *_):
+        self.after(0, self._refresh_click_ui)
+
+    def _refresh_click_ui(self):
         total = click_stats.get_total()
-        self.after(0, lambda: (
-            self._overlay.set_click_count(total),
-            self._click_counter.refresh(),
-        ))
+        self._overlay.set_click_count(total)
+        self._click_counter.refresh()
 
     def _stop_service(self):
         """TODO: description de _stop_service."""

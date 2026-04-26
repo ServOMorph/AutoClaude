@@ -125,8 +125,11 @@ class StatusOverlay(ctk.CTkToplevel):
 
     def _keep_on_top(self):
         try:
-            self.attributes("-topmost", True)
-            self.lift()
+            if not self.winfo_exists():
+                return  # widget détruit — stop la boucle
+            if self.state() == "normal":
+                self.attributes("-topmost", True)
+                self.lift()
+            self.after(2000, self._keep_on_top)
         except Exception:
             pass
-        self.after(2000, self._keep_on_top)
