@@ -2,6 +2,7 @@
 
 import webbrowser
 import customtkinter as ctk
+from config import DEBUG_COMPTEUR
 from src.config.constants import APP_NAME, VERSION, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
@@ -213,6 +214,8 @@ class AutoClaudeApp(ctk.CTk):
 
     def _flash_indicator(self, x: int, y: int):
         """Cercle rouge temporaire à la position du clic — debug visuel."""
+        if not DEBUG_COMPTEUR:
+            return
         import tkinter as tk
         size = 48
         win = ctk.CTkToplevel(self)
