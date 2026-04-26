@@ -12,6 +12,14 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.1] — 2026-04-26
+
+### Corrigé
+
+- **Double-click bug — sleep duration insufficient** : v2.4.0 utilisait `sleep(1.0)` post-clic, mais Claude Code met >1.2s à traiter et fermer le bouton. Augmenté à `sleep(2.0)`. Root cause validée en production : 1.0s = button still visible, detected again → 2nd click on stale position.
+
+---
+
 ## [2.4.0] — 2026-04-26
 
 ### Corrigé
