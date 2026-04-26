@@ -31,6 +31,8 @@ class AutoclickService:
         self._thread: threading.Thread | None = None
         self._listener: InputListener | None = None
         self._log = get_logger()
+        self._last_click_time = 0
+        self._cooldown_duration = 3.0  # Cooldown de 3s après un clic pour éviter re-détection
 
     def start(self):
         """TODO: description de start."""
@@ -81,15 +83,22 @@ class AutoclickService:
     def _run(self):
         """TODO: description de _run."""
         while not self._stop_event.is_set():
+            # Vérifier le cooldown — ne pas re-détecter trop rapidement après un clic
+            time_since_last_click = time.time() - self._last_click_time
+            if time_since_last_click < self._cooldown_duration:
+                time.sleep(self._interval)
+                continue
+
             coords = detector.locate(self._image_path)
             if coords:
                 x, y = coords
                 if clicker.click(x, y):
+                    self._last_click_time = time.time()
                     clicker.move_away()
                     click_stats.increment()
                     if self._on_click:
                         self._on_click(x, y)
-                    time.sleep(2.0)  # laisser le bouton disparaître + Claude Code traiter avant la prochaine détection
+                    time.sleep(2.0)  # laisser le bouton disparaître + Claude Code traiter
                 else:
                     time.sleep(self._interval)
             else:
