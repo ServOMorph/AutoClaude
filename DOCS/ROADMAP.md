@@ -1,7 +1,7 @@
 # Roadmap AutoClaude v2.0 — Suivi d'avancement
 
 > Dernière mise à jour : 2026-04-26
-> Statut global : **Phase 9 (v2.3.0) terminée** — Overlay flottant + Stabilité long-run déployés + fixes crash long-run
+> Statut global : **Phase 9 (v2.3.0) terminée** — Phase 10 (préparation merge) en cours
 
 ---
 
@@ -211,6 +211,33 @@ is_running() → bool
 
 ---
 
+## Phase 10 — Préparation merge sur main ⏳
+
+> Objectif : préparer le merge de la branche MAJ sur main — cohérence doc/code, tests, fixes pré-merge.
+
+| Tâche | Statut | Notes |
+|-------|--------|-------|
+| 10.1 Corriger `requirements.txt` — ajouter `psutil` | ⏳ | `psutil>=5.9.0` manquant (bloquant installation depuis source) |
+| 10.2 Fixer log version (app.py:65) | ⏳ | Importer `VERSION` depuis constants au lieu de `APP_NAME` |
+| 10.3 Mettre à jour README — périodes analytics | ⏳ | Corriger "Heure/Jour/Semaine/Mois/Année" → "Aujourd'hui/7j/30j/12m/Tout" |
+| 10.4 Retirer ou implémenter Mode Récent/Tout | ⏳ | CHANGELOG promet pagination, README la mentionne, code ne l'a pas |
+| 10.5 Ajouter tests unitaires | ⏳ | `aggregate_windowed()`, `daily_totals`, StatusOverlay drag/position |
+| 10.6 Nettoyer TODO comments | ⏳ | Remplacer 74 docstrings génériques par vraies descriptions |
+| 10.7 Mettre à jour date README | ⏳ | 25 avril → 26 avril 2026 |
+| 10.8 Harmoniser noms assets dans doc | ⏳ | logo.png → Icone AutoClaude.png (ou réconcilier) |
+
+### Critères d'acceptation merge
+
+| Critère | Statut |
+|---------|--------|
+| Tous les bloquants (10.1–10.4) corrigés | ⏳ |
+| Tests des features [Unreleased] présents | ⏳ |
+| README cohérent avec le code | ⏳ |
+| CHANGELOG à jour jusqu'à la date du merge | ⏳ |
+| Version pyproject/constants/badges synchronisées | ✅ |
+
+---
+
 ## Évolutions futures (hors v2.3.0)
 
 > Non planifiées — consignées pour référence.
@@ -236,3 +263,4 @@ is_running() → bool
 | 2026-04-23 | Phase 8 complète — ARCHITECTURE, SECURITY, CHARTE_GRAPHIQUE, README, LICENSE |
 | 2026-04-25 | Phase 9 complète — v2.3.0 publiée (overlay + analyses + stabilité long-run) |
 | 2026-04-26 | Fixes crash long-run — cache total click_stats, pruning events 365j, _keep_on_top robuste, _on_autoclick sans lambda leak |
+| 2026-04-26 | Refactoring racine du projet + analytics refactoring + Phase 10 (préparation merge) — 8 tâches bloquantes/recommandées identifiées |
