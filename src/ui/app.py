@@ -204,8 +204,26 @@ class AutoClaudeApp(ctk.CTk):
         )
         self._service.start()
 
-    def _on_autoclick(self, *_):
-        self.after(0, self._refresh_click_ui)
+    def _on_autoclick(self, x: int, y: int):
+        self.after(0, lambda: self._on_click_main(x, y))
+
+    def _on_click_main(self, x: int, y: int):
+        self._flash_indicator(x, y)
+        self._refresh_click_ui()
+
+    def _flash_indicator(self, x: int, y: int):
+        """Cercle rouge temporaire à la position du clic — debug visuel."""
+        import tkinter as tk
+        size = 48
+        win = ctk.CTkToplevel(self)
+        win.overrideredirect(True)
+        win.attributes("-topmost", True)
+        win.attributes("-transparentcolor", "black")
+        win.geometry(f"{size}x{size}+{x - size // 2}+{y - size // 2}")
+        c = tk.Canvas(win, width=size, height=size, bg="black", highlightthickness=0)
+        c.pack()
+        c.create_oval(3, 3, size - 3, size - 3, outline="red", width=4, fill="")
+        win.after(400, win.destroy)
 
     def _refresh_click_ui(self):
         total = click_stats.get_total()
