@@ -12,6 +12,14 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.6] — 2026-04-27
+
+### Corrigé
+
+- **FlashIndicator CTkToplevel crash** : changé en `tk.Toplevel` pur pour éviter les erreurs RGBA (`#ffffff22`) sur systèmes où customtkinter échoue. `DEBUG_COMPTEUR=True` fonctionne maintenant sans crash.
+
+---
+
 ## [2.4.5] — 2026-04-27
 
 ### Corrigé
