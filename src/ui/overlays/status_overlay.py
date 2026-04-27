@@ -129,8 +129,11 @@ class StatusOverlay(ctk.CTkToplevel):
         try:
             if not self.winfo_exists():
                 return
-            self.attributes("-topmost", True)
-            self.lift()
-            self.after(2000, self._keep_on_top)
+            # Skip Win32 calls if overlay is hidden — économise les appels SetWindowPos
+            # sur des sessions longues (était : 7200 appels inutiles / 4h en hidden).
+            if self.winfo_viewable():
+                self.attributes("-topmost", True)
+                self.lift()
+            self.after(5000, self._keep_on_top)
         except Exception:
             pass

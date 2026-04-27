@@ -33,8 +33,8 @@ class ClickCounter(ctk.CTkFrame):
             height=26,
             command=self._on_reset,
         ).pack(side="right", padx=(8, 16), pady=10)
-
-        self._schedule_refresh()
+        # Plus de polling 1s — refresh() est appelé directement par l'app
+        # depuis _refresh_click_ui() à chaque clic détecté.
 
     def _format(self, total: int) -> str:
         """TODO: description de _format."""
@@ -95,8 +95,3 @@ class ClickCounter(ctk.CTkFrame):
         """TODO: description de refresh."""
         total = click_stats.get_total()
         self._label.configure(text=self._format(total))
-
-    def _schedule_refresh(self):
-        """TODO: description de _schedule_refresh."""
-        self.refresh()
-        self.after(1000, self._schedule_refresh)

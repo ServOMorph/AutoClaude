@@ -305,3 +305,4 @@ Réalisables rapidement si ressources disponibles après merge :
 | 2026-04-26 | Test isolation fix — click_stats tests now use tmp_path, no longer erase real user data. Bug discovered: double-click counting. |
 | 2026-04-26 | **Phase 11.0 ✅ ROOT CAUSE FIXED** — Timestamp analysis: 680ms pair gaps = sleep(0.4) + locate() time. Button stays visible >700ms. Fix: sleep(1.0) post-click. Awaiting production test. |
 | 2026-04-26 | **Phase 11.0 ✅ VERIFICATION + FINAL FIX** — User testing confirmed 1.0s insufficient. Increased sleep(1.0) → sleep(2.0) post-click. Commit 6863c06. Ready for production test. |
+| 2026-04-27 | **v2.4.5 ✅ LONG-RUN CRASH FIXES** — 5 resource leaks fixed (FlashIndicator reuse, _keep_on_top lazy, mss singleton, gc.collect periodic, click_counter polling removed). Verify logs `~/.autoclaude/logs/autoclaude.log` after next 4+ hour session: thread count stable, handle count stable, gc: N visible. |

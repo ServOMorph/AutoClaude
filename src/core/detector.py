@@ -8,6 +8,28 @@ try:
 except Exception:
     _mss = None
 
+import threading
+
+# Instance MSS persistante — évite d'allouer/désallouer un device context à
+# chaque détection (toutes les 0.5s). Sur sessions longues, la création répétée
+# fragmente le pool de GDI handles.
+_mss_instance = None
+_mss_lock = threading.Lock()
+
+
+def _get_mss():
+    """Retourne l'instance MSS partagée (lazy init), None si mss indisponible."""
+    global _mss_instance
+    if _mss is None:
+        return None
+    with _mss_lock:
+        if _mss_instance is None:
+            try:
+                _mss_instance = _mss.mss()
+            except Exception:
+                _mss_instance = None
+    return _mss_instance
+
 try:
     import cv2 as _cv2
     import numpy as _np
@@ -44,7 +66,11 @@ def _center_from_tuple(t):
 
 def _mss_cv2(path: str, confidence: float = 0.8):
     """TODO: description de _mss_cv2."""
+    global _mss_instance
     if not _mss or not _cv2 or not _np:
+        return None
+    sct = _get_mss()
+    if sct is None:
         return None
     try:
         template = _cv2.imread(path)
@@ -52,22 +78,28 @@ def _mss_cv2(path: str, confidence: float = 0.8):
             return None
         template_gray = _cv2.cvtColor(template, _cv2.COLOR_BGR2GRAY)
         h, w = template_gray.shape
-        with _mss.mss() as sct:
-            for monitor in sct.monitors[1:]:
-                screenshot = sct.grab(monitor)
-                img = _np.array(screenshot)
-                img_gray = _cv2.cvtColor(
-                    _cv2.cvtColor(img, _cv2.COLOR_BGRA2BGR),
-                    _cv2.COLOR_BGR2GRAY,
-                )
-                result = _cv2.matchTemplate(img_gray, template_gray, _cv2.TM_CCOEFF_NORMED)
-                _, max_val, _, max_loc = _cv2.minMaxLoc(result)
-                if max_val >= confidence:
-                    x = monitor["left"] + max_loc[0] + w // 2
-                    y = monitor["top"] + max_loc[1] + h // 2
-                    return (int(x), int(y))
+        for monitor in sct.monitors[1:]:
+            screenshot = sct.grab(monitor)
+            img = _np.array(screenshot)
+            img_gray = _cv2.cvtColor(
+                _cv2.cvtColor(img, _cv2.COLOR_BGRA2BGR),
+                _cv2.COLOR_BGR2GRAY,
+            )
+            result = _cv2.matchTemplate(img_gray, template_gray, _cv2.TM_CCOEFF_NORMED)
+            _, max_val, _, max_loc = _cv2.minMaxLoc(result)
+            if max_val >= confidence:
+                x = monitor["left"] + max_loc[0] + w // 2
+                y = monitor["top"] + max_loc[1] + h // 2
+                return (int(x), int(y))
     except Exception:
-        pass
+        # En cas d'erreur, on jette l'instance partagée — état GDI peut être corrompu
+        with _mss_lock:
+            if _mss_instance is not None:
+                try:
+                    _mss_instance.close()
+                except Exception:
+                    pass
+                _mss_instance = None
     return None
 
 

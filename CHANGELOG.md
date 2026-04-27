@@ -12,6 +12,19 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.5] — 2026-04-27
+
+### Corrigé
+
+- **Crash long-run (sessions de plusieurs heures)** : suite de fixes ciblés sur l'accumulation de ressources Win32/GDI :
+  - **`FlashIndicator` réutilisable** : un seul `CTkToplevel` partagé pour tous les flashs au lieu d'en créer/détruire un par clic. Évite la fuite progressive de HWND et de références dans `AppearanceModeTracker`/`ScalingTracker` de customtkinter sur sessions longues.
+  - **`_keep_on_top` paresseux** : ne fait plus d'appel `lift()`/`-topmost` quand l'overlay est masqué (`winfo_viewable()`), et passe l'intervalle de 2s → 5s. Économise des milliers d'appels Win32 inutiles par session.
+  - **Instance `mss` persistante** : le détecteur partage une seule instance MSS au lieu d'en allouer/désallouer une à chaque détection (toutes les 0.5s). Évite la fragmentation du pool de GDI handles. En cas d'erreur, l'instance est jetée et recréée au prochain appel.
+  - **`gc.collect()` périodique** : forcé toutes les 5min par le HealthMonitor. Tk/customtkinter laissent traîner des références circulaires (callbacks `after`, widget→master) que le GC cyclique de Python ne récupère pas immédiatement.
+  - **Polling 1s du compteur supprimé** : `ClickCounter._schedule_refresh` était redondant (déjà rafraîchi par `_refresh_click_ui` après chaque clic). Économise 3600 appels `after()` par heure.
+
+---
+
 ## [2.4.4] — 2026-04-26
 
 ### Corrigé

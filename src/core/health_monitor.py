@@ -1,5 +1,6 @@
 """Watchdog interne : snapshots mémoire/handles/threads toutes les 5 minutes."""
 
+import gc
 import threading
 import time
 
@@ -37,12 +38,15 @@ def _loop():
     log = get_logger()
     log.info("HealthMonitor démarré")
     while not _stop_event.wait(_INTERVAL):
+        # Force la collecte cyclique — Tk garde des références circulaires
+        # (after callbacks, widget→master) qui s'accumulent sur sessions longues.
+        collected = gc.collect()
         snap = _snapshot()
         if not snap:
             continue
         log.info(
-            "Santé — RSS: %(rss_mb)s Mo | handles: %(handles)s | threads: %(threads)s",
-            snap,
+            "Santé — RSS: %(rss_mb)s Mo | handles: %(handles)s | threads: %(threads)s | gc: %(gc)s",
+            {**snap, "gc": collected},
         )
         if snap.get("rss_mb", 0) > _WARN_RSS_MB:
             log.warning("RSS élevé : %.1f Mo (seuil %d Mo)", snap["rss_mb"], _WARN_RSS_MB)

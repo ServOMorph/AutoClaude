@@ -18,6 +18,7 @@ from src.ui.components.click_counter import ClickCounter
 from src.ui.components.overlay_toggle import OverlayToggle
 from src.core import click_stats
 from src.ui.overlays.status_overlay import StatusOverlay
+from src.ui.overlays.flash_indicator import FlashIndicator
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
 
@@ -56,11 +57,13 @@ class AutoClaudeApp(ctk.CTk):
 
         self._overlay = StatusOverlay(self, on_toggle=self._activate_btn._toggle)
         self._overlay.set_click_count(click_stats.get_total())
-        
+
         if settings.get("overlay_enabled"):
             self._overlay.deiconify()
         else:
             self._overlay.withdraw()
+
+        self._flash: FlashIndicator | None = None
 
         health_monitor.start()
         self._log.info("AutoClaude démarré (v%s)", VERSION)
@@ -213,20 +216,16 @@ class AutoClaudeApp(ctk.CTk):
         self._refresh_click_ui()
 
     def _flash_indicator(self, x: int, y: int):
-        """Cercle rouge temporaire à la position du clic — debug visuel."""
+        """Cercle rouge temporaire à la position du clic — debug visuel.
+
+        Réutilise une seule instance FlashIndicator pour éviter de créer/détruire
+        un Toplevel à chaque clic (fuite de HWND sur sessions longues).
+        """
         if not DEBUG_COMPTEUR:
             return
-        import tkinter as tk
-        size = 48
-        win = ctk.CTkToplevel(self)
-        win.overrideredirect(True)
-        win.attributes("-topmost", True)
-        win.attributes("-transparentcolor", "black")
-        win.geometry(f"{size}x{size}+{x - size // 2}+{y - size // 2}")
-        c = tk.Canvas(win, width=size, height=size, bg="black", highlightthickness=0)
-        c.pack()
-        c.create_oval(3, 3, size - 3, size - 3, outline="red", width=4, fill="")
-        win.after(400, win.destroy)
+        if self._flash is None:
+            self._flash = FlashIndicator(self)
+        self._flash.flash(x, y)
 
     def _refresh_click_ui(self):
         total = click_stats.get_total()
@@ -274,5 +273,11 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.destroy()
         except Exception:
             pass
+        if self._flash is not None:
+            try:
+                self._flash.destroy()
+            except Exception:
+                pass
+            self._flash = None
         self._log.info("AutoClaude fermé")
         self.destroy()
