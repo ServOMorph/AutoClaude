@@ -2,10 +2,9 @@
 
 import sys
 import tkinter as tk
-import customtkinter as ctk
 
 
-class FlashIndicator(ctk.CTkToplevel):
+class FlashIndicator(tk.Toplevel):
     """Cercle rouge déplacé/affiché à chaque appel — instance unique réutilisée.
 
     Évite la création/destruction de CTkToplevel à chaque clic, qui sur de longues
