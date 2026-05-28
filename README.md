@@ -15,6 +15,12 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 
 ---
 
+## 📹 Démo vidéo
+
+[Regardez la présentation du projet](https://youtu.be/eXGs9HPtRxs?si=w-Hk8YcVxobJGU50)
+
+---
+
 ## Fonctionnalités
 
 - Détection d'image par template matching (OpenCV + mss)
