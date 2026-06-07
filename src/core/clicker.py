@@ -40,6 +40,19 @@ def click(x: int, y: int) -> bool:
     return False
 
 
+def click_and_return(x: int, y: int) -> bool:
+    """Sauvegarde la position de la souris, clique en (x, y), puis ramène la souris à sa position d'origine."""
+    if _pyautogui:
+        try:
+            origin_x, origin_y = _pyautogui.position()
+            result = click(x, y)
+            _pyautogui.moveTo(origin_x, origin_y, duration=0.05)
+            return result
+        except Exception:
+            pass
+    return click(x, y)
+
+
 def move_away() -> None:
     """Déplace la souris hors du bouton cliqué pour éviter l'état hover sur le prochain scan.
     Déplacement relatif < 50px pour ne pas déclencher le mode auto_stop."""

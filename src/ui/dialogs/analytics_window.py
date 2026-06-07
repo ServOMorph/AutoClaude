@@ -136,9 +136,19 @@ class AnalyticsWindow(ctk.CTkToplevel):
 
         if any(v > 0 for v in values):
             ax.bar(range(len(labels)), values, color=colors, width=0.6, zorder=2)
-            ax.set_xticks(range(len(labels)))
-            rotation = 30 if len(labels) > 10 else 0
-            ax.set_xticklabels(labels, rotation=rotation, ha="right" if rotation else "center", fontsize=8)
+            if window == "30d":
+                # 30 étiquettes dd/mm sur 640px = illisible — n'afficher qu'une sur 5
+                step = 5
+                visible_ticks = list(range(0, len(labels), step))
+                ax.set_xticks(visible_ticks)
+                ax.set_xticklabels(
+                    [labels[i] for i in visible_ticks],
+                    rotation=0, ha="center", fontsize=8,
+                )
+            else:
+                ax.set_xticks(range(len(labels)))
+                rotation = 30 if len(labels) > 10 else 0
+                ax.set_xticklabels(labels, rotation=rotation, ha="right" if rotation else "center", fontsize=8)
             for i, v in enumerate(values):
                 if v > 0:
                     ax.text(i, v + max_val * 0.01, str(v), ha="center", va="bottom",
