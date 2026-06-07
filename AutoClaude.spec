@@ -51,7 +51,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='assets/logo.ico',  # Icône exe + raccourci
+    icon='assets/Icone AutoClaude.ico',  # Icône exe + raccourci
 )
 
 coll = COLLECT(

@@ -12,6 +12,19 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.7] — 2026-06-07
+
+### Ajouté
+
+- **Retour souris après clic** : la position de la souris est sauvegardée avant chaque clic, puis restaurée automatiquement après — l'utilisateur retrouve son curseur là où il l'avait laissé.
+
+### Corrigé
+
+- **Graphique 30 jours illisible** : n'affiche plus les 30 étiquettes `dd/mm` superposées, mais 1 étiquette tous les 5 jours (~6 étiquettes lisibles).
+- **Spec PyInstaller** : chemin icône corrigé (`assets/Icone AutoClaude.ico`) — le build ne plantait plus sur `assets/logo.ico` inexistant.
+
+---
+
 ## [2.4.6] — 2026-04-27
 
 ### Corrigé
