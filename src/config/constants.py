@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-VERSION = "2.4.7"
+VERSION = "2.4.8"
 APP_NAME = "AutoClaude"
 
 # Paths

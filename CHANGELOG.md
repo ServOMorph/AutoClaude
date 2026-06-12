@@ -12,6 +12,18 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.8] — 2026-06-12
+
+### Corrigé
+
+- **Crash natif tk86t.dll (access violation 0xc0000005)** — les plantages aléatoires, systématiquement loggés dans le journal Windows (Event ID 1000, offset `0xeb0a`), avaient trois déclencheurs identifiés notamment lors des switchs de bureaux virtuels :
+  - **Appels Tk inter-threads** : `_on_autoclick` et `_on_service_stopped` appelaient `self.after(0, ...)` depuis le thread `AutoclickWorker`. Remplacé par une `queue.Queue` vidée dans `_poll_ui_queue()` (toutes les 100 ms, thread principal) — 100 % thread-safe.
+  - **FlashIndicator map/unmap répété** : `deiconify()`/`withdraw()` à chaque clic (`DEBUG_COMPTEUR=True`) généraient des événements `WM_WINDOWPOSCHANGED` qui stressent exactement le chemin fragile de Tk lors d'un changement de bureau. Remplacé par `attributes("-alpha", 0.0/1.0)` — la fenêtre reste mappée en permanence.
+  - **`_keep_on_top` périodique** : appel `lift()` + `-topmost` toutes les 5 s sur une fenêtre potentiellement cloakée. Supprimé ; le topmost est persistent — rebind uniquement sur `<Map>` pour le récupérer après `deiconify`.
+- **Forensique crash** : `faulthandler.enable()` activé au démarrage vers `~/.autoclaude/logs/crash.log` — capture la stack Python native au prochain crash éventuel.
+
+---
+
 ## [2.4.7] — 2026-06-07
 
 ### Ajouté

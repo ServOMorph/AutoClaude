@@ -126,14 +126,18 @@ class StatusOverlay(ctk.CTkToplevel):
         self.count_label.configure(text=str(count))
 
     def _keep_on_top(self):
+        # `-topmost` est persistent — pas besoin de le réaffirmer ni de lift().
+        # On rebind uniquement sur <Map> pour récupérer après un deiconify.
         try:
             if not self.winfo_exists():
                 return
-            # Skip Win32 calls if overlay is hidden — économise les appels SetWindowPos
-            # sur des sessions longues (était : 7200 appels inutiles / 4h en hidden).
-            if self.winfo_viewable():
+            self.bind("<Map>", lambda _: self._on_map(), add="+")
+        except Exception:
+            pass
+
+    def _on_map(self):
+        try:
+            if self.winfo_exists():
                 self.attributes("-topmost", True)
-                self.lift()
-            self.after(5000, self._keep_on_top)
         except Exception:
             pass

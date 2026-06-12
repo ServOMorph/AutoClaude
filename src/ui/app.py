@@ -1,5 +1,6 @@
 """TODO: description du module."""
 
+import queue
 import webbrowser
 import customtkinter as ctk
 from config import DEBUG_COMPTEUR
@@ -50,6 +51,7 @@ class AutoClaudeApp(ctk.CTk):
 
         self._service: AutoclickService | None = None
         self._project_path: str = ""
+        self._ui_queue: queue.Queue = queue.Queue()
 
         self._build_ui()
         self.bind("<Escape>", lambda _: self._stop_service())
@@ -65,6 +67,7 @@ class AutoClaudeApp(ctk.CTk):
 
         self._flash: FlashIndicator | None = None
 
+        self._poll_ui_queue()
         health_monitor.start()
         self._log.info("AutoClaude démarré (v%s)", VERSION)
 
@@ -186,6 +189,15 @@ class AutoClaudeApp(ctk.CTk):
 
         Footer(self).pack(fill="x", padx=20, pady=(0, 20), side="bottom")
 
+    def _poll_ui_queue(self):
+        try:
+            while True:
+                fn = self._ui_queue.get_nowait()
+                fn()
+        except queue.Empty:
+            pass
+        self.after(100, self._poll_ui_queue)
+
     def _on_toggle(self, active: bool):
         """TODO: description de _on_toggle."""
         if active:
@@ -209,7 +221,7 @@ class AutoClaudeApp(ctk.CTk):
         self._service.start()
 
     def _on_autoclick(self, x: int, y: int):
-        self.after(0, lambda: self._on_click_main(x, y))
+        self._ui_queue.put(lambda: self._on_click_main(x, y))
 
     def _on_click_main(self, x: int, y: int):
         self._flash_indicator(x, y)
@@ -242,7 +254,7 @@ class AutoClaudeApp(ctk.CTk):
 
     def _on_service_stopped(self):
         """TODO: description de _on_service_stopped."""
-        self.after(0, lambda: (
+        self._ui_queue.put(lambda: (
             self._activate_btn.set_active(False),
             self._overlay.set_active(False),
         ))

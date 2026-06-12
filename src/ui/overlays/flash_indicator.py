@@ -41,7 +41,9 @@ class FlashIndicator(tk.Toplevel):
         )
 
         self._hide_after_id: str | None = None
-        self.withdraw()
+        # Fenêtre toujours mappée, rendue invisible via alpha — évite les appels
+        # map/unmap (WM_WINDOWPOSCHANGED) qui peuvent déclencher le bug tk86t.dll.
+        self.attributes("-alpha", 0.0)
 
     def flash(self, x: int, y: int, duration_ms: int = 400) -> None:
         """Repositionne et affiche brièvement l'indicateur à (x, y)."""
@@ -50,8 +52,7 @@ class FlashIndicator(tk.Toplevel):
                 return
             half = self.SIZE // 2
             self.geometry(f"{self.SIZE}x{self.SIZE}+{x - half}+{y - half}")
-            self.deiconify()
-            self.lift()
+            self.attributes("-alpha", 1.0)
             if self._hide_after_id is not None:
                 try:
                     self.after_cancel(self._hide_after_id)
@@ -65,6 +66,6 @@ class FlashIndicator(tk.Toplevel):
         self._hide_after_id = None
         try:
             if self.winfo_exists():
-                self.withdraw()
+                self.attributes("-alpha", 0.0)
         except Exception:
             pass
