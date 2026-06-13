@@ -5,6 +5,10 @@ from src.config.constants import (
     OVERLAY_ALPHA, OVERLAY_COLOR_ACTIVE, OVERLAY_COLOR_INACTIVE, OVERLAY_TEXT_COLOR,
 )
 from src.config import settings
+from src.core.virtual_desktop import VirtualDesktopManager
+from src.core.logger import get_logger
+
+_log = get_logger()
 
 
 class StatusOverlay(ctk.CTkToplevel):
@@ -79,6 +83,91 @@ class StatusOverlay(ctk.CTkToplevel):
             widget.bind("<ButtonRelease-1>", self._stop_drag)
 
         self._keep_on_top()
+
+        # Suivi des bureaux virtuels Windows : sur une fenêtre overrideredirect
+        # topmost, Windows laisse un « fantôme » non cliquable quand on change de
+        # bureau. On déplace l'overlay vers le bureau courant dès qu'on détecte
+        # un changement. cf. memory crash_tk86t_signature (on évite map/unmap).
+        self._vd = VirtualDesktopManager()
+        self._hwnd = None
+        self._last_desktop_bytes = None
+        self._vd_after_id = None
+        _log.info("Overlay VD tracking: available=%s", self._vd.available)
+        if self._vd.available:
+            self._last_desktop_bytes = self._desktop_bytes(self._vd.current_desktop_id())
+            _log.info("Overlay VD initial desktop=%s", self._fmt(self._last_desktop_bytes))
+            self._vd_after_id = self.after(1500, self._check_desktop_switch)
+
+    @staticmethod
+    def _desktop_bytes(guid):
+        return bytes(guid) if guid is not None else None
+
+    @staticmethod
+    def _fmt(b):
+        return b.hex()[:12] if b else "None"
+
+    def _get_hwnd(self):
+        if self._hwnd:
+            return self._hwnd
+        try:
+            self._hwnd = self._vd.root_hwnd(self.winfo_id())
+        except Exception:
+            self._hwnd = None
+        return self._hwnd
+
+    def _check_desktop_switch(self):
+        """Re-déplace l'overlay vers le bureau virtuel actif si l'utilisateur a changé."""
+        try:
+            if not self.winfo_exists():
+                return
+            # Ignore quand l'overlay est masqué (désactivé par l'utilisateur).
+            if self.state() != "withdrawn":
+                current = self._desktop_bytes(self._vd.current_desktop_id())
+                if current is not None and current != self._last_desktop_bytes:
+                    _log.info(
+                        "VD switch détecté: %s -> %s — remap overlay",
+                        self._fmt(self._last_desktop_bytes), self._fmt(current),
+                    )
+                    self._last_desktop_bytes = current
+                    self._follow_to_current_desktop()
+        except Exception:
+            _log.exception("VD poll: erreur")
+        finally:
+            try:
+                if self.winfo_exists():
+                    self._vd_after_id = self.after(1500, self._check_desktop_switch)
+            except Exception:
+                pass
+
+    def _follow_to_current_desktop(self):
+        hwnd = self._get_hwnd()
+        # Tentative non intrusive d'abord (MoveWindowToDesktop, sans map/unmap)...
+        moved = False
+        try:
+            gid = self._vd.current_desktop_id()
+            if gid is not None and hwnd:
+                moved = self._vd.move_window_to_desktop(hwnd, gid)
+        except Exception:
+            moved = False
+        on_current = self._vd.is_on_current_desktop(hwnd)
+        _log.info("VD remap: hwnd=%s move_ok=%s is_on_current=%s", hwnd, moved, on_current)
+        # ...puis ré-affichage sur le bureau courant (méthode prouvée, équivalente
+        # au toggle manuel). map/unmap rare → risque tk86t négligeable vs per-click.
+        try:
+            self.withdraw()
+            self.after(80, self._finish_remap)
+        except Exception:
+            _log.exception("VD remap: withdraw a échoué")
+
+    def _finish_remap(self):
+        try:
+            if self.winfo_exists():
+                self.deiconify()
+                self.attributes("-topmost", True)
+                _log.info("VD remap: deiconify OK, is_on_current=%s",
+                          self._vd.is_on_current_desktop(self._get_hwnd()))
+        except Exception:
+            _log.exception("VD remap: deiconify a échoué")
 
     def _start_drag(self, event):
         self._drag_start_x = event.x

@@ -12,6 +12,18 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ---
 
+## [2.4.9] — 2026-06-13
+
+### Corrigé
+
+- **Overlay « fantôme » lors d'un changement de bureau virtuel Windows** — l'indicateur flottant (`overrideredirect` + topmost) restait collé à son bureau d'origine en passant d'un bureau virtuel à l'autre : il apparaissait translucide et non cliquable sur le nouveau bureau, obligeant à le désactiver puis réactiver. L'overlay détecte désormais le changement de bureau et se déplace automatiquement vers le bureau actif.
+  - Nouveau module `src/core/virtual_desktop.py` : wrapper ctypes minimal autour de l'API COM documentée `IVirtualDesktopManager` (`IsWindowOnCurrentVirtualDesktop`, `GetWindowDesktopId`, `MoveWindowToDesktop`).
+  - Détection robuste via le GUID de bureau de la fenêtre au premier plan (la VD manager ne traque pas fiablement les fenêtres `overrideredirect`).
+  - Déplacement via `MoveWindowToDesktop` — **sans cycle map/unmap**, évitant le chemin fragile à l'origine du crash `tk86t.dll` (cf. v2.4.8). Repli withdraw/deiconify uniquement si le déplacement échoue.
+  - Dégradation progressive : sans support COM, la fonctionnalité est simplement ignorée.
+
+---
+
 ## [2.4.8] — 2026-06-12
 
 ### Corrigé
