@@ -136,19 +136,61 @@ class VirtualDesktopManager:
     def current_desktop_id(self):
         """GUID du bureau virtuel actuellement affiché, ou None.
 
-        Déduit via la fenêtre au premier plan (`GetForegroundWindow`), qui est
-        toujours sur le bureau visible. Renvoie None si cette fenêtre n'a pas
-        d'id exploitable (console, fenêtre `overrideredirect`, épinglée).
+        Déduit d'abord via la fenêtre au premier plan (`GetForegroundWindow`),
+        qui est toujours sur le bureau visible. Mais cette fenêtre n'a pas
+        toujours de GUID exploitable (console, fenêtre `overrideredirect` ou
+        cloakée, animation de transition) — c'était la cause du fantôme : on
+        renvoyait None et le changement de bureau passait inaperçu.
+
+        Fallback robuste : si le premier plan n'a pas de GUID, on énumère les
+        fenêtres pour trouver n'importe quelle fenêtre *normale* présente sur le
+        bureau courant. Une fenêtre normale, elle, a toujours un GUID fiable.
         """
         if not self._ptr:
             return None
         try:
             foreground = ctypes.windll.user32.GetForegroundWindow()
-            if not foreground:
-                return None
-            return self.get_window_desktop_id(foreground)
+            if foreground:
+                gid = self.get_window_desktop_id(foreground)
+                if gid is not None:
+                    return gid
+            return self._scan_current_desktop_id()
         except Exception:
             return None
+
+    def _scan_current_desktop_id(self):
+        """Cherche le GUID du bureau courant via une fenêtre normale visible.
+
+        Parcourt les fenêtres top-level : la première qui est visible, sur le
+        bureau courant (`IsWindowOnCurrentVirtualDesktop` — fiable pour une
+        fenêtre normale) et porteuse d'un GUID non-null donne le bureau affiché.
+        Renvoie None si aucune (bureau réellement vide — fantôme alors sans
+        conséquence, rien à survoler).
+        """
+        if not self._ptr:
+            return None
+        user32 = ctypes.windll.user32
+        found = {"gid": None}
+
+        @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+        def _cb(hwnd, _lparam):
+            try:
+                if not user32.IsWindowVisible(hwnd):
+                    return True
+                if self.is_on_current_desktop(hwnd) is True:
+                    gid = self.get_window_desktop_id(hwnd)
+                    if gid is not None:
+                        found["gid"] = gid
+                        return False  # stop l'énumération
+            except Exception:
+                pass
+            return True
+
+        try:
+            user32.EnumWindows(_cb, 0)
+        except Exception:
+            return None
+        return found["gid"]
 
     def follow_to_current_desktop(self, hwnd) -> bool:
         """Déplace `hwnd` vers le bureau virtuel actuellement affiché.

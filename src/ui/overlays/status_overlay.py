@@ -94,6 +94,7 @@ class StatusOverlay(ctk.CTkToplevel):
         self._vd_after_id = None
         self._isoncurrent_ok = True   # IsWindowOnCurrentVirtualDesktop fiable ?
         self._pending_verify = False  # remap déclenché par signal 1, à vérifier
+        self._remap_in_progress = False  # withdraw en cours, deiconify en attente
         _log.info("Overlay VD tracking: available=%s", self._vd.available)
         if self._vd.available:
             self._last_desktop_bytes = self._desktop_bytes(self._vd.current_desktop_id())
@@ -172,10 +173,16 @@ class StatusOverlay(ctk.CTkToplevel):
         # qui ramène réellement une fenêtre overrideredirect sur le bureau visible
         # (MoveWindowToDesktop renvoie S_OK sans rien déplacer pour ces fenêtres).
         # Rare (1× par switch) → risque tk86t négligeable vs map/unmap par clic.
+        # Garde anti-chevauchement : en switch rapide, un nouveau poll ne doit pas
+        # relancer un withdraw alors qu'un deiconify est encore en attente.
+        if self._remap_in_progress:
+            return
         try:
+            self._remap_in_progress = True
             self.withdraw()
             self.after(80, self._finish_remap)
         except Exception:
+            self._remap_in_progress = False
             _log.exception("VD remap: withdraw a échoué")
 
     def _finish_remap(self):
@@ -187,6 +194,8 @@ class StatusOverlay(ctk.CTkToplevel):
                           self._vd.is_on_current_desktop(self._get_hwnd()))
         except Exception:
             _log.exception("VD remap: deiconify a échoué")
+        finally:
+            self._remap_in_progress = False
 
     def _start_drag(self, event):
         self._drag_start_x = event.x
