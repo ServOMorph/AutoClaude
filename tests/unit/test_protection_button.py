@@ -1,6 +1,5 @@
 """Tests pour ui.components.protection_button."""
 
-import pytest
 
 
 def test_import_module():

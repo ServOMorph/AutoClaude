@@ -2,7 +2,6 @@
 
 import gc
 import threading
-import time
 
 try:
     import psutil as _psutil

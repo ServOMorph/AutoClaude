@@ -1,6 +1,5 @@
 """Tests pour core.monitors."""
 
-import pytest
 
 
 def test_import_module():

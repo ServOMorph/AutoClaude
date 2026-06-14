@@ -1,6 +1,5 @@
 """Tests pour ui.theme."""
 
-import pytest
 
 
 def test_import_module():

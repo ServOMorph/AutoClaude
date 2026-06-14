@@ -1,6 +1,5 @@
 """Tests pour core.listener."""
 
-import pytest
 
 
 def test_import_module():

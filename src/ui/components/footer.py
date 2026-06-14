@@ -1,7 +1,7 @@
 """TODO: description du module."""
 
 import customtkinter as ctk
-from src.config.constants import VERSION, URL_WEBSITE
+from src.config.constants import VERSION
 from src.ui import theme
 
 

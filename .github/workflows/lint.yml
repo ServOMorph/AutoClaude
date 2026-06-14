@@ -21,17 +21,13 @@ jobs:
           cache: 'pip'
 
       - name: Install linters
-        run: |
-          pip install ruff black mypy
+        run: pip install -r requirements-dev.txt
 
-      - name: Run Ruff
-        run: |
-          ruff check src/ tests/ || true
+      - name: Ruff (bloquant)
+        run: ruff check src/ tests/
 
-      - name: Run Black (check only)
-        run: |
-          black --check src/ tests/ || true
+      - name: Black (info)
+        run: black --check src/ tests/ || true
 
-      - name: Run MyPy
-        run: |
-          mypy src/ --ignore-missing-imports || true
+      - name: MyPy (info)
+        run: mypy src/ || true

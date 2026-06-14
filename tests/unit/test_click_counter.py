@@ -1,6 +1,5 @@
 """Tests pour ui.components.click_counter."""
 
-import pytest
 
 
 def test_import_module():

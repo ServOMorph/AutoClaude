@@ -1,6 +1,5 @@
 """Tests pour core.clicker."""
 
-import pytest
 
 
 def test_import_module():

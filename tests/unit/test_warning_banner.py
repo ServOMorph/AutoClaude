@@ -1,6 +1,5 @@
 """Tests pour ui.components.warning_banner."""
 
-import pytest
 
 
 def test_import_module():

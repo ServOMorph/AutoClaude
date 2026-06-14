@@ -1,6 +1,5 @@
 """Tests pour ui.components.activate_button."""
 
-import pytest
 
 
 def test_import_module():

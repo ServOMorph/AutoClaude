@@ -1,6 +1,5 @@
 """Tests pour config.settings."""
 
-import pytest
 
 
 def test_import_module():

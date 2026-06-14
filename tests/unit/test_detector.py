@@ -1,6 +1,5 @@
 """Tests pour core.detector."""
 
-import pytest
 
 
 def test_import_module():

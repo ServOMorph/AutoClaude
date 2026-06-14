@@ -1,6 +1,5 @@
 """Tests pour ui.app."""
 
-import pytest
 
 
 def test_import_module():

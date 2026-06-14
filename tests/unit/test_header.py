@@ -1,6 +1,5 @@
 """Tests pour ui.components.header."""
 
-import pytest
 
 
 def test_import_module():

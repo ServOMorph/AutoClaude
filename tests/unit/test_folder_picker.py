@@ -1,6 +1,5 @@
 """Tests pour ui.dialogs.folder_picker."""
 
-import pytest
 
 
 def test_import_module():

@@ -1,6 +1,5 @@
 """Tests pour security.claude_md_protector."""
 
-import pytest
 
 
 def test_import_module():

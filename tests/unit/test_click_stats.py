@@ -5,9 +5,6 @@ IMPORTANT : tous les tests utilisent un répertoire temporaire via la fixture
 (~/.autoclaude/click_stats.json).
 """
 
-import json
-import tempfile
-from pathlib import Path
 from datetime import datetime
 import pytest
 from unittest.mock import patch

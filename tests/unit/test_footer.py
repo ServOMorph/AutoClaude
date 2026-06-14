@@ -1,6 +1,5 @@
 """Tests pour ui.components.footer."""
 
-import pytest
 
 
 def test_import_module():

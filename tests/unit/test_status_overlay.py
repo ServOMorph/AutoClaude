@@ -1,8 +1,6 @@
 """Tests pour ui.overlays.status_overlay — overlay flottant draggable."""
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
-from datetime import datetime
+from unittest.mock import Mock, patch
 
 
 def test_import_module():

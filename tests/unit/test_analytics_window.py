@@ -1,6 +1,5 @@
 """Tests pour ui.dialogs.analytics_window."""
 
-import pytest
 
 
 def test_import_module():

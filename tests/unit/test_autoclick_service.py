@@ -1,6 +1,5 @@
 """Tests pour core.autoclick_service."""
 
-import pytest
 
 
 def test_import_module():
