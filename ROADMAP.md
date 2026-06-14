@@ -257,11 +257,11 @@ is_running() → bool
 | Tâche | Statut | Objectif | Délivrables |
 |-------|--------|---------|-------------|
 | 11.0 **FIX: Double-click bug** | ✅ | ✅ Root cause: sleep(0.4)s trop court | Fix appliqué: sleep(2.0)s post-click (6863c06) |
-| 11.1 Configurer CI/CD GitHub Actions | ⏳ | Tests auto sur chaque PR, linting, couverture | `.github/workflows/tests.yml` + `pytest.yml` |
+| 11.1 Configurer CI/CD GitHub Actions | ✅ | Tests auto sur chaque PR, linting, couverture | `tests.yml` (windows × 3.10/3.11/3.12) + `lint.yml` (ruff gate) — 42/42 ✅ verts (54dd8ba) |
 | 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
 | 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
 | 11.4 Documenter API interne | ⏳ | Générer docstrings valides pour Sphinx | `docs/api/` avec HTML buildable |
-| 11.5 Tester sur Python 3.11 + 3.12 | ⏳ | Vérifier compatibilité declared (3.10+) | Passage tests sur 3.11 et 3.12 |
+| 11.5 Tester sur Python 3.11 + 3.12 | ✅ | Vérifier compatibilité declared (3.10+) | Couvert par matrix CI 11.1 — 3.10/3.11/3.12 tous verts |
 | 11.6 Support macOS basique | ⏳ | Alerter sur permissions écran, tester mouse listener | Marquer comme "expérimental macOS" |
 | 11.7 Refactoring logger | ⏳ | Consolider logique version + exception hook | Moins de dépendances circulaires |
 | 11.8 Release v2.4.0 | ⏳ | Bump version, CHANGELOG, exe PyInstaller | Tag + release GitHub |
@@ -309,3 +309,4 @@ Réalisables rapidement si ressources disponibles après merge :
 | 2026-06-07 | **v2.4.7 ✅** — Retour souris à sa position après chaque clic (`click_and_return`). Graphique 30j : 1 étiquette/5j au lieu de 30 superposées. Fix spec PyInstaller (icône). Release GitHub publiée. |
 | 2026-06-12 | **v2.4.8 ✅ CRASH NATIF TK FIXÉ** — Diagnostic : access violation `0xc0000005` dans tk86t.dll (offset constant `0xeb0a`, Event ID 1000). 3 causes corrigées : appels Tk inter-threads → queue.Queue, FlashIndicator map/unmap → alpha, _keep_on_top périodique → event `<Map>`. faulthandler activé vers crash.log. |
 | 2026-06-13 | **v2.4.9 ✅ OVERLAY BUREAUX VIRTUELS** — Fix fantôme overrideredirect au switch de bureau virtuel Windows. Nouveau `src/core/virtual_desktop.py` (COM IVirtualDesktopManager). Détection via GUID de la fenêtre au premier plan ; remap withdraw/deiconify (MoveWindowToDesktop ment sur overrideredirect). Testé OK par l'utilisateur. Release GitHub + exe publiés. |
+| 2026-06-14 | **Phase 11.1 ✅ CI/CD GITHUB ACTIONS** — Deux workflows : `tests.yml` (windows-latest × Python 3.10/3.11/3.12, 42 tests, couverture) + `lint.yml` (ruff bloquant, black/mypy info). Migration `config.py` → `src/config/constants.py` (shadow namespace corrigé). 27 imports inutilisés auto-fixés (ruff). Tous verts sur GitHub. 11.5 (compat 3.11/3.12) couverte par matrix. |
