@@ -41,13 +41,12 @@ def click(x: int, y: int) -> bool:
 
 
 def click_and_return(x: int, y: int) -> bool:
-    """Sauvegarde la position de la souris, clique en (x, y), puis ramène la souris à sa position d'origine."""
+    """Clique en (x, y) puis ramène la souris à sa position d'origine (sans clic de retour)."""
     if _pyautogui:
         try:
             origin_x, origin_y = _pyautogui.position()
             result = click(x, y)
             _pyautogui.moveTo(origin_x, origin_y, duration=0.05)
-            _pyautogui.click(origin_x, origin_y)
             return result
         except Exception:
             pass
