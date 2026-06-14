@@ -8,6 +8,7 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce pr
 
 ### Corrigé
 
+- **Clic fantôme à la position d'origine** — après avoir cliqué le bouton détecté, la souris retournait à sa position initiale *et effectuait un clic* à cet endroit. Suppression du clic de retour (`click_and_return`) : seul le déplacement visuel est conservé.
 - **Overlay fantôme Win+Tab (même bureau)** — Task View cloake les fenêtres sans changer leur GUID de bureau ; ni `IsWindowOnCurrentVirtualDesktop` ni `fg_changed` ne détectaient cet état. Ajout d'un 3ᵉ signal : `DwmGetWindowAttribute(DWMWA_CLOAKED)` sur le HWND de l'overlay lui-même — déclenche un remap dès que la fenêtre est cloakée par le DWM (retour sur le même bureau inclus).
 - **Overlay fantôme fenêtre sans GUID au premier plan** — `current_desktop_id()` renvoyait `None` quand `GetForegroundWindow()` n'avait pas de GUID exploitable (console, fenêtre cloakée, animation de transition), bloquant `fg_changed`. Ajout d'un fallback `EnumWindows` : on cherche n'importe quelle fenêtre normale visible sur le bureau courant, dont le GUID est toujours fiable.
 - **Remap en chevauchement lors de switchs rapides** — garde `_remap_in_progress` empêche un nouveau `withdraw` de partir pendant qu'un `deiconify` est encore en attente.

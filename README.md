@@ -125,10 +125,9 @@ La fenêtre d'analyses offre :
 
 Une fois qu'AutoClaude détecte le bouton et clique dessus :
 1. La souris retourne à sa position d'origine (avant le clic)
-2. Un clic est effectué à cette position
-3. Le cooldown `COOLDOWN_DURATION` s'applique avant la prochaine détection
+2. Le cooldown `COOLDOWN_DURATION` s'applique avant la prochaine détection
 
-Cela permet au curseur de ne pas rester sur le bouton cliqué et d'éviter les faux positifs dus au survol persistant.
+Cela évite que le curseur reste sur le bouton cliqué et prévient les faux positifs dus au survol persistant.
 
 ### Arrêt
 
