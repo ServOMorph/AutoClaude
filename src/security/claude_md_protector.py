@@ -21,7 +21,7 @@ class ClaudeMdProtector:
     """TODO: description de ClaudeMdProtector."""
     def __init__(self, project_path: str | Path):
         """TODO: description de __init__."""
-        self._project_path = Path(project_path)
+        self._project_path = Path(project_path).resolve()
         self._claude_dir = self._project_path / ".claude"
         self._target = self._claude_dir / "CLAUDE.md"
 
