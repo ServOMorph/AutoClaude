@@ -264,7 +264,7 @@ is_running() → bool
 | 11.5 Tester sur Python 3.11 + 3.12 | ✅ | Vérifier compatibilité declared (3.10+) | Couvert par matrix CI 11.1 — 3.10/3.11/3.12 tous verts |
 | 11.6 Support macOS basique | ⏳ | Alerter sur permissions écran, tester mouse listener | Marquer comme "expérimental macOS" |
 | 11.7 Refactoring logger | ⏳ | Consolider logique version + exception hook | Moins de dépendances circulaires |
-| 11.8 Release v2.4.0 | ⏳ | Bump version, CHANGELOG, exe PyInstaller | Tag + release GitHub |
+| 11.8 Release v2.5.0 | ✅ | Bump version, CHANGELOG, exe PyInstaller | v2.5.0 tag + release GitHub, exe 120 MB (9e7b5fb) |
 
 ### Post-merge quick wins
 
@@ -310,3 +310,4 @@ Réalisables rapidement si ressources disponibles après merge :
 | 2026-06-12 | **v2.4.8 ✅ CRASH NATIF TK FIXÉ** — Diagnostic : access violation `0xc0000005` dans tk86t.dll (offset constant `0xeb0a`, Event ID 1000). 3 causes corrigées : appels Tk inter-threads → queue.Queue, FlashIndicator map/unmap → alpha, _keep_on_top périodique → event `<Map>`. faulthandler activé vers crash.log. |
 | 2026-06-13 | **v2.4.9 ✅ OVERLAY BUREAUX VIRTUELS** — Fix fantôme overrideredirect au switch de bureau virtuel Windows. Nouveau `src/core/virtual_desktop.py` (COM IVirtualDesktopManager). Détection via GUID de la fenêtre au premier plan ; remap withdraw/deiconify (MoveWindowToDesktop ment sur overrideredirect). Testé OK par l'utilisateur. Release GitHub + exe publiés. |
 | 2026-06-14 | **Phase 11.1 ✅ CI/CD GITHUB ACTIONS** — Deux workflows : `tests.yml` (windows-latest × Python 3.10/3.11/3.12, 42 tests, couverture) + `lint.yml` (ruff bloquant, black/mypy info). Migration `config.py` → `src/config/constants.py` (shadow namespace corrigé). 27 imports inutilisés auto-fixés (ruff). Tous verts sur GitHub. 11.5 (compat 3.11/3.12) couverte par matrix. |
+| 2026-06-14 | **v2.5.0 ✅ PHASE 11 RELEASE** — CI/CD GitHub Actions (tests + lint) + dual-signal overlay VD (anti-loop) + security audit (0 CVE, pip-audit). Bump 2.4.9 → 2.5.0. PyInstaller exe généré (120 MB). Tag + release GitHub publiés. 42 tests ✅, 0 ruff warnings. |
