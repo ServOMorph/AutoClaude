@@ -92,11 +92,13 @@ class StatusOverlay(ctk.CTkToplevel):
         self._hwnd = None
         self._last_desktop_bytes = None
         self._vd_after_id = None
+        self._isoncurrent_ok = True   # IsWindowOnCurrentVirtualDesktop fiable ?
+        self._pending_verify = False  # remap déclenché par signal 1, à vérifier
         _log.info("Overlay VD tracking: available=%s", self._vd.available)
         if self._vd.available:
             self._last_desktop_bytes = self._desktop_bytes(self._vd.current_desktop_id())
             _log.info("Overlay VD initial desktop=%s", self._fmt(self._last_desktop_bytes))
-            self._vd_after_id = self.after(1500, self._check_desktop_switch)
+            self._vd_after_id = self.after(1000, self._check_desktop_switch)
 
     @staticmethod
     def _desktop_bytes(guid):
@@ -116,43 +118,60 @@ class StatusOverlay(ctk.CTkToplevel):
         return self._hwnd
 
     def _check_desktop_switch(self):
-        """Re-déplace l'overlay vers le bureau virtuel actif si l'utilisateur a changé."""
+        """Re-déplace l'overlay vers le bureau virtuel actif si l'utilisateur a changé.
+
+        Deux signaux indépendants, car aucun n'est fiable seul sur une fenêtre
+        `overrideredirect` :
+          1. `IsWindowOnCurrentVirtualDesktop(overlay)` — direct, mais peut « mentir »
+             (toujours True) selon les versions de Windows.
+          2. Changement du GUID de bureau de la fenêtre au premier plan — robuste,
+             mais aveugle quand cette fenêtre n'a pas de GUID (bureau vide, Task View).
+        """
         try:
             if not self.winfo_exists():
                 return
-            # Ignore quand l'overlay est masqué (désactivé par l'utilisateur).
-            if self.state() != "withdrawn":
-                current = self._desktop_bytes(self._vd.current_desktop_id())
-                if current is not None and current != self._last_desktop_bytes:
-                    _log.info(
-                        "VD switch détecté: %s -> %s — remap overlay",
-                        self._fmt(self._last_desktop_bytes), self._fmt(current),
-                    )
-                    self._last_desktop_bytes = current
-                    self._follow_to_current_desktop()
+            if self.state() == "withdrawn":
+                self._pending_verify = False
+                return
+
+            hwnd = self._get_hwnd()
+            on_current = self._vd.is_on_current_desktop(hwnd) if self._isoncurrent_ok else None
+
+            # Anti-boucle : si un remap déclenché par le signal 1 n'a rien changé
+            # (toujours False juste après), c'est que le signal ment → on le coupe.
+            if self._pending_verify:
+                self._pending_verify = False
+                if on_current is False:
+                    self._isoncurrent_ok = False
+                    on_current = None
+                    _log.warning("VD: IsWindowOnCurrentVirtualDesktop non fiable "
+                                 "(overrideredirect) — désactivé, fallback fenêtre 1er plan")
+
+            current = self._desktop_bytes(self._vd.current_desktop_id())
+            fg_changed = current is not None and current != self._last_desktop_bytes
+            if current is not None:
+                self._last_desktop_bytes = current
+
+            if on_current is False or fg_changed:
+                _log.info("VD remap déclenché (on_current=%s fg_changed=%s desktop=%s)",
+                          on_current, fg_changed, self._fmt(current))
+                if on_current is False:
+                    self._pending_verify = True
+                self._follow_to_current_desktop()
         except Exception:
             _log.exception("VD poll: erreur")
         finally:
             try:
                 if self.winfo_exists():
-                    self._vd_after_id = self.after(1500, self._check_desktop_switch)
+                    self._vd_after_id = self.after(1000, self._check_desktop_switch)
             except Exception:
                 pass
 
     def _follow_to_current_desktop(self):
-        hwnd = self._get_hwnd()
-        # Tentative non intrusive d'abord (MoveWindowToDesktop, sans map/unmap)...
-        moved = False
-        try:
-            gid = self._vd.current_desktop_id()
-            if gid is not None and hwnd:
-                moved = self._vd.move_window_to_desktop(hwnd, gid)
-        except Exception:
-            moved = False
-        on_current = self._vd.is_on_current_desktop(hwnd)
-        _log.info("VD remap: hwnd=%s move_ok=%s is_on_current=%s", hwnd, moved, on_current)
-        # ...puis ré-affichage sur le bureau courant (méthode prouvée, équivalente
-        # au toggle manuel). map/unmap rare → risque tk86t négligeable vs per-click.
+        # Ré-affichage sur le bureau courant via withdraw/deiconify : seule méthode
+        # qui ramène réellement une fenêtre overrideredirect sur le bureau visible
+        # (MoveWindowToDesktop renvoie S_OK sans rien déplacer pour ces fenêtres).
+        # Rare (1× par switch) → risque tk86t négligeable vs map/unmap par clic.
         try:
             self.withdraw()
             self.after(80, self._finish_remap)
@@ -164,7 +183,7 @@ class StatusOverlay(ctk.CTkToplevel):
             if self.winfo_exists():
                 self.deiconify()
                 self.attributes("-topmost", True)
-                _log.info("VD remap: deiconify OK, is_on_current=%s",
+                _log.info("VD remap terminé, is_on_current=%s",
                           self._vd.is_on_current_desktop(self._get_hwnd()))
         except Exception:
             _log.exception("VD remap: deiconify a échoué")
