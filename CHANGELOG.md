@@ -4,11 +4,32 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
-## [Unreleased]
+## [2.5.0] — 2026-06-14
+
+### Ajouté
+
+- **CI/CD GitHub Actions** — Deux workflows automatisés :
+  - `tests.yml` : tests sur Windows (Python 3.10, 3.11, 3.12) avec couverture de code
+  - `lint.yml` : linting strict avec ruff (gate bloquant), black et mypy (informationnel)
+  - 42 tests passent, 0 avertissements ruff
+
+### Amélioré
+
+- **Overlay bureaux virtuels** — détection dual-signal plus robuste :
+  - Anti-loop : si la première détection échoue, fallback vers signal secondaire (GUID fenêtre au premier plan)
+  - Réduit les faux positifs lors de changements de bureau rapides
+  - Poll interval 1500ms → 1000ms pour meilleure réactivité
+
+- **Sécurité** : audit complet du code (pip-audit : 0 CVE) + normalisation des symlinks dans `ClaudeMdProtector` (`.resolve()`)
 
 ### Corrigé
 
-### Ajouté
+- **Texte corrompu** dans CONTRIBUTING.md
+
+### Notes techniques
+
+- Migration `config.py` (racine) → `src/config/constants.py` — résout le shadowing du namespace Python
+- 27 imports inutilisés auto-fixés (ruff)
 
 ---
 
