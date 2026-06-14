@@ -4,6 +4,22 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.1] — 2026-06-14
+
+### Amélioré
+
+- **Clic retour position** — après avoir cliqué sur le bouton détecté, la souris retourne à sa position d'origine et effectue un clic à cet endroit, évitant le survol persistant sur le bouton
+
+### Corrigé
+
+- **Imports `src.config.constants`** — correction des imports `config.constants` → `src.config.constants` dans `autoclick_service.py` et `detector.py` (erreur de démarrage à la régression)
+
+### Documentation
+
+- README : section "Comportement après clic" — description des 3 étapes post-détection
+
+---
+
 ## [2.5.0] — 2026-06-14
 
 ### Ajouté

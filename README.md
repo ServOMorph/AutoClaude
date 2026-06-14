@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
 [![Lint](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml)
-[![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.5.1-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
 > **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
@@ -120,6 +120,15 @@ La fenêtre d'analyses offre :
 - **Mode Récent** (défaut) : fenêtre glissante — dernières 24h / 7 derniers jours / 30 derniers jours / 12 derniers mois
 - **Mode Tout** : historique complet avec navigation Précédent / Suivant (paginé par jour, mois ou année selon la période)
 - **Bandeau de stats** : total, moyenne par jour actif, record journalier, jours actifs
+
+### Comportement après clic
+
+Une fois qu'AutoClaude détecte le bouton et clique dessus :
+1. La souris retourne à sa position d'origine (avant le clic)
+2. Un clic est effectué à cette position
+3. Le cooldown `COOLDOWN_DURATION` s'applique avant la prochaine détection
+
+Cela permet au curseur de ne pas rester sur le bouton cliqué et d'éviter les faux positifs dus au survol persistant.
 
 ### Arrêt
 
