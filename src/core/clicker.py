@@ -47,6 +47,7 @@ def click_and_return(x: int, y: int) -> bool:
             origin_x, origin_y = _pyautogui.position()
             result = click(x, y)
             _pyautogui.moveTo(origin_x, origin_y, duration=0.05)
+            _pyautogui.click(origin_x, origin_y)
             return result
         except Exception:
             pass
