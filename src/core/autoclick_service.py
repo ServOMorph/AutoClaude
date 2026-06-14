@@ -3,7 +3,7 @@
 import time
 import threading
 
-from config import COOLDOWN_DURATION, PRE_CLICK_DELAY
+from config.constants import COOLDOWN_DURATION, PRE_CLICK_DELAY
 from src.core import detector, clicker, click_stats
 from src.core.listener import InputListener
 from src.core.monitors import get_all_monitors

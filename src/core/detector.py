@@ -1,6 +1,6 @@
 """TODO: description du module."""
 
-from config import CONFIDENCE_THRESHOLD
+from config.constants import CONFIDENCE_THRESHOLD
 from src.core.monitors import get_all_monitors
 
 try:

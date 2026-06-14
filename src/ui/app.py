@@ -3,8 +3,7 @@
 import queue
 import webbrowser
 import customtkinter as ctk
-from config import DEBUG_COMPTEUR
-from src.config.constants import APP_NAME, VERSION, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB
+from src.config.constants import APP_NAME, VERSION, WINDOW_WIDTH, WINDOW_HEIGHT, ASSET_LOGO_ICO, ASSET_YES_PNG, URL_GITHUB, DEBUG_COMPTEUR
 from src.config import settings
 from src.core.autoclick_service import AutoclickService
 from src.core import health_monitor

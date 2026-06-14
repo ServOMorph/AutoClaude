@@ -33,6 +33,12 @@ WINDOW_HEIGHT = 980
 # Defaults
 DEFAULT_INTERVAL = 0.5
 
+# Tuning détection/clic (modifiable sans toucher au code source)
+DEBUG_COMPTEUR = False
+COOLDOWN_DURATION = 3.0
+CONFIDENCE_THRESHOLD = 0.90
+PRE_CLICK_DELAY = 1.0
+
 # Overlay flottant
 OVERLAY_WIDTH = 120
 OVERLAY_HEIGHT = 40
