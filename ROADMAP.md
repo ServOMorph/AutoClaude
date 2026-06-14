@@ -258,7 +258,7 @@ is_running() → bool
 |-------|--------|---------|-------------|
 | 11.0 **FIX: Double-click bug** | ✅ | ✅ Root cause: sleep(0.4)s trop court | Fix appliqué: sleep(2.0)s post-click (6863c06) |
 | 11.1 Configurer CI/CD GitHub Actions | ✅ | Tests auto sur chaque PR, linting, couverture | `tests.yml` (windows × 3.10/3.11/3.12) + `lint.yml` (ruff gate) — 42/42 ✅ verts (54dd8ba) |
-| 11.2 Ajouter badges CI à README | ⏳ | Visibilité status build + couverture | Badges dans header README |
+| 11.2 Ajouter badges CI à README | ✅ | Visibilité status build + couverture | Badges Tests + Lint dans header README (4ed8468) |
 | 11.3 Audit de sécurité complet | ⏳ | Vérifier dépendances (pip audit), injections possibles | Rapport audit_security.md |
 | 11.4 Documenter API interne | ⏳ | Générer docstrings valides pour Sphinx | `docs/api/` avec HTML buildable |
 | 11.5 Tester sur Python 3.11 + 3.12 | ✅ | Vérifier compatibilité declared (3.10+) | Couvert par matrix CI 11.1 — 3.10/3.11/3.12 tous verts |
