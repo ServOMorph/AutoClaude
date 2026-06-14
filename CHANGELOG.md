@@ -4,6 +4,16 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.2] — 2026-06-14
+
+### Corrigé
+
+- **Overlay fantôme Win+Tab (même bureau)** — Task View cloake les fenêtres sans changer leur GUID de bureau ; ni `IsWindowOnCurrentVirtualDesktop` ni `fg_changed` ne détectaient cet état. Ajout d'un 3ᵉ signal : `DwmGetWindowAttribute(DWMWA_CLOAKED)` sur le HWND de l'overlay lui-même — déclenche un remap dès que la fenêtre est cloakée par le DWM (retour sur le même bureau inclus).
+- **Overlay fantôme fenêtre sans GUID au premier plan** — `current_desktop_id()` renvoyait `None` quand `GetForegroundWindow()` n'avait pas de GUID exploitable (console, fenêtre cloakée, animation de transition), bloquant `fg_changed`. Ajout d'un fallback `EnumWindows` : on cherche n'importe quelle fenêtre normale visible sur le bureau courant, dont le GUID est toujours fiable.
+- **Remap en chevauchement lors de switchs rapides** — garde `_remap_in_progress` empêche un nouveau `withdraw` de partir pendant qu'un `deiconify` est encore en attente.
+
+---
+
 ## [2.5.1] — 2026-06-14
 
 ### Amélioré

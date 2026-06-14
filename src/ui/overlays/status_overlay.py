@@ -5,7 +5,7 @@ from src.config.constants import (
     OVERLAY_ALPHA, OVERLAY_COLOR_ACTIVE, OVERLAY_COLOR_INACTIVE, OVERLAY_TEXT_COLOR,
 )
 from src.config import settings
-from src.core.virtual_desktop import VirtualDesktopManager
+from src.core.virtual_desktop import VirtualDesktopManager, is_cloaked
 from src.core.logger import get_logger
 
 _log = get_logger()
@@ -148,14 +148,19 @@ class StatusOverlay(ctk.CTkToplevel):
                     _log.warning("VD: IsWindowOnCurrentVirtualDesktop non fiable "
                                  "(overrideredirect) — désactivé, fallback fenêtre 1er plan")
 
+            # Signal 3 (cloaked DWM) : détecte directement l'état fantôme, y compris
+            # le cloak provoqué par Task View (Win+Tab) sans changement de bureau,
+            # que ni on_current ni fg_changed ne voient.
+            cloaked = is_cloaked(hwnd)
+
             current = self._desktop_bytes(self._vd.current_desktop_id())
             fg_changed = current is not None and current != self._last_desktop_bytes
             if current is not None:
                 self._last_desktop_bytes = current
 
-            if on_current is False or fg_changed:
-                _log.info("VD remap déclenché (on_current=%s fg_changed=%s desktop=%s)",
-                          on_current, fg_changed, self._fmt(current))
+            if on_current is False or fg_changed or cloaked:
+                _log.info("VD remap déclenché (on_current=%s fg_changed=%s cloaked=%s desktop=%s)",
+                          on_current, fg_changed, cloaked, self._fmt(current))
                 if on_current is False:
                     self._pending_verify = True
                 self._follow_to_current_desktop()

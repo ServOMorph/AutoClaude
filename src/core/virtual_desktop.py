@@ -35,6 +35,28 @@ _CLSID_VirtualDesktopManager = "{aa509086-5ca9-4c25-8f95-589d3c07b48a}"
 _IID_IVirtualDesktopManager = "{a5cd92ff-29be-454c-8d04-d82879fb3f1b}"
 _CLSCTX_ALL = 0x17
 _GA_ROOT = 2
+_DWMWA_CLOAKED = 14  # DwmGetWindowAttribute : !=0 => fenêtre masquée/cloakée
+
+
+def is_cloaked(hwnd):
+    """État cloaked DWM d'une fenêtre : 0 = visible, !=0 = masquée, None = erreur.
+
+    Le DWM cloake (`DWM_CLOAKED_SHELL=2`) toute fenêtre qui n'appartient pas au
+    bureau virtuel affiché — y compris quand Task View (Win+Tab) la « laisse »
+    sur l'ancien bureau sans changer son GUID. Détecte directement l'état
+    fantôme de l'overlay, indépendamment de la fenêtre au premier plan.
+    """
+    if not hwnd:
+        return None
+    try:
+        val = wintypes.DWORD()
+        hr = ctypes.windll.dwmapi.DwmGetWindowAttribute(
+            wintypes.HWND(hwnd), _DWMWA_CLOAKED,
+            ctypes.byref(val), ctypes.sizeof(val),
+        )
+        return None if hr != 0 else val.value
+    except Exception:
+        return None
 
 
 class VirtualDesktopManager:
