@@ -4,6 +4,17 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.3] — 2026-07-05
+
+### Corrigé
+
+- **Overlay fantôme persistant (Win+Tab, bureau virtuel, plein écran/pygame)** — l'approche précédente (détecter le changement de bureau via GUID puis réagir) laissait passer plusieurs cas, notamment l'ouverture d'une fenêtre plein écran (pygame). Remplacée par une boucle de réaffirmation continue (`_keep_visible`, 800 ms) qui ne dépend plus de détecter la cause :
+  - `reassert_topmost` (nouveau, `src/core/virtual_desktop.py`) : `SetWindowPos(HWND_TOPMOST, NOACTIVATE)` Win32 direct à chaque tick — corrige la perte de z-order face à une fenêtre plein écran. `attributes("-topmost", True)` côté Tk est un no-op quand l'attribut est déjà vrai, d'où la nécessité de l'appel Win32.
+  - `is_cloaked` (DWM) déclenche un remap `withdraw`/`deiconify` throttlé à 4 s si l'overlay est réellement masqué — couvre Win+Tab, bureaux virtuels et plein écran.
+  - Suppression du tracking GUID (`IsWindowOnCurrentVirtualDesktop`, `EnumWindows`, suivi de bureau courant) devenu inutile, réduisant la surface de code fragile sur ce chemin.
+
+---
+
 ## [2.5.2] — 2026-06-14
 
 ### Corrigé

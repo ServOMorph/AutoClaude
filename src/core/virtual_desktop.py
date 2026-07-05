@@ -37,6 +37,36 @@ _CLSCTX_ALL = 0x17
 _GA_ROOT = 2
 _DWMWA_CLOAKED = 14  # DwmGetWindowAttribute : !=0 => fenêtre masquée/cloakée
 
+# SetWindowPos : réaffirmation topmost sans déplacer/redimensionner/activer.
+_HWND_TOPMOST = -1
+_SWP_NOSIZE = 0x0001
+_SWP_NOMOVE = 0x0002
+_SWP_NOACTIVATE = 0x0010
+_SWP_NOOWNERZORDER = 0x0200
+
+
+def reassert_topmost(hwnd) -> bool:
+    """Force la fenêtre au sommet du z-order topmost via SetWindowPos (Win32).
+
+    Complément indispensable à `attributes("-topmost", True)` : Tk mémorise
+    l'état de l'attribut et ne ré-émet pas SetWindowPos quand il est déjà vrai —
+    un simple re-set côté Tk est donc un no-op. On appelle SetWindowPos
+    directement pour reprendre le dessus quand une fenêtre plein écran a volé le
+    rang topmost (cas « overlay passé derrière »). N'active pas la fenêtre
+    (NOACTIVATE, pas de vol de focus) et ne décloake PAS une fenêtre masquée par
+    le DWM — voir `is_cloaked` pour ce cas complémentaire.
+    """
+    if not hwnd or sys.platform != "win32":
+        return False
+    try:
+        return bool(ctypes.windll.user32.SetWindowPos(
+            wintypes.HWND(hwnd), wintypes.HWND(_HWND_TOPMOST),
+            0, 0, 0, 0,
+            _SWP_NOMOVE | _SWP_NOSIZE | _SWP_NOACTIVATE | _SWP_NOOWNERZORDER,
+        ))
+    except Exception:
+        return False
+
 
 def is_cloaked(hwnd):
     """État cloaked DWM d'une fenêtre : 0 = visible, !=0 = masquée, None = erreur.

@@ -1,14 +1,20 @@
 import sys
+import time
 import customtkinter as ctk
 from src.config.constants import (
     OVERLAY_WIDTH, OVERLAY_HEIGHT, OVERLAY_MARGIN,
     OVERLAY_ALPHA, OVERLAY_COLOR_ACTIVE, OVERLAY_COLOR_INACTIVE, OVERLAY_TEXT_COLOR,
 )
 from src.config import settings
-from src.core.virtual_desktop import VirtualDesktopManager, is_cloaked
+from src.core.virtual_desktop import VirtualDesktopManager, is_cloaked, reassert_topmost
 from src.core.logger import get_logger
 
 _log = get_logger()
+
+# Cadence de la boucle anti-fantôme et intervalle minimal entre deux remaps
+# lorsqu'un cloak persiste (borne le flicker et le risque crash tk86t).
+OVERLAY_POLL_MS = 800
+REMAP_THROTTLE_S = 4.0
 
 
 class StatusOverlay(ctk.CTkToplevel):
@@ -84,102 +90,67 @@ class StatusOverlay(ctk.CTkToplevel):
 
         self._keep_on_top()
 
-        # Suivi des bureaux virtuels Windows : sur une fenêtre overrideredirect
-        # topmost, Windows laisse un « fantôme » non cliquable quand on change de
-        # bureau. On déplace l'overlay vers le bureau courant dès qu'on détecte
-        # un changement. cf. memory crash_tk86t_signature (on évite map/unmap).
-        self._vd = VirtualDesktopManager()
+        # Anti-fantôme (overrideredirect + topmost). Deux causes distinctes,
+        # réaffirmées à chaque tick sans détection fragile plutôt que « détecter
+        # puis réagir » (jeu de whack-a-mole qui laissait passer pygame, etc.) :
+        #   1. Perte de z-order (fenêtre plein écran qui passe devant) → on
+        #      réaffirme topmost via SetWindowPos Win32 (inconditionnel, cheap).
+        #   2. Cloak DWM (Win+Tab, bureaux virtuels, plein écran) → l'overlay
+        #      devient translucide/non cliquable ; seul un cycle withdraw/
+        #      deiconify le décloake. Déclenché sur `is_cloaked`, throttlé pour
+        #      borner le flicker et le risque crash tk86t (cf. memory).
         self._hwnd = None
-        self._last_desktop_bytes = None
         self._vd_after_id = None
-        self._isoncurrent_ok = True   # IsWindowOnCurrentVirtualDesktop fiable ?
-        self._pending_verify = False  # remap déclenché par signal 1, à vérifier
-        self._remap_in_progress = False  # withdraw en cours, deiconify en attente
-        _log.info("Overlay VD tracking: available=%s", self._vd.available)
-        if self._vd.available:
-            self._last_desktop_bytes = self._desktop_bytes(self._vd.current_desktop_id())
-            _log.info("Overlay VD initial desktop=%s", self._fmt(self._last_desktop_bytes))
-            self._vd_after_id = self.after(1000, self._check_desktop_switch)
-
-    @staticmethod
-    def _desktop_bytes(guid):
-        return bytes(guid) if guid is not None else None
-
-    @staticmethod
-    def _fmt(b):
-        return b.hex()[:12] if b else "None"
+        self._remap_in_progress = False   # withdraw en cours, deiconify en attente
+        self._last_remap = 0.0            # monotonic du dernier remap (throttle)
+        if sys.platform == "win32":
+            self._vd_after_id = self.after(OVERLAY_POLL_MS, self._keep_visible)
 
     def _get_hwnd(self):
         if self._hwnd:
             return self._hwnd
         try:
-            self._hwnd = self._vd.root_hwnd(self.winfo_id())
+            self._hwnd = VirtualDesktopManager.root_hwnd(self.winfo_id())
         except Exception:
             self._hwnd = None
         return self._hwnd
 
-    def _check_desktop_switch(self):
-        """Re-déplace l'overlay vers le bureau virtuel actif si l'utilisateur a changé.
+    def _keep_visible(self):
+        """Boucle qui maintient l'overlay visible ET cliquable, quelle que soit
+        la cause du fantôme.
 
-        Deux signaux indépendants, car aucun n'est fiable seul sur une fenêtre
-        `overrideredirect` :
-          1. `IsWindowOnCurrentVirtualDesktop(overlay)` — direct, mais peut « mentir »
-             (toujours True) selon les versions de Windows.
-          2. Changement du GUID de bureau de la fenêtre au premier plan — robuste,
-             mais aveugle quand cette fenêtre n'a pas de GUID (bureau vide, Task View).
+        - `reassert_topmost` à chaque tick : reprend le dessus si une fenêtre
+          plein écran a volé le rang topmost (cheap, sans effet de bord).
+        - `is_cloaked` : répond directement à « suis-je fantôme maintenant ? »
+          (Win+Tab, bureau virtuel, plein écran). Si oui, on décloake via un
+          remap withdraw/deiconify, throttlé à REMAP_THROTTLE_S pour éviter toute
+          boucle de flicker quand le cloak persiste (appli plein écran active).
         """
         try:
             if not self.winfo_exists():
                 return
-            if self.state() == "withdrawn":
-                self._pending_verify = False
-                return
-
-            hwnd = self._get_hwnd()
-            on_current = self._vd.is_on_current_desktop(hwnd) if self._isoncurrent_ok else None
-
-            # Anti-boucle : si un remap déclenché par le signal 1 n'a rien changé
-            # (toujours False juste après), c'est que le signal ment → on le coupe.
-            if self._pending_verify:
-                self._pending_verify = False
-                if on_current is False:
-                    self._isoncurrent_ok = False
-                    on_current = None
-                    _log.warning("VD: IsWindowOnCurrentVirtualDesktop non fiable "
-                                 "(overrideredirect) — désactivé, fallback fenêtre 1er plan")
-
-            # Signal 3 (cloaked DWM) : détecte directement l'état fantôme, y compris
-            # le cloak provoqué par Task View (Win+Tab) sans changement de bureau,
-            # que ni on_current ni fg_changed ne voient.
-            cloaked = is_cloaked(hwnd)
-
-            current = self._desktop_bytes(self._vd.current_desktop_id())
-            fg_changed = current is not None and current != self._last_desktop_bytes
-            if current is not None:
-                self._last_desktop_bytes = current
-
-            if on_current is False or fg_changed or cloaked:
-                _log.info("VD remap déclenché (on_current=%s fg_changed=%s cloaked=%s desktop=%s)",
-                          on_current, fg_changed, cloaked, self._fmt(current))
-                if on_current is False:
-                    self._pending_verify = True
-                self._follow_to_current_desktop()
+            if self.state() != "withdrawn" and not self._remap_in_progress:
+                hwnd = self._get_hwnd()
+                reassert_topmost(hwnd)
+                if is_cloaked(hwnd) and (time.monotonic() - self._last_remap) >= REMAP_THROTTLE_S:
+                    _log.info("Overlay fantôme (cloaked) → remap")
+                    self._last_remap = time.monotonic()
+                    self._follow_to_current_desktop()
         except Exception:
-            _log.exception("VD poll: erreur")
+            _log.exception("Overlay _keep_visible: erreur")
         finally:
             try:
                 if self.winfo_exists():
-                    self._vd_after_id = self.after(1000, self._check_desktop_switch)
+                    self._vd_after_id = self.after(OVERLAY_POLL_MS, self._keep_visible)
             except Exception:
                 pass
 
     def _follow_to_current_desktop(self):
-        # Ré-affichage sur le bureau courant via withdraw/deiconify : seule méthode
-        # qui ramène réellement une fenêtre overrideredirect sur le bureau visible
-        # (MoveWindowToDesktop renvoie S_OK sans rien déplacer pour ces fenêtres).
-        # Rare (1× par switch) → risque tk86t négligeable vs map/unmap par clic.
-        # Garde anti-chevauchement : en switch rapide, un nouveau poll ne doit pas
-        # relancer un withdraw alors qu'un deiconify est encore en attente.
+        # Cycle withdraw/deiconify : seule méthode qui décloake réellement une
+        # fenêtre overrideredirect (MoveWindowToDesktop renvoie S_OK sans rien
+        # déplacer pour ces fenêtres). Throttlé par l'appelant → risque tk86t
+        # borné. Garde anti-chevauchement : un nouveau tick ne relance pas un
+        # withdraw pendant qu'un deiconify est encore en attente.
         if self._remap_in_progress:
             return
         try:
@@ -188,17 +159,16 @@ class StatusOverlay(ctk.CTkToplevel):
             self.after(80, self._finish_remap)
         except Exception:
             self._remap_in_progress = False
-            _log.exception("VD remap: withdraw a échoué")
+            _log.exception("Overlay remap: withdraw a échoué")
 
     def _finish_remap(self):
         try:
             if self.winfo_exists():
                 self.deiconify()
-                self.attributes("-topmost", True)
-                _log.info("VD remap terminé, is_on_current=%s",
-                          self._vd.is_on_current_desktop(self._get_hwnd()))
+                reassert_topmost(self._get_hwnd())
+                _log.info("Overlay remap terminé, cloaked=%s", is_cloaked(self._get_hwnd()))
         except Exception:
-            _log.exception("VD remap: deiconify a échoué")
+            _log.exception("Overlay remap: deiconify a échoué")
         finally:
             self._remap_in_progress = False
 
