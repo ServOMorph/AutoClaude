@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "autoclaude"
-version = "2.5.2"
+version = "2.5.4"
 description = "Outil d'autoclick pour Claude Code — détecte et clique automatiquement les boutons de confirmation dans VS Code"
 readme = "README.md"
 license = {text = "MIT"}
@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "pyautogui>=0.9.53",

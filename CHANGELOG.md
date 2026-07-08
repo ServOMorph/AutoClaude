@@ -4,6 +4,16 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.4] — 2026-07-08
+
+### Corrigé
+
+- **Crash aléatoire sur sessions longues (`access violation` natif)** — diagnostic via `faulthandler` (déjà actif dans `run.py`, sortie `~/.autoclaude/logs/crash.log`) : 84 crashs capturés, tous avec la même signature : le thread principal meurt dans `tkinter.mainloop`, à l'intérieur de `tk86t.dll` version **8.6.12** (bug connu de cette version de Tk, livrée avec Python 3.11). Les snapshots santé (RSS/handles/threads) confirment qu'il ne s'agit pas d'une fuite de ressources — ils plafonnent sur toute la durée des sessions observées. Le ralentissement système parfois observé juste avant le crash est corrélé aux switchs de bureaux virtuels (contexte déclencheur), pas à une accumulation en mémoire.
+  - **Correctif** : passage du runtime à **Python 3.13** (Tk 8.6.15). L'exécutable distribué (`AutoClaude.exe`, build PyInstaller) embarque désormais `tk86t.dll` 8.6.15 au lieu de 8.6.12.
+  - Build à réaliser depuis un venv Python 3.13 (`.venv`) pour que PyInstaller embarque la bonne version de Tk — voir `requires-python` dans `pyproject.toml`, classifieur 3.13 ajouté.
+
+---
+
 ## [2.5.3] — 2026-07-05
 
 ### Corrigé
