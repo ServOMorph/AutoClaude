@@ -115,7 +115,8 @@ def _pyautogui_multimonitor(path: str, confidence: float = 0.8):
             region = (mon["x"], mon["y"], mon["width"], mon["height"])
             try:
                 box = _pyautogui.locateOnScreen(path, confidence=confidence, region=region)
-            except TypeError:
+            except (TypeError, NotImplementedError):
+                # confidence indisponible sans OpenCV → dégradation sans seuil
                 box = _pyautogui.locateOnScreen(path, region=region)
             if box:
                 x, y = _pyautogui.center(box)
@@ -132,7 +133,8 @@ def _pyautogui_single(path: str, confidence: float = 0.8):
     try:
         try:
             box = _pyautogui.locateOnScreen(path, confidence=confidence)
-        except TypeError:
+        except (TypeError, NotImplementedError):
+            # confidence indisponible sans OpenCV → dégradation sans seuil
             box = _pyautogui.locateOnScreen(path)
         if not box:
             return None

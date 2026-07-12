@@ -4,6 +4,16 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.5] — 2026-07-12
+
+### Corrigé
+
+- **Détection d'image totalement inopérante sur environnement Python neuf** — après installation d'une nouvelle version de Python (venv reconstruit à froid), `opencv-python`, `mss` et `screeninfo` étaient marqués "optionnels" et commentés dans `requirements.txt`, donc jamais installés. Sans OpenCV, `pyautogui.locateOnScreen(confidence=...)` lève `NotImplementedError`, non rattrapé par le `except TypeError` existant dans `_pyautogui_single`/`_pyautogui_multimonitor` (`src/core/detector.py`) : tous les backends de détection tombaient à `None` silencieusement.
+  - `requirements.txt` : `opencv-python`, `mss`, `numpy`, `screeninfo` déplacés en dépendances requises (ne sont plus de simples optimisations — leur absence casse la détection).
+  - `src/core/detector.py` : `except (TypeError, NotImplementedError)` pour un vrai fallback dégradé (sans seuil de confiance) quand OpenCV est absent, au lieu d'un échec silencieux.
+
+---
+
 ## [2.5.4] — 2026-07-08
 
 ### Corrigé

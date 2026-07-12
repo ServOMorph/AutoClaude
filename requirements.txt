@@ -6,11 +6,12 @@ Pillow>=10.0.0
 matplotlib>=3.8.0
 psutil>=5.9.0
 
-# Optionnelles — détection rapide (mss + OpenCV)
-# opencv-python>=4.8.0
-# mss>=9.0.0
-# numpy>=1.24.0
-# screeninfo>=0.8.1
+# Détection (requis pour un fonctionnement fiable — sans OpenCV,
+# pyautogui.locateOnScreen(confidence=...) lève NotImplementedError)
+opencv-python>=4.8.0
+mss>=9.0.0
+numpy>=1.24.0
+screeninfo>=0.8.1
 
 # Build — installer voir pyproject.toml [project.optional-dependencies]
 # pyinstaller>=6.0.0
