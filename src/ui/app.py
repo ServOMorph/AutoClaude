@@ -1,5 +1,6 @@
 """TODO: description du module."""
 
+import gc
 import queue
 import webbrowser
 import customtkinter as ctk
@@ -67,6 +68,7 @@ class AutoClaudeApp(ctk.CTk):
         self._flash: FlashIndicator | None = None
 
         self._poll_ui_queue()
+        self._schedule_gc()
         health_monitor.start()
         self._log.info("AutoClaude démarré (v%s)", VERSION)
 
@@ -196,6 +198,20 @@ class AutoClaudeApp(ctk.CTk):
         except queue.Empty:
             pass
         self.after(100, self._poll_ui_queue)
+
+    def _schedule_gc(self):
+        """Collecte gc explicite dans le thread principal Tk (toutes les 60s).
+
+        Le gc automatique est désactivé globalement (run.py) car il peut se
+        déclencher dans un thread secondaire (ex. worker autoclick) : finaliser
+        un objet Tk hors du thread principal corrompt l'état natif Tcl et cause
+        un crash différé dans tk86t.dll. En centralisant la collecte ici, toutes
+        les finalisations d'objets Tk se font dans le bon thread.
+        """
+        collected = gc.collect()
+        if collected:
+            self._log.info("gc.collect() (thread principal) : %d objets collectés", collected)
+        self.after(60_000, self._schedule_gc)
 
     def _on_toggle(self, active: bool):
         """TODO: description de _on_toggle."""

@@ -1,6 +1,5 @@
 """Watchdog interne : snapshots mémoire/handles/threads toutes les 5 minutes."""
 
-import gc
 import threading
 
 try:
@@ -13,7 +12,7 @@ from src.core.logger import get_logger
 _INTERVAL = 300  # 5 minutes
 _WARN_RSS_MB = 500
 _WARN_HANDLES = 5000
-_WARN_THREADS = 20
+_WARN_THREADS = 30  # baseline observée ~21-45 selon services actifs (pynput, mss, cv2...)
 
 _monitor_thread: threading.Thread | None = None
 _stop_event = threading.Event()
@@ -37,15 +36,15 @@ def _loop():
     log = get_logger()
     log.info("HealthMonitor démarré")
     while not _stop_event.wait(_INTERVAL):
-        # Force la collecte cyclique — Tk garde des références circulaires
-        # (after callbacks, widget→master) qui s'accumulent sur sessions longues.
-        collected = gc.collect()
+        # Pas de gc.collect() ici : le gc automatique est désactivé globalement
+        # (run.py) et centralisé dans le thread principal Tk (app.py) — finaliser
+        # un objet Tk depuis ce thread watchdog corromprait l'état natif Tcl.
         snap = _snapshot()
         if not snap:
             continue
         log.info(
-            "Santé — RSS: %(rss_mb)s Mo | handles: %(handles)s | threads: %(threads)s | gc: %(gc)s",
-            {**snap, "gc": collected},
+            "Santé — RSS: %(rss_mb)s Mo | handles: %(handles)s | threads: %(threads)s",
+            snap,
         )
         if snap.get("rss_mb", 0) > _WARN_RSS_MB:
             log.warning("RSS élevé : %.1f Mo (seuil %d Mo)", snap["rss_mb"], _WARN_RSS_MB)

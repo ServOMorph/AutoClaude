@@ -33,6 +33,10 @@ def _get_mss():
 try:
     import cv2 as _cv2
     import numpy as _np
+    # Le pool de threads interne d'OpenCV (~20 threads) est inutile pour un
+    # matchTemplate sur une capture d'écran et gonfle inutilement le compteur
+    # de threads du process. Un seul thread suffit largement en pratique.
+    _cv2.setNumThreads(1)
 except Exception:
     _cv2 = None
     _np = None

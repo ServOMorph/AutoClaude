@@ -4,6 +4,21 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.6] — 2026-07-17
+
+### Corrigé
+
+- **Crash `access violation` persistant sur sessions longues (> 1h), malgré le passage à Tk 8.6.15 (v2.5.4)** — le crash continuait de se produire (6 nouveaux dumps `crash.log` sur le runtime Python 3.13, dernier après ~1h19 de session autoclick active). Nouveau diagnostic : le garbage collector Python peut finaliser des objets Tk (`CTkFont`, `Variable`, images…) depuis un thread secondaire — l'interpréteur Tcl étant lié à son thread créateur, cela corrompt son état natif et provoque un crash différé, aléatoire, dans `tk86t.dll`, indépendamment de la version de Tk. Deux vecteurs identifiés : le `gc.collect()` explicite exécuté toutes les 5 min dans le thread `HealthMonitor` (`src/core/health_monitor.py`), et le gc automatique déclenché dans le thread `AutoclickWorker` par les allocations numpy répétées (`src/core/detector.py`, toutes les 0,5s) — ce qui explique la corrélation avec les sessions actives longues.
+  - `run.py` : `gc.disable()` au démarrage — désactive le gc générationnel automatique (le comptage de références continue de libérer la grande majorité des objets normalement).
+  - `src/ui/app.py` : `gc.collect()` explicite, planifié via `after()` toutes les 60s, **dans le thread principal Tk** — centralise toutes les finalisations d'objets Tk dans le bon thread.
+  - `src/core/health_monitor.py` : retrait du `gc.collect()` du thread watchdog (déplacé dans le thread principal, voir ci-dessus).
+
+### Amélioré
+
+- **Bruit de threads OpenCV** — `cv2.setNumThreads(1)` (`src/core/detector.py`) : le pool de threads interne d'OpenCV (~20 threads) était inutile pour un `matchTemplate` sur une capture d'écran et déclenchait en continu le warning "Threads élevés" du HealthMonitor. Seuil d'alerte du HealthMonitor ajusté de 20 à 30 (baseline réelle observée).
+
+---
+
 ## [2.5.5] — 2026-07-12
 
 ### Corrigé
