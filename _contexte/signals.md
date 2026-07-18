@@ -1,10 +1,6 @@
-# Signals — autoclaude   (MAJ 2026-07-18)
+# Signals — autoclaude   (MAJ 2026-07-19)
 
 ## Actions ouvertes
-- [P1|ouvert] Implémenter Phase 1 de roadmap_model_badge.md (badge overlay de base)
-  fait quand: src/ui/overlays/model_badge.py existe, drag & drop + clic droit
-  (changer modèle / supprimer) fonctionnels, tests unitaires passants
-  réf: roadmap_model_badge.md, src/ui/overlays/status_overlay.py (pattern de référence)
 
 ## Questions ouvertes
 
@@ -13,31 +9,31 @@
 ## Blocages
 
 ## Contexte chaud
-- Fenêtres cibles du badge modèle : VSCode + extension Claude Code (chat intégré)
-- Choix du modèle sur le badge : manuel (pas de détection auto), cycle via clic droit
 
-## Dernière session (2026-07-18)
+## Dernière session (2026-07-19)
 <!-- Écrasé intégralement par /close. Synthèse < 25 lignes. -->
 
 ## Décisions prises
-- Badge overlay violet foncé (#5A189A) pour afficher le modèle Claude actif
-- Suit la fenêtre VSCode ciblée, drag & drop au clic gauche
-- Clic droit : menu contextuel (changer modèle / supprimer badge) — pas d'action au clic gauche
-- Modèle choisi manuellement, pas de détection automatique
-- Roadmap en 3 phases : badge de base, attachement fenêtre VSCode, intégration UI + persistance
+- Roadmap badge modèle Claude clôturée (3/3 phases implémentées et testées)
+- Persistance des badges identifiée par titre de fenêtre (hwnd non stable entre sessions)
+- roadmap_model_badge.md archivé dans _archives/
 
 ## Livrables produits ou modifiés
-- roadmap_model_badge.md : créé (3 phases, spécifications validées)
-- src/config/constants.py : ajout MODEL_BADGE_WIDTH/HEIGHT/COLOR/TEXT_COLOR
+- src/core/window_tracker.py : créé (énumération/suivi fenêtres VSCode Win32)
+- src/ui/overlays/model_badge.py : attachement fenêtre, suivi position/visibilité, persistance
+- src/ui/dialogs/model_badge_picker.py : créé (sélection fenêtre + modèle)
+- src/ui/app.py : bouton création badge, multi-badges, restauration au démarrage
+- src/config/settings.py : clé model_badges
+- README.md, DOCS/ARCHITECTURE.md, CHANGELOG.md : documentation mise à jour
+- _archives/roadmap_model_badge.md : roadmap archivée (3 phases [FAIT])
+- 32 nouveaux tests unitaires, suite complète 87/87 passants
 
 ## Hypothèses validées / invalidées
-- VALIDE : approche manuelle pour le choix du modèle (pas d'OCR/détection auto)
-- VALIDE : clic droit pour changer modèle + supprimer (pas de clic gauche)
-- EN ATTENTE : aucun code fonctionnel implémenté (Phase 1 non démarrée)
+- VALIDE : suivi par polling léger (pattern OVERLAY_POLL_MS) suffisant, pas besoin du remap anti-fantôme complet de StatusOverlay
+- VALIDE : identification des badges persistés par titre de fenêtre plutôt que hwnd
 
 ## Prochaine étape exacte
-Démarrer Phase 1 : créer src/ui/overlays/model_badge.py (CTkToplevel, drag & drop,
-menu contextuel clic droit) en réutilisant le pattern de status_overlay.py.
+Aucune action de suivi identifiée. Fonctionnalité badge modèle Claude complète.
 
 ## Question bloquante pour la session suivante
 Aucune

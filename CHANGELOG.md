@@ -4,12 +4,24 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.8] — 2026-07-19
+
+### Ajouté
+
+- Finalisation de la fonctionnalité badge modèle Claude : roadmap `roadmap_model_badge.md` archivée dans `_archives/` (3/3 phases [FAIT]), documentation (`README.md`, `DOCS/ARCHITECTURE.md`) mise à jour pour refléter l'attachement fenêtre, le multi-badges et la persistance.
+
 ## [2.5.7] — 2026-07-18
 
 ### Ajouté
 
-- **Roadmap badge overlay modèle Claude** (`roadmap_model_badge.md`) — planification en 3 phases d'un overlay violet foncé attaché à une fenêtre VSCode+Claude Code, affichant le modèle actif (Haiku/Sonnet/Opus/Fable). Modèle choisi manuellement à la création ; clic droit ouvre un menu contextuel pour changer le modèle ou supprimer le badge (clic gauche réservé au drag & drop).
-- `src/config/constants.py` : constantes `MODEL_BADGE_WIDTH`, `MODEL_BADGE_HEIGHT`, `MODEL_BADGE_COLOR`, `MODEL_BADGE_TEXT_COLOR` en préparation de la Phase 1.
+- **Badge overlay modèle Claude** — overlay violet foncé attaché à une fenêtre VSCode+Claude Code, affichant le modèle actif (Haiku/Sonnet/Opus/Fable).
+  - `src/ui/overlays/model_badge.py` : `ModelBadge` (CTkToplevel sans bordure, topmost), drag & drop au clic gauche, menu contextuel clic droit (changer modèle / supprimer).
+  - `src/core/window_tracker.py` : énumération des fenêtres VSCode (Win32 `EnumWindows`, filtre classe/titre), suivi position/existence/minimisation par hwnd (`WindowTracker`), dégradation progressive hors Windows.
+  - Attachement fenêtre : le badge suit la fenêtre VSCode ciblée (position relative maintenue, polling léger), se masque si elle est minimisée/fermée/cloakée (réutilise `is_cloaked` de `virtual_desktop.py`), réapparaît sinon.
+  - `src/ui/dialogs/model_badge_picker.py` : dialogue de sélection (fenêtre VSCode cible + modèle initial) déclenché par le bouton "Créer un badge modèle" dans `app.py`.
+  - Multi-badges (un par fenêtre VSCode), persistance dans `~/.autoclaude/settings.json` (`model_badges` : titre fenêtre, position relative, modèle) et restauration au démarrage si la fenêtre existe encore.
+  - `src/config/constants.py` : constantes `MODEL_BADGE_WIDTH`, `MODEL_BADGE_HEIGHT`, `MODEL_BADGE_COLOR`, `MODEL_BADGE_TEXT_COLOR`.
+  - 32 nouveaux tests unitaires (badge, window_tracker, dialogue, intégration app/settings).
 
 ## [2.5.6] — 2026-07-17
 

@@ -17,7 +17,10 @@ AutoClaude/
 │   │   ├── detector.py     # Détection image par template matching
 │   │   ├── clicker.py      # Clic souris
 │   │   ├── listener.py     # Écoute clavier/souris (Esc, auto-stop)
-│   │   └── autoclick_service.py  # Orchestration thread + événements
+│   │   ├── autoclick_service.py  # Orchestration thread + événements
+│   │   ├── health_monitor.py     # Watchdog stabilité (threads, mémoire)
+│   │   ├── virtual_desktop.py    # Détection cloak DWM, bureaux virtuels (Win32)
+│   │   └── window_tracker.py     # Énumération/suivi fenêtres VSCode (Win32 EnumWindows)
 │   ├── security/
 │   │   └── claude_md_protector.py  # Injection restrictions dans .claude/CLAUDE.md
 │   └── ui/
@@ -29,8 +32,14 @@ AutoClaude/
 │       │   ├── activate_button.py
 │       │   ├── protection_button.py
 │       │   └── footer.py
-│       └── dialogs/
-│           └── folder_picker.py
+│       ├── dialogs/
+│       │   ├── folder_picker.py
+│       │   ├── analytics_window.py
+│       │   └── model_badge_picker.py    # Sélection fenêtre VSCode + modèle
+│       └── overlays/
+│           ├── status_overlay.py        # Indicateur flottant ON/OFF
+│           ├── flash_indicator.py       # Cercle rouge debug clic
+│           └── model_badge.py           # Badge modèle attaché à une fenêtre VSCode
 └── DOCS/
 ```
 
@@ -72,6 +81,14 @@ Chaque backend est importé au chargement du module avec `try/except` silencieux
 ### Persistance paramètres
 
 `src/config/settings.py` lit/écrit `~/.autoclaude/settings.json`. Aucun chemin absolu personnel dans le code source — `Path.home()` est résolu à l'exécution.
+
+### Badge modèle Claude — attachement fenêtre
+
+`window_tracker.py` isole les appels Win32 (`EnumWindows`, `GetWindowRect`, `IsWindow`, `IsIconic`) derrière une dégradation progressive (`sys.platform != "win32"` → `None`/`False`/liste vide). `WindowTracker` compose ces primitives et réutilise `is_cloaked()` de `virtual_desktop.py` pour détecter les fenêtres masquées par changement de bureau virtuel.
+
+`ModelBadge` (`model_badge.py`) suit sa fenêtre cible par polling léger (`MODEL_BADGE_POLL_MS`, pattern `OVERLAY_POLL_MS`) : repositionnement relatif si visible, `withdraw()`/`deiconify()` sinon — volontairement plus simple que le remap anti-fantôme de `StatusOverlay` (pas de suivi actif inter-bureaux, le badge se contente de refléter l'état de sa fenêtre parente).
+
+La persistance (`settings["model_badges"]`) identifie chaque badge par **titre de fenêtre** (pas par hwnd, non stable entre sessions) : au démarrage, `AutoClaudeApp._restore_model_badges()` ne recrée un badge que si une fenêtre au titre correspondant est retrouvée via `list_vscode_windows()`.
 
 ## Dépendances
 

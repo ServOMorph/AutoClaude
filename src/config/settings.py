@@ -14,6 +14,7 @@ _DEFAULTS = {
     "overlay_enabled": True,
     "overlay_x": None,
     "overlay_y": None,
+    "model_badges": [],
 }
 
 

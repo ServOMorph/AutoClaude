@@ -16,7 +16,7 @@ Claude utilisé (Haiku, Sonnet, Opus, Fable) dans une fenêtre VSCode + extensio
 
 ## Phases
 
-### Phase 1 — Badge overlay de base [TODO]
+### Phase 1 — Badge overlay de base [FAIT]
 - Créer `src/ui/overlays/model_badge.py` : CTkToplevel sans bordure, topmost,
   badge violet foncé affichant le nom du modèle.
 - Drag & drop au clic gauche (réutiliser le pattern StatusOverlay).
@@ -27,7 +27,7 @@ Claude utilisé (Haiku, Sonnet, Opus, Fable) dans une fenêtre VSCode + extensio
 **⏸ Checkpoint** — Demander à l'utilisateur de faire `/compact` avant de continuer.
 Attendre sa réponse écrite. Ne pas commencer la phase suivante sans confirmation.
 
-### Phase 2 — Attachement à une fenêtre VSCode [TODO]
+### Phase 2 — Attachement à une fenêtre VSCode [FAIT]
 - `src/core/window_tracker.py` : énumération des fenêtres VSCode (Win32 EnumWindows,
   filtre sur classe/titre), suivi position/taille/état d'une fenêtre par hwnd.
 - Le badge suit la fenêtre : position relative maintenue quand la fenêtre bouge
@@ -40,7 +40,7 @@ Attendre sa réponse écrite. Ne pas commencer la phase suivante sans confirmati
 **⏸ Checkpoint** — Demander à l'utilisateur de faire `/compact` avant de continuer.
 Attendre sa réponse écrite. Ne pas commencer la phase suivante sans confirmation.
 
-### Phase 3 — Intégration UI et persistance [TODO]
+### Phase 3 — Intégration UI et persistance [FAIT]
 - Bouton "Créer un badge modèle" dans l'UI principale (app.py) : sélection de la
   fenêtre VSCode cible + modèle initial, puis création du badge.
 - Gestion multi-badges (un par fenêtre VSCode).

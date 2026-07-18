@@ -22,6 +22,9 @@ from src.ui.overlays.status_overlay import StatusOverlay
 from src.ui.overlays.flash_indicator import FlashIndicator
 from src.ui.dialogs.folder_picker import pick_folder
 from src.ui.dialogs.analytics_window import AnalyticsWindow
+from src.ui.dialogs.model_badge_picker import pick_model_badge_target
+from src.ui.overlays.model_badge import ModelBadge
+from src.core.window_tracker import list_vscode_windows
 
 
 class AutoClaudeApp(ctk.CTk):
@@ -66,6 +69,9 @@ class AutoClaudeApp(ctk.CTk):
             self._overlay.withdraw()
 
         self._flash: FlashIndicator | None = None
+
+        self._model_badges: list[ModelBadge] = []
+        self._restore_model_badges()
 
         self._poll_ui_queue()
         self._schedule_gc()
@@ -135,6 +141,21 @@ class AutoClaudeApp(ctk.CTk):
         ).pack(pady=(0, 4))
 
         OverlayToggle(self, on_change=self._on_overlay_toggle).pack(pady=(0, 12))
+
+        ctk.CTkButton(
+            self,
+            text="🏷️  Créer un badge modèle",
+            font=theme.font_body(),
+            fg_color=theme.PALETTE["bg_secondary"],
+            hover_color=theme.PALETTE["border"],
+            text_color=theme.PALETTE["text"],
+            border_color=theme.PALETTE["border"],
+            border_width=1,
+            corner_radius=8,
+            width=360,
+            height=38,
+            command=self._create_model_badge,
+        ).pack(pady=(0, 12))
 
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(pady=(0, 16))
@@ -292,6 +313,50 @@ class AutoClaudeApp(ctk.CTk):
         """TODO: description de _open_analytics."""
         AnalyticsWindow(self)
 
+    def _create_model_badge(self):
+        """Ouvre le dialogue de sélection puis crée le badge modèle correspondant."""
+        result = pick_model_badge_target(self)
+        if not result:
+            return
+        hwnd, title, model = result
+        self._add_model_badge(hwnd, title, model, rel_x=20, rel_y=20)
+        self._save_model_badges()
+
+    def _add_model_badge(self, hwnd: int, title: str, model: str, rel_x: int, rel_y: int):
+        badge = ModelBadge(
+            self,
+            model=model,
+            target_hwnd=hwnd,
+            window_title=title,
+            rel_x=rel_x,
+            rel_y=rel_y,
+            on_state_change=self._save_model_badges,
+        )
+        badge.on_remove = lambda b=badge: self._remove_model_badge(b)
+        self._model_badges.append(badge)
+
+    def _remove_model_badge(self, badge: ModelBadge):
+        if badge in self._model_badges:
+            self._model_badges.remove(badge)
+        self._save_model_badges()
+
+    def _save_model_badges(self):
+        settings.set("model_badges", [b.get_state() for b in self._model_badges])
+
+    def _restore_model_badges(self):
+        saved = settings.get("model_badges")
+        if not saved:
+            return
+        available = list_vscode_windows()
+        for entry in saved:
+            hwnd = next((h for h, t in available if t == entry.get("title")), None)
+            if hwnd is None:
+                continue
+            self._add_model_badge(
+                hwnd, entry.get("title"), entry.get("model", "Sonnet"),
+                rel_x=entry.get("rel_x", 20), rel_y=entry.get("rel_y", 20),
+            )
+
     def _on_close(self):
         """TODO: description de _on_close."""
         self._stop_service()
@@ -306,5 +371,11 @@ class AutoClaudeApp(ctk.CTk):
             except Exception:
                 pass
             self._flash = None
+        for badge in list(self._model_badges):
+            try:
+                badge.destroy()
+            except Exception:
+                pass
+        self._model_badges.clear()
         self._log.info("AutoClaude fermé")
         self.destroy()

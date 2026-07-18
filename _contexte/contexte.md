@@ -7,8 +7,9 @@ Outil Python qui détecte et clique automatiquement sur les boutons de confirmat
 Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (packaging)
 
 ## État actuel (réécrit intégralement à chaque /close)
-Roadmap du badge overlay modèle Claude définie (roadmap_model_badge.md, 3 phases).
-Constantes UI ajoutées (MODEL_BADGE_*). Phase 1 (badge de base) non démarrée.
+Badge overlay modèle Claude terminé (3/3 phases). Attachement fenêtre VSCode, drag & drop,
+multi-badges, persistance settings avec restauration au démarrage. 87 tests unitaires passants.
+roadmap_model_badge.md archivée dans _archives/.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -16,3 +17,5 @@ Constantes UI ajoutées (MODEL_BADGE_*). Phase 1 (badge de base) non démarrée.
   attaché à une fenêtre VSCode+Claude Code, modèle choisi manuellement, clic droit
   pour changer le modèle ou supprimer le badge (pas d'action au clic gauche, réservé
   au drag & drop).
+- 2026-07-19 : Persistance des badges par titre de fenêtre (hwnd non stable entre sessions) ;
+  restauration au démarrage uniquement si la fenêtre existe encore.

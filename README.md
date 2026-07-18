@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
 [![Lint](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml)
-[![Version](https://img.shields.io/badge/version-2.5.7-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.5.8-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
 > **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
@@ -32,6 +32,7 @@ Quand Claude Code travaille dans VS Code, il demande régulièrement une confirm
 - **Compteur de clics** avec historique persisté
 - **Analyses graphiques** : navigation temporelle (Récent / Tout), bandeau de statistiques (total, moyenne, record, jours actifs), graphes par Aujourd'hui/7j/30j/12m/Tout
 - **Indicateur flottant** : overlay always-on-top en bas à gauche de l'écran, cliquable pour activer/désactiver l'autoclick depuis n'importe quelle application
+- **Badge modèle Claude** : overlay violet foncé attaché à une fenêtre VSCode, affiche le modèle actif (Haiku/Sonnet/Opus/Fable), suit la fenêtre et se masque avec elle, multi-badges, position et modèle persistés
 - Logs rotatifs (`~/.autoclaude/logs/`) et watchdog de stabilité pour une utilisation longue durée
 - Interface sombre SéréniaTech (CustomTkinter)
 - Paramètres persistés localement (`~/.autoclaude/settings.json`)
@@ -112,6 +113,17 @@ Un petit indicateur apparaît en bas à gauche de l'écran, par-dessus toutes le
 
 Un clic sur l'indicateur active ou désactive l'autoclick directement, sans revenir à la fenêtre principale. L'affichage se contrôle via le switch **"Afficher l'indicateur flottant"** dans l'UI.
 
+
+### Badge modèle Claude
+
+Le bouton **"Créer un badge modèle"** ouvre un dialogue de sélection : fenêtre VSCode cible (détectée via énumération Win32) et modèle initial. Le badge créé :
+
+- suit la fenêtre VSCode choisie (position relative maintenue quand elle se déplace)
+- se masque automatiquement si la fenêtre est minimisée, fermée ou cloakée (changement de bureau virtuel), réapparaît sinon
+- se déplace par drag & drop (clic gauche) — la position relative est mise à jour et persistée
+- clic droit : menu contextuel pour changer le modèle affiché ou supprimer le badge
+
+Plusieurs badges peuvent coexister (un par fenêtre VSCode). Fenêtre cible, position et modèle sont persistés dans `~/.autoclaude/settings.json` et restaurés au démarrage si la fenêtre existe encore.
 
 ### Analyses
 
@@ -207,8 +219,8 @@ DEBUG_COMPTEUR = True
 ## Architecture
 
 ```
-src/core/       détection, clic, listener, service autoclick, logger, health monitor
-src/ui/         interface CustomTkinter + composants + dialogs + overlays
+src/core/       détection, clic, listener, service autoclick, logger, health monitor, window_tracker
+src/ui/         interface CustomTkinter + composants + dialogs + overlays (status, flash, badge modèle)
 src/security/   ClaudeMdProtector
 src/config/     constantes et persistance JSON
 assets/         yes.png, Icone AutoClaude.png, Icone AutoClaude.ico, ui-screenshot.png
@@ -236,7 +248,7 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 18 juillet 2026 (v2.5.7)
+Date : 19 juillet 2026 (v2.5.8)
 
 ---
 
