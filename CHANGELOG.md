@@ -4,6 +4,13 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.7] — 2026-07-18
+
+### Ajouté
+
+- **Roadmap badge overlay modèle Claude** (`roadmap_model_badge.md`) — planification en 3 phases d'un overlay violet foncé attaché à une fenêtre VSCode+Claude Code, affichant le modèle actif (Haiku/Sonnet/Opus/Fable). Modèle choisi manuellement à la création ; clic droit ouvre un menu contextuel pour changer le modèle ou supprimer le badge (clic gauche réservé au drag & drop).
+- `src/config/constants.py` : constantes `MODEL_BADGE_WIDTH`, `MODEL_BADGE_HEIGHT`, `MODEL_BADGE_COLOR`, `MODEL_BADGE_TEXT_COLOR` en préparation de la Phase 1.
+
 ## [2.5.6] — 2026-07-17
 
 ### Corrigé
