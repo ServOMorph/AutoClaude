@@ -98,7 +98,7 @@ La persistance (`settings["model_badges"]`) identifie chaque badge par **titre d
 | `Pillow` | Logo PNG dans CTk | Oui |
 | `pyautogui` | Détection + clic fallback | Oui |
 | `pynput` | Listener clavier/souris | Oui |
-| `opencv-python` | Template matching précis | Non |
-| `mss` | Capture multi-moniteur | Non |
-| `numpy` | Traitement image cv2 | Non |
-| `screeninfo` | Énumération moniteurs | Non |
+| `opencv-python` | Template matching précis | Oui |
+| `mss` | Capture multi-moniteur | Oui |
+| `numpy` | Traitement image cv2 | Oui |
+| `screeninfo` | Énumération moniteurs | Oui |
