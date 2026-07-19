@@ -1,0 +1,84 @@
+# AutoClaude
+
+AutoClaude est un outil d'automatisation et de protection de projet en Python conçu spécifiquement pour assister Claude Code lors de son exécution dans VS Code sur Windows. Il détecte le bouton de confirmation récurrent de Claude Code et clique dessus automatiquement, évitant les interruptions constantes pour le développeur.
+
+## Informations Clés
+- **Rôle principal** : Autoclicker intelligent par détection visuelle + protection de projet locale.
+- **Technologies** : Python 3.13, CustomTkinter (GUI sombre), OpenCV (Template Matching), mss (Capture multi-moniteurs), Win32 API (Suivi de fenêtres natif).
+- **Auteurs** : ServOMorph / SéréniaTech (https://serenia-tech.fr)
+- **Licence** : MIT
+
+---
+
+## Fonctionnalités Principales
+
+1. **Autoclick par Template Matching** :
+   - Capture de l'écran en continu via `mss` et détection de l'image cible (`assets/yes.png` représentant le bouton "Approuver") avec OpenCV.
+   - Algorithme de retour de souris : déplace la souris sur le bouton pour cliquer puis la repositionne à sa position d'origine.
+   - Protection anti-boucle : délai minimal configuré après chaque clic pour laisser le bouton disparaître.
+
+2. **Indicateur Flottant (StatusOverlay)** :
+   - Petit indicateur graphique *always-on-top* et *draggable* (position persistée).
+   - Affiche le statut actif/inactif (Vert/Rouge) et permet de basculer l'état au clic.
+   - Gestion des bureaux virtuels Windows via l'API DWM (`is_cloaked`) pour s'assurer que l'indicateur suit le bureau virtuel actif.
+
+3. **Badge de Modèle Claude** :
+   - Badge graphique violet attaché dynamiquement à une fenêtre VS Code ciblée.
+   - Affiche le modèle d'IA sélectionné (Haiku, Sonnet, Opus, Fable).
+   - Suit automatiquement les mouvements, la minimisation, et le masquage de la fenêtre VS Code par pooling Win32 léger (`WindowTracker`).
+
+4. **Protection Claude Code (ClaudeMdProtector)** :
+   - Injection de directives et règles de sécurité à l'intérieur du fichier `.claude/CLAUDE.md` d'un projet pour limiter le comportement de Claude Code.
+
+5. **Analyses de Clics** :
+   - Historique des clics enregistrés localement avec des statistiques (total, moyenne, records) et représentations graphiques (Matplotlib) sur 5 périodes.
+
+---
+
+## Structure du Dépôt
+
+- `run.py` : Point d'entrée de l'application (charge l'interface graphique Tk).
+- `src/` : Code source de l'application.
+  - `src/core/` : Logique applicative.
+    - `detector.py` : Détecteur visuel (OpenCV / PyAutoGUI).
+    - `clicker.py` : Clic souris.
+    - `listener.py` : Écoutes clavier (arrêt par Esc) et souris (arrêt par mouvement).
+    - `autoclick_service.py` : Service d'orchestration threadé.
+    - `health_monitor.py` : Surveillance de la mémoire (RSS), handles et threads.
+    - `virtual_desktop.py` : Gestion des bureaux virtuels.
+    - `window_tracker.py` : Suivi Win32 des fenêtres VS Code.
+  - `src/ui/` : Interface utilisateur CustomTkinter.
+    - `app.py` : Fenêtre principale.
+    - `components/` : Éléments réutilisables (Header, Footer, ActivateButton...).
+    - `overlays/` : Fenêtres transparentes (StatusOverlay, FlashIndicator, ModelBadge).
+  - `src/security/` : Gestionnaire de protection.
+    - `claude_md_protector.py` : Lecture/écriture dans `.claude/CLAUDE.md`.
+  - `src/config/` : Configuration et persistance.
+    - `constants.py` : Constantes et style.
+    - `settings.py` : Paramètres utilisateurs persistés dans `~/.autoclaude/settings.json`.
+- `tests/` : Suite de tests unitaires (couvrant la logique de statistiques, overlays et tracker).
+- `DOCS/` : Documentation approfondie.
+  - `DOCS/ARCHITECTURE.md` : Décisions de conception et flux de données.
+  - `DOCS/SECURITY.md` : API de protection `.claude/CLAUDE.md`.
+
+---
+
+## Installation & Usage Rapide
+
+```bash
+# Installation des dépendances obligatoires
+pip install -r requirements.txt
+
+# Lancement
+python run.py
+```
+
+*Note : Sous Windows, un exécutable autonome peut être généré à l'aide de `build.py` (qui exécute PyInstaller).*
+
+---
+
+## Points de Stabilité et Maintenance
+
+- **Tkinter Thread-Safety** : Toutes les mises à jour de l'UI provenant de threads secondaires transitent par une `queue.Queue` lue par le thread principal Tkinter.
+- **Garbage Collection (Tk long-run)** : Pour contrer les plantages de Tkinter sur de longues sessions, le Garbage Collector automatique est désactivé au démarrage et exécuté explicitement toutes les 60 secondes depuis le thread principal.
+- **Dégradation Progressive** : Si les bibliothèques d'énumération Win32 ou COM ne sont pas disponibles (hors Windows), les fonctionnalités liées aux overlays et aux badges s'estompent silencieusement sans planter l'outil de base.
