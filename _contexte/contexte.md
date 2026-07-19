@@ -7,9 +7,11 @@ Outil Python qui détecte et clique automatiquement sur les boutons de confirmat
 Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (packaging)
 
 ## État actuel (réécrit intégralement à chaque /close)
-Badge overlay modèle Claude terminé (3/3 phases). Attachement fenêtre VSCode, drag & drop,
-multi-badges, persistance settings avec restauration au démarrage. 87 tests unitaires passants.
-roadmap_model_badge.md archivée dans _archives/.
+Badge overlay modèle Claude fonctionnel, mais avait provoqué des crashs intermittents
+(access violation tk86t.dll) via des cycles withdraw/deiconify et geometry() non throttlés.
+Correctif appliqué (throttle 4s, geometry conditionnel, pattern StatusOverlay) + logs de
+crash rendus datables/exploitables. Non confirmé en conditions réelles longue durée.
+94 tests unitaires passants, v2.5.9.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -19,3 +21,8 @@ roadmap_model_badge.md archivée dans _archives/.
   au drag & drop).
 - 2026-07-19 : Persistance des badges par titre de fenêtre (hwnd non stable entre sessions) ;
   restauration au démarrage uniquement si la fenêtre existe encore.
+- 2026-07-19 : Crash tk86t.dll causé par les cycles withdraw/deiconify + geometry non
+  throttlés de ModelBadge ; corrigé en réutilisant le pattern anti-crash de StatusOverlay
+  (throttle 4s, geometry conditionnel, reassert_topmost). Logs de crash instrumentés
+  (marqueur de session horodaté, sentinelle session.lock) pour rendre tout futur crash
+  analysable.

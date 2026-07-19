@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Tests](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/tests.yml)
 [![Lint](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml/badge.svg)](https://github.com/ServOMorph/AutoClaude/actions/workflows/lint.yml)
-[![Version](https://img.shields.io/badge/version-2.5.8-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
+[![Version](https://img.shields.io/badge/version-2.5.9-blue.svg)](https://github.com/ServOMorph/AutoClaude/releases)
 
 > **Conçu pour [Claude Code](https://claude.ai/code) dans VS Code** — donne plus d'autonomie à Claude Code en cliquant automatiquement sur les boutons de confirmation récurrents, sans interrompre le flux de travail de l'IA.
 
@@ -165,7 +165,7 @@ Voir [DOCS/SECURITY.md](DOCS/SECURITY.md) pour le détail du bloc injecté et de
 
 ## Logs & stabilité
 
-AutoClaude est conçu pour tourner en continu. Les logs sont disponibles dans `~/.autoclaude/logs/autoclaude.log` (rotation automatique, 5 Mo × 3 fichiers). En cas de crash ou de comportement anormal, ce fichier est le premier endroit à consulter.
+AutoClaude est conçu pour tourner en continu. Les logs sont disponibles dans `~/.autoclaude/logs/autoclaude.log` (rotation automatique, 5 Mo × 3 fichiers). En cas de crash natif (access violation), `~/.autoclaude/logs/crash.log` contient les stacks de tous les threads au moment du crash, chaque session étant délimitée par un marqueur horodaté ; un fichier `session.lock` signale au démarrage suivant qu'une session précédente s'est terminée anormalement.
 
 ---
 
@@ -248,7 +248,7 @@ MIT — voir [LICENSE](LICENSE)
 Projet réalisé par ServOMorph avec ClaudeCode pour SérénIA Tech :
 https://serenia-tech.fr/
 
-Date : 19 juillet 2026 (v2.5.8)
+Date : 19 juillet 2026 (v2.5.9)
 
 ---
 

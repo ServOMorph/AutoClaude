@@ -4,6 +4,16 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.9] — 2026-07-19
+
+### Corrigé
+
+- **Crash access violation tk86t.dll lié aux badges modèle** — `ModelBadge` déclenchait des cycles `withdraw`/`deiconify` et des appels `geometry()` non throttlés à chaque tick de suivi (800 ms), reproduisant la cause connue du crash déjà corrigée pour `StatusOverlay`. Corrigé en réutilisant le même pattern : throttle 4s sur les transitions de visibilité, `geometry()` conditionné à un changement de position réel, `reassert_topmost` Win32 après `deiconify`, annulation du `after()` de suivi à la destruction du badge.
+
+### Ajouté
+
+- **Logs de crash exploitables** — `run.py` écrit un marqueur de session horodaté (date, PID, version) dans `crash.log` avant d'activer `faulthandler`, permettant de dater et corréler chaque crash natif. Une sentinelle `session.lock` détecte au démarrage suivant qu'une session précédente s'est terminée anormalement. `crash.log` est purgé au-delà de 1 Mo. `ModelBadge` logge désormais ses transitions de visibilité (INFO) et ses erreurs internes (ERROR avec stack) au lieu de les avaler silencieusement.
+
 ## [2.5.8] — 2026-07-19
 
 ### Ajouté

@@ -162,6 +162,7 @@ def test_track_window_hides_when_not_visible():
     badge.tracker = Mock()
     badge.tracker.is_visible.return_value = False
     badge._was_hidden = False
+    badge.window_title = "file.py - Visual Studio Code"
 
     ModelBadge._track_window(badge)
 
@@ -181,6 +182,8 @@ def test_track_window_shows_and_repositions_when_visible():
     badge._was_hidden = True
     badge._rel_x = 20
     badge._rel_y = 20
+    badge._last_pos = None
+    badge.window_title = "file.py - Visual Studio Code"
 
     ModelBadge._track_window(badge)
 
@@ -254,6 +257,70 @@ def test_get_state_returns_snapshot():
         "rel_y": 30,
         "model": "Opus",
     }
+
+
+def test_track_window_throttled_transition_deferred():
+    """_track_window() reporte la transition withdraw/deiconify si le throttle est actif."""
+    from src.ui.overlays.model_badge import ModelBadge
+
+    badge = Mock(spec=ModelBadge)
+    badge.winfo_exists.return_value = True
+    badge.tracker = Mock()
+    badge.tracker.is_visible.return_value = False
+    badge._was_hidden = False
+    badge._throttle_ok.return_value = False
+
+    ModelBadge._track_window(badge)
+
+    badge.withdraw.assert_not_called()
+    assert badge._was_hidden is False
+
+
+def test_track_window_no_geometry_when_position_unchanged():
+    """_track_window() n'appelle pas geometry() si la position cible n'a pas changé."""
+    from src.ui.overlays.model_badge import ModelBadge
+
+    badge = Mock(spec=ModelBadge)
+    badge.winfo_exists.return_value = True
+    badge.tracker = Mock()
+    badge.tracker.is_visible.return_value = True
+    badge.tracker.get_rect.return_value = (100, 200, 300, 400)
+    badge._was_hidden = False
+    badge._rel_x = 20
+    badge._rel_y = 20
+    badge._last_pos = (120, 220)
+
+    ModelBadge._track_window(badge)
+
+    badge.geometry.assert_not_called()
+
+
+def test_throttle_ok_respects_min_interval():
+    """_throttle_ok() bloque une transition trop rapprochée de la précédente."""
+    import time
+    from src.ui.overlays.model_badge import ModelBadge
+
+    badge = Mock(spec=ModelBadge)
+    badge._last_vis_change = time.monotonic()
+    assert ModelBadge._throttle_ok(badge) is False
+
+    badge._last_vis_change = 0.0
+    assert ModelBadge._throttle_ok(badge) is True
+
+
+@patch('src.ui.overlays.model_badge.ctk.CTkToplevel.destroy')
+def test_destroy_cancels_pending_after(mock_super_destroy):
+    """destroy() annule le after de suivi avant de détruire le widget."""
+    from src.ui.overlays.model_badge import ModelBadge
+
+    badge = Mock(spec=ModelBadge)
+    badge._track_after_id = "after#123"
+
+    ModelBadge.destroy(badge)
+
+    badge.after_cancel.assert_called_once_with("after#123")
+    assert badge._track_after_id is None
+    mock_super_destroy.assert_called_once()
 
 
 def test_track_window_no_tracker_does_nothing():

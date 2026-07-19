@@ -1,15 +1,25 @@
 import sys
+import time
 import tkinter as tk
 import customtkinter as ctk
 from src.config.constants import (
     MODEL_BADGE_WIDTH, MODEL_BADGE_HEIGHT, MODEL_BADGE_COLOR, MODEL_BADGE_TEXT_COLOR,
 )
 from src.core.window_tracker import WindowTracker
+from src.core.virtual_desktop import VirtualDesktopManager, reassert_topmost
+from src.core.logger import get_logger
+
+_log = get_logger()
 
 MODEL_OPTIONS = ["Haiku", "Sonnet", "Opus", "Fable"]
 
 # Cadence du suivi de la fenêtre attachée (position + visibilité).
 MODEL_BADGE_POLL_MS = 800
+
+# Intervalle minimal entre deux transitions withdraw/deiconify : le cycle
+# map/unmap est impliqué dans le crash natif tk86t.dll (cf. virtual_desktop.py),
+# même valeur que REMAP_THROTTLE_S de StatusOverlay.
+MODEL_BADGE_VIS_THROTTLE_S = 4.0
 
 
 class ModelBadge(ctk.CTkToplevel):
@@ -43,6 +53,9 @@ class ModelBadge(ctk.CTkToplevel):
         self._rel_x, self._rel_y = rel_x, rel_y
         self._track_after_id = None
         self._was_hidden = False
+        self._last_vis_change = 0.0
+        self._last_pos = None
+        self._hwnd = None
 
         win_rect = self.tracker.get_rect() if self.tracker else None
         if win_rect:
@@ -111,33 +124,55 @@ class ModelBadge(ctk.CTkToplevel):
             if win_rect:
                 self._rel_x = self.winfo_x() - win_rect[0]
                 self._rel_y = self.winfo_y() - win_rect[1]
+                self._last_pos = (self.winfo_x(), self.winfo_y())
                 if self.on_state_change:
                     self.on_state_change()
         self._is_dragging = False
 
+    def _get_hwnd(self):
+        if self._hwnd:
+            return self._hwnd
+        try:
+            self._hwnd = VirtualDesktopManager.root_hwnd(self.winfo_id())
+        except Exception:
+            self._hwnd = None
+        return self._hwnd
+
+    def _throttle_ok(self) -> bool:
+        return (time.monotonic() - self._last_vis_change) >= MODEL_BADGE_VIS_THROTTLE_S
+
     def _track_window(self):
         """Suit la fenêtre attachée : position relative maintenue, visibilité
-        synchronisée (masqué si minimisée/fermée/cloaked)."""
+        synchronisée (masqué si minimisée/fermée/cloaked).
+
+        Les transitions withdraw/deiconify sont throttlées (map/unmap = risque
+        crash tk86t) et geometry() n'est appelé que si la position a changé."""
         try:
             if not self.winfo_exists() or not self.tracker:
                 return
 
             if not self.tracker.is_visible():
-                if not self._was_hidden:
+                if not self._was_hidden and self._throttle_ok():
                     self._was_hidden = True
+                    self._last_vis_change = time.monotonic()
+                    _log.info("ModelBadge '%s' : cible invisible → withdraw", self.window_title)
                     self.withdraw()
             else:
-                if self._was_hidden:
+                if self._was_hidden and self._throttle_ok():
                     self._was_hidden = False
+                    self._last_vis_change = time.monotonic()
+                    _log.info("ModelBadge '%s' : cible visible → deiconify", self.window_title)
                     self.deiconify()
-                    self.attributes("-topmost", True)
-                win_rect = self.tracker.get_rect()
-                if win_rect:
-                    x = win_rect[0] + self._rel_x
-                    y = win_rect[1] + self._rel_y
-                    self.geometry(f"+{x}+{y}")
+                    reassert_topmost(self._get_hwnd())
+                if not self._was_hidden:
+                    win_rect = self.tracker.get_rect()
+                    if win_rect:
+                        pos = (win_rect[0] + self._rel_x, win_rect[1] + self._rel_y)
+                        if pos != self._last_pos:
+                            self._last_pos = pos
+                            self.geometry(f"+{pos[0]}+{pos[1]}")
         except Exception:
-            pass
+            _log.exception("ModelBadge _track_window: erreur")
         finally:
             try:
                 if self.winfo_exists():
@@ -172,6 +207,15 @@ class ModelBadge(ctk.CTkToplevel):
         if self.on_remove:
             self.on_remove()
         self.destroy()
+
+    def destroy(self):
+        if self._track_after_id:
+            try:
+                self.after_cancel(self._track_after_id)
+            except Exception:
+                pass
+            self._track_after_id = None
+        super().destroy()
 
     def _keep_on_top(self):
         try:
