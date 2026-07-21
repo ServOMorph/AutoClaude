@@ -19,43 +19,39 @@
   withdraw/deiconify + geometry conditionnel, pattern aligné sur StatusOverlay).
   À rouvrir si un nouveau crash apparaît dans crash.log malgré le correctif.
 
-## Dernière session (2026-07-19)
-Bug remonté : plantages intermittents depuis l'ajout des badges modèle. Diagnostic via
-crash.log (faulthandler) : access violation native tk86t.dll, signature connue (cf. doc
-virtual_desktop.py), pas de fuite mémoire (RSS/handles/threads stables). Cause identifiée :
-ModelBadge._track_window() faisait withdraw/deiconify et geometry() sans throttle ni
-condition, contrairement au pattern anti-crash déjà validé dans StatusOverlay. Correctif
-appliqué + instrumentation du système de logs pour rendre le prochain crash exploitable
-(non testé en conditions réelles longue durée dans cette session).
+## Dernière session (2026-07-21)
+Demande esthétique sur le badge modèle : cadre trop grand, fond trop opaque. Réduction des
+dimensions et du padding, ajout d'une transparence de fenêtre. Modification purement visuelle,
+aucun changement de comportement (throttle/tracking inchangés).
 
 ## Décisions prises
-- Aligner ModelBadge sur le pattern anti-crash de StatusOverlay : throttle 4s sur les
-  transitions withdraw/deiconify, geometry() conditionné à un changement de position réel,
-  reassert_topmost Win32 après deiconify, annulation du after() de suivi à la destruction.
-- Instrumenter run.py pour rendre les crashs futurs analysables : marqueur de session
-  horodaté dans crash.log, sentinelle session.lock (détection fin anormale), purge de
-  crash.log au-delà de 1 Mo.
-- Bump version 2.5.8 -> 2.5.9 (correctifs, pas de rupture de structure).
+- Réduire le badge modèle : 140x50 -> 80x26px, corner_radius 10 -> 6, padding 10/5 -> 4/2px,
+  police 13 -> 11.
+- Fond semi-transparent via attributes("-alpha", MODEL_BADGE_ALPHA=0.65) sur la fenêtre
+  entière (limite connue : rend aussi le texte translucide, pas de transparence sélective
+  du fond seul sans passer par -transparentcolor).
+- Bump version 2.5.9 -> 2.5.10 (changement cosmétique, pas de rupture de structure).
 
 ## Livrables produits ou modifiés
-- src/ui/overlays/model_badge.py : throttle visibilité, geometry conditionnel,
-  reassert_topmost, destroy() annule le after, logs INFO/ERROR sur les transitions
-- run.py : marqueur de session horodaté, sentinelle session.lock, purge crash.log
-- src/config/constants.py : VERSION 2.5.9
-- tests/unit/test_model_badge.py : 5 nouveaux tests + 2 tests existants ajustés
-- tests/unit/test_run_entry.py : créé (3 tests purge crash.log)
-- suite complète : 94/94 tests passants
+- src/config/constants.py : MODEL_BADGE_WIDTH/HEIGHT réduits, MODEL_BADGE_ALPHA ajouté,
+  VERSION 2.5.10
+- src/ui/overlays/model_badge.py : alpha appliqué, corner_radius/padding/police réduits
+- CHANGELOG.md, README.md : version 2.5.10
+- suite complète : 94/94 tests passants (aucun test cassé par le changement visuel)
 
 ## Hypothèses validées / invalidées
 - VALIDE : la signature crash (access violation tk86t.dll, pas de fuite mémoire) confirme
-  un problème de cycle map/unmap Tk, pas une fuite de ressources.
+  un problème de cycle map/unmap Tk, pas une fuite de ressources (session précédente).
 - EN ATTENTE : le correctif throttle/geometry conditionnel élimine réellement le crash —
-  seule une session longue en conditions réelles peut le confirmer.
+  seule une session longue en conditions réelles peut le confirmer. Non testé cette session
+  (changement purement visuel, pas de session longue lancée).
+- EN ATTENTE : le rendu visuel du badge réduit/transparent n'a pas été vérifié à l'écran
+  (pas d'accès à l'exécution UI dans cet environnement) — à valider au prochain lancement.
 
 ## Prochaine étape exacte
-Faire tourner l'application en usage normal (badges actifs) sur une session longue.
-Vérifier au prochain démarrage l'absence de warning "session précédente terminée
-anormalement" et l'absence de nouvelle entrée dans crash.log.
+Lancer l'application, vérifier visuellement le badge modèle (taille, transparence) et
+poursuivre la session longue en attente (badges actifs, plusieurs heures) pour confirmer
+l'absence de crash tk86t.dll.
 
 ## Question bloquante pour la session suivante
 Aucune

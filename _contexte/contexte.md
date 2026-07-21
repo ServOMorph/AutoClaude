@@ -7,11 +7,10 @@ Outil Python qui détecte et clique automatiquement sur les boutons de confirmat
 Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (packaging)
 
 ## État actuel (réécrit intégralement à chaque /close)
-Badge overlay modèle Claude fonctionnel, mais avait provoqué des crashs intermittents
-(access violation tk86t.dll) via des cycles withdraw/deiconify et geometry() non throttlés.
-Correctif appliqué (throttle 4s, geometry conditionnel, pattern StatusOverlay) + logs de
-crash rendus datables/exploitables. Non confirmé en conditions réelles longue durée.
-94 tests unitaires passants, v2.5.9.
+Badge overlay modèle Claude fonctionnel. Correctif anti-crash tk86t.dll (throttle 4s,
+geometry conditionnel, pattern StatusOverlay) toujours en attente de confirmation longue
+durée. Apparence du badge revue : cadre réduit (80x26px) et fond semi-transparent
+(alpha 0.65) suite à retour esthétique. 94 tests unitaires passants, v2.5.10.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -26,3 +25,6 @@ crash rendus datables/exploitables. Non confirmé en conditions réelles longue 
   (throttle 4s, geometry conditionnel, reassert_topmost). Logs de crash instrumentés
   (marqueur de session horodaté, sentinelle session.lock) pour rendre tout futur crash
   analysable.
+- 2026-07-21 : Badge modèle redimensionné (80x26px) et rendu semi-transparent (alpha 0.65)
+  sur demande esthétique ; changement purement visuel, sans impact sur le correctif
+  anti-crash tk86t.dll.

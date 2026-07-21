@@ -4,6 +4,7 @@ import tkinter as tk
 import customtkinter as ctk
 from src.config.constants import (
     MODEL_BADGE_WIDTH, MODEL_BADGE_HEIGHT, MODEL_BADGE_COLOR, MODEL_BADGE_TEXT_COLOR,
+    MODEL_BADGE_ALPHA,
 )
 from src.core.window_tracker import WindowTracker
 from src.core.virtual_desktop import VirtualDesktopManager, reassert_topmost
@@ -42,6 +43,7 @@ class ModelBadge(ctk.CTkToplevel):
         self.title("AutoClaude Model Badge")
         self.overrideredirect(True)
         self.attributes("-topmost", True)
+        self.attributes("-alpha", MODEL_BADGE_ALPHA)
 
         if sys.platform == "win32":
             try:
@@ -68,7 +70,7 @@ class ModelBadge(ctk.CTkToplevel):
         self.main_frame = ctk.CTkFrame(
             self,
             fg_color=MODEL_BADGE_COLOR,
-            corner_radius=10,
+            corner_radius=6,
             border_width=0
         )
         self.main_frame.pack(expand=True, fill="both")
@@ -76,11 +78,11 @@ class ModelBadge(ctk.CTkToplevel):
         self.label = ctk.CTkLabel(
             self.main_frame,
             text=self.model,
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
             text_color=MODEL_BADGE_TEXT_COLOR,
             fg_color="transparent"
         )
-        self.label.pack(expand=True, fill="both", padx=10, pady=5)
+        self.label.pack(expand=True, fill="both", padx=4, pady=2)
 
         self._drag_start_x = 0
         self._drag_start_y = 0

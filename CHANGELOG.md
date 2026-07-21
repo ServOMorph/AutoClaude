@@ -4,6 +4,12 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.10] — 2026-07-21
+
+### Modifié
+
+- **Badge modèle plus discret** — cadre réduit (140x50 → 80x26px, `corner_radius` 10 → 6, padding 10/5 → 4/2px, police 13 → 11), fond semi-transparent (`MODEL_BADGE_ALPHA = 0.65` via `-alpha` sur la fenêtre).
+
 ## [2.5.9] — 2026-07-19
 
 ### Corrigé

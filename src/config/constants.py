@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-VERSION = "2.5.9"
+VERSION = "2.5.10"
 APP_NAME = "AutoClaude"
 
 # Paths
@@ -49,7 +49,8 @@ OVERLAY_COLOR_INACTIVE = "#2ecc71"  # Vert
 OVERLAY_TEXT_COLOR = "#ffffff"
 
 # Model Badge overlay
-MODEL_BADGE_WIDTH = 140
-MODEL_BADGE_HEIGHT = 50
+MODEL_BADGE_WIDTH = 80
+MODEL_BADGE_HEIGHT = 26
 MODEL_BADGE_COLOR = "#5A189A"       # Violet foncé
 MODEL_BADGE_TEXT_COLOR = "#ffffff"
+MODEL_BADGE_ALPHA = 0.65
