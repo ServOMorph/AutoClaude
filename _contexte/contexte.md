@@ -7,10 +7,11 @@ Outil Python qui détecte et clique automatiquement sur les boutons de confirmat
 Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (packaging)
 
 ## État actuel (réécrit intégralement à chaque /close)
-Badge overlay modèle Claude fonctionnel. Correctif anti-crash tk86t.dll (throttle 4s,
-geometry conditionnel, pattern StatusOverlay) toujours en attente de confirmation longue
-durée. Apparence du badge revue : cadre réduit (80x26px) et fond semi-transparent
-(alpha 0.65) suite à retour esthétique. 94 tests unitaires passants, v2.5.10.
+Correctif anti-crash tk86t.dll/model_badge validé par l'analyse de 13 sessions crash.log
+(aucune récidive). Nouvelle cause de crash identifiée et corrigée : double moteur de capture
+GDI (mss+cv2 + pyautogui/screeninfo) empilés à chaque tick de détection, screeninfo interrogé
+en boucle serrée. Correctif : cache TTL 30s sur les moniteurs, suppression du fallback
+redondant. 96 tests unitaires passants, v2.5.11. Confirmation longue durée toujours en attente.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -28,3 +29,7 @@ durée. Apparence du badge revue : cadre réduit (80x26px) et fond semi-transpar
 - 2026-07-21 : Badge modèle redimensionné (80x26px) et rendu semi-transparent (alpha 0.65)
   sur demande esthétique ; changement purement visuel, sans impact sur le correctif
   anti-crash tk86t.dll.
+- 2026-07-21 : Crash access violation résiduel identifié dans AutoclickWorker (double capture
+  GDI mss+cv2/pyautogui + screeninfo en boucle serrée depuis thread secondaire) ; corrigé par
+  cache TTL 30s sur get_all_monitors() et suppression du fallback pyautogui/screeninfo quand
+  mss+cv2 disponible.

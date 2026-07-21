@@ -1,5 +1,8 @@
 """TODO: description du module."""
 
+import threading
+import time
+
 try:
     from screeninfo import get_monitors as _get_monitors
 except Exception:
@@ -10,9 +13,18 @@ try:
 except Exception:
     _mss = None
 
+# screeninfo interroge l'API Win32 (EnumDisplayMonitors) à chaque appel — coûteux
+# et instable en boucle serrée depuis un thread secondaire. La configuration des
+# moniteurs change rarement : un cache avec TTL évite de la réinterroger à
+# chaque tick de détection (toutes les 0.5s) sans perdre les reconfigurations.
+_CACHE_TTL = 30.0
+_cache: list[dict] = []
+_cache_time = 0.0
+_cache_lock = threading.Lock()
 
-def get_all_monitors() -> list[dict]:
-    """TODO: description de get_all_monitors."""
+
+def _query_monitors() -> list[dict]:
+    """TODO: description de _query_monitors."""
     monitors = []
     if _get_monitors:
         try:
@@ -36,3 +48,14 @@ def get_all_monitors() -> list[dict]:
         except Exception:
             pass
     return monitors
+
+
+def get_all_monitors() -> list[dict]:
+    """Retourne la liste des moniteurs, mise en cache pendant _CACHE_TTL secondes."""
+    global _cache, _cache_time
+    with _cache_lock:
+        now = time.monotonic()
+        if not _cache or now - _cache_time >= _CACHE_TTL:
+            _cache = _query_monitors()
+            _cache_time = now
+        return _cache

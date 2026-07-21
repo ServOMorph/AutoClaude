@@ -4,6 +4,12 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.11] — 2026-07-21
+
+### Corrigé
+
+- **Crashes access violation dans le worker de détection** — deux moteurs de capture GDI (mss+cv2 puis pyautogui/screeninfo) s'enchaînaient à chaque tick (0.5s) quand le bouton n'était pas détecté, avec `screeninfo` interrogeant l'API Win32 en boucle serrée depuis un thread secondaire. Corrigé : `detector.locate()` n'utilise plus le fallback pyautogui/screeninfo quand mss+cv2 est disponible, et `monitors.get_all_monitors()` met désormais en cache la liste des moniteurs (TTL 30s) au lieu de la requêter à chaque appel.
+
 ## [2.5.10] — 2026-07-21
 
 ### Modifié

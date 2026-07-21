@@ -175,9 +175,9 @@ def locate(path: str, confidence: float = None) -> tuple[int, int] | None:
     if coords:
         return coords
     if _mss and _cv2:
-        coords = _mss_cv2(path, confidence)
-        if coords:
-            return coords
+        # mss+cv2 couvre déjà tous les moniteurs (sct.monitors) — inutile
+        # d'empiler un second moteur de capture GDI (pyautogui/screeninfo).
+        return _mss_cv2(path, confidence)
     if get_all_monitors():
         coords = _pyautogui_multimonitor(path, confidence)
         if coords:

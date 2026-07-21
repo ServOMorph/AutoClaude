@@ -1,57 +1,60 @@
-# Signals — autoclaude   (MAJ 2026-07-19)
+# Signals — autoclaude   (MAJ 2026-07-21)
 
 ## Actions ouvertes
-- [P1] Confirmer sur une session longue (plusieurs heures, badges actifs) que le crash
-  access violation tk86t.dll ne se reproduit plus.
-  fait quand: une session de plusieurs heures avec badges actifs se termine sans que
-  session.lock persiste au prochain démarrage (pas de warning "session précédente
-  terminée anormalement") et sans nouvelle entrée dans crash.log.
-  réf: run.py (sentinelle session.lock, marqueur horodaté crash.log), src/ui/overlays/model_badge.py
-
-## Questions ouvertes
-
-## Échéances
-
-## Blocages
+- [P1] Confirmer sur une session longue (plusieurs heures, badges + autoclick actifs) que
+  plus aucun crash access violation ne se produit (ni model_badge, ni autoclick_service/screeninfo).
+  fait quand: une session de plusieurs heures se termine sans que session.lock persiste au
+  prochain démarrage (pas de warning "session précédente terminée anormalement") et sans
+  nouvelle entrée dans crash.log.
+  réf: run.py (sentinelle session.lock, marqueur horodaté crash.log), src/core/detector.py,
+  src/core/monitors.py, src/core/autoclick_service.py
 
 ## Contexte chaud
-- Le crash n'est pas confirmé résolu, seulement corrigé par hypothèse (throttle
-  withdraw/deiconify + geometry conditionnel, pattern aligné sur StatusOverlay).
-  À rouvrir si un nouveau crash apparaît dans crash.log malgré le correctif.
+- Analyse de ~/.autoclaude/logs/crash.log (13 sessions v2.5.10) : le correctif tk86t.dll/
+  model_badge (throttle 4s + geometry conditionnel, session 2026-07-19) tient — aucune fault
+  dans model_badge.py sur ces sessions. Mais l'app a continué à crasher, cette fois dans le
+  thread AutoclickWorker : double moteur de capture GDI (mss+cv2 puis pyautogui/screeninfo)
+  empilés à chaque tick (0.5s), avec screeninfo interrogé en boucle serrée depuis un thread
+  secondaire — signature classique de corruption mémoire différée (site de fault natif variable
+  d'un crash à l'autre : screeninfo, matchTemplate, time.sleep).
+- Correctif appliqué cette session (cache TTL 30s sur get_all_monitors, suppression du fallback
+  pyautogui/screeninfo quand mss+cv2 disponible) mais non confirmé en conditions réelles longue
+  durée — seuls les tests unitaires valident le comportement. À rouvrir si nouvelle fault dans
+  crash.log malgré le correctif, y compris avec un site natif différent.
 
 ## Dernière session (2026-07-21)
-Demande esthétique sur le badge modèle : cadre trop grand, fond trop opaque. Réduction des
-dimensions et du padding, ajout d'une transparence de fenêtre. Modification purement visuelle,
-aucun changement de comportement (throttle/tracking inchangés).
+Analyse des crash.log fournis par l'utilisateur (session plantée plusieurs fois). Diagnostic :
+crash déplacé du badge modèle (résolu) vers le worker AutoclickService — double capture GDI
+(mss+cv2 + pyautogui/screeninfo) et requêtes screeninfo en boucle serrée. Correctifs appliqués :
+cache moniteurs (TTL 30s) et suppression du fallback redondant quand mss+cv2 disponible. Tests
+de non-régression ajoutés. Version bumpée 2.5.10 -> 2.5.11.
 
 ## Décisions prises
-- Réduire le badge modèle : 140x50 -> 80x26px, corner_radius 10 -> 6, padding 10/5 -> 4/2px,
-  police 13 -> 11.
-- Fond semi-transparent via attributes("-alpha", MODEL_BADGE_ALPHA=0.65) sur la fenêtre
-  entière (limite connue : rend aussi le texte translucide, pas de transparence sélective
-  du fond seul sans passer par -transparentcolor).
-- Bump version 2.5.9 -> 2.5.10 (changement cosmétique, pas de rupture de structure).
+- Diagnostic du crash : cause dans autoclick_service/detector (double moteur de capture GDI +
+  screeninfo en boucle serrée), pas dans model_badge — le correctif précédent (tk86t.dll) tient.
+- Correctif : cache TTL 30s sur monitors.get_all_monitors() ; detector.locate() n'utilise plus
+  le fallback pyautogui/screeninfo quand mss+cv2 est disponible.
+- Bump version 2.5.10 -> 2.5.11 (correction, pas de rupture de structure).
 
 ## Livrables produits ou modifiés
-- src/config/constants.py : MODEL_BADGE_WIDTH/HEIGHT réduits, MODEL_BADGE_ALPHA ajouté,
-  VERSION 2.5.10
-- src/ui/overlays/model_badge.py : alpha appliqué, corner_radius/padding/police réduits
-- CHANGELOG.md, README.md : version 2.5.10
-- suite complète : 94/94 tests passants (aucun test cassé par le changement visuel)
+- src/core/monitors.py : cache TTL 30s (_query_monitors + get_all_monitors)
+- src/core/detector.py : locate() ne cumule plus mss_cv2 + fallback pyautogui/screeninfo
+- tests/unit/test_monitors.py, tests/unit/test_detector.py : tests de non-régression ajoutés
+- src/config/constants.py : VERSION 2.5.11
+- CHANGELOG.md, README.md : version 2.5.11
+- suite complète : 96/96 tests passants
 
 ## Hypothèses validées / invalidées
-- VALIDE : la signature crash (access violation tk86t.dll, pas de fuite mémoire) confirme
-  un problème de cycle map/unmap Tk, pas une fuite de ressources (session précédente).
-- EN ATTENTE : le correctif throttle/geometry conditionnel élimine réellement le crash —
-  seule une session longue en conditions réelles peut le confirmer. Non testé cette session
-  (changement purement visuel, pas de session longue lancée).
-- EN ATTENTE : le rendu visuel du badge réduit/transparent n'a pas été vérifié à l'écran
-  (pas d'accès à l'exécution UI dans cet environnement) — à valider au prochain lancement.
+- VALIDE : le correctif tk86t.dll/model_badge (throttle+geometry, session 2026-07-19) tient —
+  aucune fault dans model_badge.py sur les 13 sessions v2.5.10 analysées.
+- INVALIDE : l'hypothèse "crash résolu" de la session précédente -> pivot : nouvelle cause
+  identifiée (double capture GDI + screeninfo en boucle serrée), corrigée cette session.
+- EN ATTENTE : le nouveau correctif (cache moniteurs + suppression fallback) n'a pas été
+  confirmé par une session longue réelle — seuls les tests unitaires valident le comportement.
 
 ## Prochaine étape exacte
-Lancer l'application, vérifier visuellement le badge modèle (taille, transparence) et
-poursuivre la session longue en attente (badges actifs, plusieurs heures) pour confirmer
-l'absence de crash tk86t.dll.
+Lancer une session longue (plusieurs heures, badges + autoclick actifs) et vérifier crash.log :
+absence de nouvelle entrée toutes causes confondues (model_badge et autoclick_service).
 
 ## Question bloquante pour la session suivante
 Aucune
