@@ -8,10 +8,9 @@ Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (
 
 ## État actuel (réécrit intégralement à chaque /close)
 Correctif anti-crash tk86t.dll/model_badge validé par l'analyse de 13 sessions crash.log
-(aucune récidive). Nouvelle cause de crash identifiée et corrigée : double moteur de capture
-GDI (mss+cv2 + pyautogui/screeninfo) empilés à chaque tick de détection, screeninfo interrogé
-en boucle serrée. Correctif : cache TTL 30s sur les moniteurs, suppression du fallback
-redondant. 96 tests unitaires passants, v2.5.11. Confirmation longue durée toujours en attente.
+(aucune récidive). Correctif crash access violation AutoclickWorker (cache TTL 30s moniteurs,
+suppression fallback GDI redondant) en place depuis v2.5.11, confirmation longue durée
+toujours en attente. CI Lint (Ruff) remis au vert après retrait d'un import mort. v2.5.12.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -33,3 +32,5 @@ redondant. 96 tests unitaires passants, v2.5.11. Confirmation longue durée touj
   GDI mss+cv2/pyautogui + screeninfo en boucle serrée depuis thread secondaire) ; corrigé par
   cache TTL 30s sur get_all_monitors() et suppression du fallback pyautogui/screeninfo quand
   mss+cv2 disponible.
+- 2026-08-05 : CI Lint en échec (import Mock inutilisé, Ruff F401) ; corrigé sans impact
+  fonctionnel.

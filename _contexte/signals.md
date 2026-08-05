@@ -22,35 +22,24 @@
   durée — seuls les tests unitaires valident le comportement. À rouvrir si nouvelle fault dans
   crash.log malgré le correctif, y compris avec un site natif différent.
 
-## Dernière session (2026-07-21)
-Analyse des crash.log fournis par l'utilisateur (session plantée plusieurs fois). Diagnostic :
-crash déplacé du badge modèle (résolu) vers le worker AutoclickService — double capture GDI
-(mss+cv2 + pyautogui/screeninfo) et requêtes screeninfo en boucle serrée. Correctifs appliqués :
-cache moniteurs (TTL 30s) et suppression du fallback redondant quand mss+cv2 disponible. Tests
-de non-régression ajoutés. Version bumpée 2.5.10 -> 2.5.11.
+## Dernière session (2026-08-05)
+CI Lint (GitHub Actions) en échec : import `Mock` inutilisé dans
+tests/unit/test_window_tracker.py (Ruff F401, bloquant). Corrigé (import retiré, `patch` reste
+utilisé). `ruff check src/ tests/` repasse sans erreur. Version bumpée 2.5.11 -> 2.5.12.
 
 ## Décisions prises
-- Diagnostic du crash : cause dans autoclick_service/detector (double moteur de capture GDI +
-  screeninfo en boucle serrée), pas dans model_badge — le correctif précédent (tk86t.dll) tient.
-- Correctif : cache TTL 30s sur monitors.get_all_monitors() ; detector.locate() n'utilise plus
-  le fallback pyautogui/screeninfo quand mss+cv2 est disponible.
-- Bump version 2.5.10 -> 2.5.11 (correction, pas de rupture de structure).
+- Correctif CI : suppression de l'import `Mock` inutilisé dans test_window_tracker.py (Ruff F401).
+- Bump version 2.5.11 -> 2.5.12 (correction, pas de rupture de structure).
 
 ## Livrables produits ou modifiés
-- src/core/monitors.py : cache TTL 30s (_query_monitors + get_all_monitors)
-- src/core/detector.py : locate() ne cumule plus mss_cv2 + fallback pyautogui/screeninfo
-- tests/unit/test_monitors.py, tests/unit/test_detector.py : tests de non-régression ajoutés
-- src/config/constants.py : VERSION 2.5.11
-- CHANGELOG.md, README.md : version 2.5.11
-- suite complète : 96/96 tests passants
+- tests/unit/test_window_tracker.py : import Mock retiré (patch conservé, toujours utilisé)
+- src/config/constants.py : VERSION 2.5.12
+- CHANGELOG.md, README.md : version 2.5.12
 
 ## Hypothèses validées / invalidées
-- VALIDE : le correctif tk86t.dll/model_badge (throttle+geometry, session 2026-07-19) tient —
-  aucune fault dans model_badge.py sur les 13 sessions v2.5.10 analysées.
-- INVALIDE : l'hypothèse "crash résolu" de la session précédente -> pivot : nouvelle cause
-  identifiée (double capture GDI + screeninfo en boucle serrée), corrigée cette session.
-- EN ATTENTE : le nouveau correctif (cache moniteurs + suppression fallback) n'a pas été
-  confirmé par une session longue réelle — seuls les tests unitaires valident le comportement.
+- VALIDE : `ruff check src/ tests/` repasse sans erreur après retrait de l'import mort.
+- EN ATTENTE : le correctif crash access violation (2.5.11, cache moniteurs + suppression
+  fallback) n'a toujours pas été confirmé par une session longue réelle.
 
 ## Prochaine étape exacte
 Lancer une session longue (plusieurs heures, badges + autoclick actifs) et vérifier crash.log :

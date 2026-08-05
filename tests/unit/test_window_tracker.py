@@ -1,6 +1,6 @@
 """Tests pour core.window_tracker — suivi de fenêtres VSCode (Win32)."""
 
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 
 def test_import_module():

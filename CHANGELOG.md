@@ -4,6 +4,12 @@ Toutes les modifications notables de **AutoClaude** sont documentées dans ce fi
 
 Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.5.12] — 2026-08-05
+
+### Corrigé
+
+- **CI Lint en échec** — import `Mock` inutilisé dans `tests/unit/test_window_tracker.py` (Ruff F401, bloquant). Import retiré, `patch` reste utilisé dans le fichier.
+
 ## [2.5.11] — 2026-07-21
 
 ### Corrigé
