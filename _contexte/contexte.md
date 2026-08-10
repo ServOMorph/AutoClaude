@@ -7,10 +7,11 @@ Outil Python qui détecte et clique automatiquement sur les boutons de confirmat
 Python 3.10+, CustomTkinter (UI), OpenCV/mss (détection d'image), PyInstaller (packaging)
 
 ## État actuel (réécrit intégralement à chaque /close)
-Correctif anti-crash tk86t.dll/model_badge validé par l'analyse de 13 sessions crash.log
-(aucune récidive). Correctif crash access violation AutoclickWorker (cache TTL 30s moniteurs,
-suppression fallback GDI redondant) en place depuis v2.5.11, confirmation longue durée
-toujours en attente. CI Lint (Ruff) remis au vert après retrait d'un import mort. v2.5.12.
+Release GitHub v2.5.12 publiée (tag + `AutoClaude.exe` fonctionnel) — jusqu'ici seul un exe
+périmé v2.5.0 était disponible publiquement. Premier build publié par erreur avec des
+dépendances manquantes (customtkinter absent de l'environnement de build), corrigé et asset
+remplacé. Correctif crash access violation AutoclickWorker (v2.5.11) toujours en attente de
+confirmation longue durée. Incohérence pyproject.toml (2.5.6) vs constants.py (2.5.12) non corrigée.
 
 ## Décisions structurantes (append only — 10 entrées max, archiver au-delà)
 - 2026-07-18 : Initialisation du protocole vibecoding.
@@ -34,3 +35,7 @@ toujours en attente. CI Lint (Ruff) remis au vert après retrait d'un import mor
   mss+cv2 disponible.
 - 2026-08-05 : CI Lint en échec (import Mock inutilisé, Ruff F401) ; corrigé sans impact
   fonctionnel.
+- 2026-08-10 : Publication de la release GitHub v2.5.12 (tag + `AutoClaude.exe`), absente
+  jusqu'ici. Premier build publié cassé (dépendances de build non installées, customtkinter
+  manquant) ; corrigé et asset remplacé. Procédure de build validée : toujours installer
+  requirements.txt avant `python build.py` et contrôler warn-AutoClaude.txt avant publication.
