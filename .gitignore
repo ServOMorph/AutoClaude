@@ -54,3 +54,4 @@ type_hints_todo.json
 # Build
 build/
 dist/
+**/_contexte/journal_session.md
